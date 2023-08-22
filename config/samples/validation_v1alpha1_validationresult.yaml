@@ -1,0 +1,12 @@
+apiVersion: validation.spectrocloud.labs/v1alpha1
+kind: ValidationResult
+metadata:
+  labels:
+    app.kubernetes.io/name: validationresult
+    app.kubernetes.io/instance: validationresult-sample
+    app.kubernetes.io/part-of: valid8or
+    app.kubernetes.io/managed-by: kustomize
+    app.kubernetes.io/created-by: valid8or
+  name: validationresult-sample
+spec:
+  # TODO(user): Add fields here

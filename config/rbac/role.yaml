@@ -1,0 +1,32 @@
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: manager-role
+rules:
+- apiGroups:
+  - validation.spectrocloud.labs
+  resources:
+  - validationresults
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - validation.spectrocloud.labs
+  resources:
+  - validationresults/finalizers
+  verbs:
+  - update
+- apiGroups:
+  - validation.spectrocloud.labs
+  resources:
+  - validationresults/status
+  verbs:
+  - get
+  - patch
+  - update

@@ -1,0 +1,27 @@
+# permissions for end users to view validationresults.
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  labels:
+    app.kubernetes.io/name: clusterrole
+    app.kubernetes.io/instance: validationresult-viewer-role
+    app.kubernetes.io/component: rbac
+    app.kubernetes.io/created-by: valid8or
+    app.kubernetes.io/part-of: valid8or
+    app.kubernetes.io/managed-by: kustomize
+  name: validationresult-viewer-role
+rules:
+- apiGroups:
+  - validation.spectrocloud.labs
+  resources:
+  - validationresults
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
+  - validation.spectrocloud.labs
+  resources:
+  - validationresults/status
+  verbs:
+  - get

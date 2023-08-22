@@ -1,0 +1,5 @@
+## Append samples of your project ##
+resources:
+- validation_v1alpha1_validationresult.yaml
+- validation_v1alpha1_awsvalidator.yaml
+#+kubebuilder:scaffold:manifestskustomizesamples
