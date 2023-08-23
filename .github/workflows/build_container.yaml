@@ -102,7 +102,7 @@ jobs:
           path: /tmp/${{ env.IMAGE_NAME }}-image.tar
 
   upload_images:
-    name: Upload images to ghcr registry
+    name: Upload images to quay registry
     needs: [ prepare_ci_run, build_image ]
     if: github.event_name == 'push' && needs.prepare_ci_run.outputs.NON_FORKED_AND_NON_ROBOT_RUN == 'true' # only run on push to main/maintenance branches
     runs-on: ubuntu-22.04
@@ -120,9 +120,9 @@ jobs:
       - name: Login to GitHub Container Registry
         uses: docker/login-action@465a07811f14bebb1938fbed4728c6a1ff8901fc # v2
         with:
-          registry: "ghcr.io"
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
+          registry: "quay.io"
+          username: tgillson
+          password: ${{ secrets.QUAY_TOKEN }}
 
       - name: Set up Docker Buildx
         id: buildx
@@ -136,7 +136,7 @@ jobs:
           platforms: linux/amd64,linux/arm64
           target: production
           tags: |
-            ghcr.io/spectrocloud-labs/valid8or/${{ env.IMAGE_NAME }}:dev-${{ env.DATETIME }}
+            quay.io/spectrocloud-labs/valid8or/${{ env.IMAGE_NAME }}:dev-${{ env.DATETIME }}
           build-args: |
             GIT_HASH=${{ env.GIT_SHA }}
             RELEASE_VERSION=dev-${{ env.DATETIME }}

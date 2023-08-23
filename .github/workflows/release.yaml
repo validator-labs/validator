@@ -48,7 +48,7 @@ jobs:
       - name: Publish Helm chart
         uses: stefanprodan/helm-gh-pages@master
         with:
-          token: ${{ secrets.VALID8OR_BOT_SECRET }}
+          token: ${{ secrets.GITHUB_TOKEN }}
           charts_dir: chart
           charts_url: https://charts.spectrocloud-labs.io
           owner: spectrocloud-labs
@@ -82,9 +82,9 @@ jobs:
       - name: Login to GitHub Container Registry
         uses: docker/login-action@465a07811f14bebb1938fbed4728c6a1ff8901fc # v2
         with:
-          registry: "ghcr.io"
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
+          registry: "quay.io"
+          username: tgillson
+          password: ${{ secrets.QUAY_TOKEN }}
 
       - name: Build Docker Image
         uses: docker/build-push-action@2eb1c1961a95fc15694676618e422e8ba1d63825 # v4
