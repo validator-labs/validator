@@ -1,0 +1,6 @@
+apiVersion: v2
+name: valid8or-plugin-aws
+description: valid8or-plugin-aws
+type: application
+version: 0.0.1
+appVersion: "0.0.1"

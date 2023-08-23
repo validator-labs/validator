@@ -164,16 +164,12 @@ $(CONTROLLER_GEN): $(LOCALBIN)
 envtest: $(ENVTEST) ## Download envtest-setup locally if necessary.
 $(ENVTEST): $(LOCALBIN)
 	test -s $(LOCALBIN)/setup-envtest || GOBIN=$(LOCALBIN) go install sigs.k8s.io/controller-runtime/tools/setup-envtest@latest
-
-.PHONY: helmify
-helmify: $(HELMIFY) ## Download helmify locally if necessary.
-$(HELMIFY): $(LOCALBIN)
-	test -s $(LOCALBIN)/helmify || GOBIN=$(LOCALBIN) go install github.com/arttor/helmify/cmd/helmify@latest
     
 OSARCH=$(shell ./hack/get-os.sh)
 HELM = $(shell pwd)/bin/$(OSARCH)/helm
 HELM_INSTALLER ?= "https://get.helm.sh/helm-$(HELM_VERSION)-$(OSARCH).tar.gz"
 HELMIFY ?= $(LOCALBIN)/helmify
+
 .PHONY: helm
 helm: $(HELM) ## Download helm locally if necessary.
 $(HELM): $(LOCALBIN)
@@ -188,10 +184,16 @@ $(HELMIFY): $(LOCALBIN)
 .PHONY: helm-build
 helm-build: helm helmify manifests kustomize
 	cd config/manager && $(KUSTOMIZE) edit set image controller=$(IMG) && cd ../../
-	$(KUSTOMIZE) build config/default | $(HELMIFY) 
+	$(KUSTOMIZE) build config/default | $(HELMIFY) -crd-dir
+	cat hack/plugin-values.yaml >> chart/values.yaml
 
+.PHONY: helm-package
 helm-package: generate manifests
 	$(HELM) package --version $(CHART_VERSION) chart/operator/
 	mkdir -p charts && mv valid8or-*.tgz charts
 	$(HELM) repo index --url https://charts.spectrocloud-labs.io/charts charts
 	mv charts/operator/index.yaml index.yaml
+
+.PHONY: frigate
+frigate:
+	frigate gen chart --no-deps -o markdown > chart/README.md

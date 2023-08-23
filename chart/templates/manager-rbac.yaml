@@ -6,9 +6,9 @@ metadata:
   {{- include "chart.labels" . | nindent 4 }}
 rules:
 - apiGroups:
-  - '*'
+  - validation.spectrocloud.labs
   resources:
-  - '*'
+  - validationresults
   verbs:
   - create
   - delete
@@ -18,43 +18,19 @@ rules:
   - update
   - watch
 - apiGroups:
-  - core.k8sgpt.ai
+  - validation.spectrocloud.labs
   resources:
-  - k8sgpts
-  verbs:
-  - create
-  - delete
-  - get
-  - list
-  - patch
-  - update
-  - watch
-- apiGroups:
-  - core.k8sgpt.ai
-  resources:
-  - k8sgpts/finalizers
+  - validationresults/finalizers
   verbs:
   - update
 - apiGroups:
-  - core.k8sgpt.ai
+  - validation.spectrocloud.labs
   resources:
-  - k8sgpts/status
+  - validationresults/status
   verbs:
   - get
   - patch
   - update
-- apiGroups:
-  - core.k8sgpt.ai
-  resources:
-  - results
-  verbs:
-  - create
-  - delete
-  - get
-  - list
-  - patch
-  - update
-  - watch
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
@@ -62,8 +38,8 @@ metadata:
   name: {{ include "chart.fullname" . }}-manager-rolebinding
   labels:
     app.kubernetes.io/component: rbac
-    app.kubernetes.io/created-by: k8sgpt-operator
-    app.kubernetes.io/part-of: k8sgpt-operator
+    app.kubernetes.io/created-by: valid8or
+    app.kubernetes.io/part-of: valid8or
   {{- include "chart.labels" . | nindent 4 }}
 roleRef:
   apiGroup: rbac.authorization.k8s.io
