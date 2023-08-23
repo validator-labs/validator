@@ -1,4 +1,4 @@
-name: release
+name: Release
 
 on:
   push:
@@ -6,6 +6,7 @@ on:
       - main
       - '[0-9]+.[0-9]+.x'
   workflow_dispatch:
+
 env:
   # Default minimum version of Go to support.
   DEFAULT_GO_VERSION: 1.19
