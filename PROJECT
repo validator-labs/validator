@@ -17,13 +17,4 @@ resources:
   kind: ValidationResult
   path: github.com/spectrocloud-labs/valid8or/api/v1alpha1
   version: v1alpha1
-- api:
-    crdVersion: v1
-    namespaced: true
-  controller: true
-  domain: spectrocloud.labs
-  group: validation
-  kind: AwsValidator
-  path: github.com/spectrocloud-labs/valid8or/api/v1alpha1
-  version: v1alpha1
 version: "3"

@@ -14,7 +14,20 @@ spec:
     singular: validationresult
   scope: Namespaced
   versions:
-  - name: v1alpha1
+  - additionalPrinterColumns:
+    - description: Age
+      jsonPath: .metadata.creationTimestamp
+      name: Age
+      type: date
+    - description: Plugin
+      jsonPath: .spec.plugin
+      name: Plugin
+      type: string
+    - description: State
+      jsonPath: .status.state
+      name: State
+      type: string
+    name: v1alpha1
     schema:
       openAPIV3Schema:
         description: ValidationResult is the Schema for the validationresults API

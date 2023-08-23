@@ -3,7 +3,6 @@
 # It should be run by config/default
 resources:
 - bases/validation.spectrocloud.labs_validationresults.yaml
-- bases/validation.spectrocloud.labs_awsvalidators.yaml
 #+kubebuilder:scaffold:crdkustomizeresource
 
 patches:

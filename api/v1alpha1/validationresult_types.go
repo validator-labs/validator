@@ -56,6 +56,9 @@ type ValidationCondition struct {
 
 //+kubebuilder:object:root=true
 //+kubebuilder:subresource:status
+//+kubebuilder:printcolumn:name="Age",type="date",JSONPath=".metadata.creationTimestamp",description="Age"
+//+kubebuilder:printcolumn:name="Plugin",type="string",JSONPath=".spec.plugin",description="Plugin"
+//+kubebuilder:printcolumn:name="State",type="string",JSONPath=".status.state",description="State"
 
 // ValidationResult is the Schema for the validationresults API
 type ValidationResult struct {
