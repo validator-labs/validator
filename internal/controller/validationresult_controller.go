@@ -53,7 +53,7 @@ func (r *ValidationResultReconciler) Reconcile(ctx context.Context, req ctrl.Req
 		return ctrl.Result{}, client.IgnoreNotFound(err)
 	}
 
-	r.Log.V(0).Info("Plugin", vr.Spec.Plugin)
+	r.Log.V(0).Info("Plugin", "name", vr.Spec.Plugin)
 
 	if vr.Status.State == validationv1alpha1.ValidationFailed || vr.Status.State == validationv1alpha1.ValidationSucceeded {
 		r.Log.V(0).Info("Validation complete", "state", vr.Status.State)
