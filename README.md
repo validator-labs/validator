@@ -8,6 +8,13 @@ The valid8or repository is fairly minimal - all the heavy lifting is done by the
 Plugins:
 - https://github.com/spectrocloud-labs/valid8or-plugin-aws
 
+## Installation
+```bash
+git clone github.com/spectrocloud-labs/valid8or
+cd valid8or
+helm install valid8or chart/ -f chart/values.yaml -n valid8or --create-namespace
+```
+
 ## Getting Started
 You’ll need a Kubernetes cluster to run against. You can use [KIND](https://sigs.k8s.io/kind) to get a local cluster for testing, or run against a remote cluster.
 **Note:** Your controller will automatically use the current context in your kubeconfig file (i.e. whatever cluster `kubectl cluster-info` shows).
