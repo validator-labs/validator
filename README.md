@@ -1,6 +1,6 @@
 # valid8or
 valid8or (AKA Validation Controller) monitors ValidationResults created by one or more valid8or plugins and uploads them to a sink of your choosing, e.g., Slack or Spectro Cloud Palette.
-![image](https://github.com/spectrocloud-labs/valid8or/assets/1795270/912b1c0d-a4ee-4af8-bf6d-98d34d60f4f4)
+![image](https://github.com/spectrocloud-labs/valid8or/assets/1795270/4945941e-4c42-4cae-909d-6d9cecf631fd)
 
 ## Description
 The valid8or repository is fairly minimal - all the heavy lifting is done by the valid8or plugins. Installation of valid8or and one or more plugins is accomplished via Helm.
