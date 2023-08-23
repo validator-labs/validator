@@ -1,8 +1,12 @@
 # valid8or
-// TODO(user): Add simple overview of use/purpose
+valid8or (AKA Validation Controller) monitors ValidationResults created by one or more valid8or plugins and uploads them to a sink of your choosing, e.g., Slack or Spectro Cloud Palette.
+![image](https://github.com/spectrocloud-labs/valid8or/assets/1795270/912b1c0d-a4ee-4af8-bf6d-98d34d60f4f4)
 
 ## Description
-// TODO(user): An in-depth paragraph about your project and overview of use
+The valid8or repository is fairly minimal - all the heavy lifting is done by the valid8or plugins. Installation of valid8or and one or more plugins is accomplished via Helm.
+
+Plugins:
+- https://github.com/spectrocloud-labs/valid8or-plugin-aws
 
 ## Getting Started
 You’ll need a Kubernetes cluster to run against. You can use [KIND](https://sigs.k8s.io/kind) to get a local cluster for testing, or run against a remote cluster.
@@ -42,7 +46,7 @@ make undeploy
 ```
 
 ## Contributing
-// TODO(user): Add detailed information on how you would like others to contribute to this project
+All contributions are welcome! Feel free to reach out on the [Spectro Cloud community Slack](https://spectrocloudcommunity.slack.com/join/shared_invite/zt-g8gfzrhf-cKavsGD_myOh30K24pImLA#/shared-invite/email).
 
 ### How it works
 This project aims to follow the Kubernetes [Operator pattern](https://kubernetes.io/docs/concepts/extend-kubernetes/operator/).
