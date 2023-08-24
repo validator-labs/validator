@@ -45,13 +45,18 @@ type ValidationResultStatus struct {
 }
 
 type ValidationCondition struct {
-	Status             corev1.ConditionStatus `json:"status"`
-	LastTransitionTime metav1.Time            `json:"lastTransitionTime,omitempty"`
-	// Unique, one-word, CamelCase reason for the condition's last transition.
-	Reason string `json:"reason,omitempty"`
-	// Human-readable message indicating details about last transition.
-	Message  string   `json:"message,omitempty"`
+	// Unique, one-word description of the validation rule associated with the condition.
+	ValidationRule string `json:"validationRule,omitempty"`
+	// Human-readable message indicating details about the last transition.
+	Message string `json:"message,omitempty"`
+	// Human-readable messages indicating additional details for the last transition.
+	Details []string `json:"details,omitempty"`
+	// Human-readable messages indicating additional failure details for the last transition.
 	Failures []string `json:"failures,omitempty"`
+	// True if the validation rule succeeded, otherwise False
+	Status corev1.ConditionStatus `json:"status"`
+	// Timestamp of most recent execution of the validation rule associated with the condition.
+	LastValidationTime metav1.Time `json:"lastValidationTime,omitempty"`
 }
 
 //+kubebuilder:object:root=true
