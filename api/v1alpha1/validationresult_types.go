@@ -17,6 +17,8 @@ limitations under the License.
 package v1alpha1
 
 import (
+	"time"
+
 	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
@@ -57,6 +59,14 @@ type ValidationCondition struct {
 	Status corev1.ConditionStatus `json:"status"`
 	// Timestamp of most recent execution of the validation rule associated with the condition.
 	LastValidationTime metav1.Time `json:"lastValidationTime,omitempty"`
+}
+
+// DefaultValidationCondition returns a default ValidationCondition
+func DefaultValidationCondition() ValidationCondition {
+	return ValidationCondition{
+		Status:             corev1.ConditionTrue,
+		LastValidationTime: metav1.Time{Time: time.Now()},
+	}
 }
 
 //+kubebuilder:object:root=true
