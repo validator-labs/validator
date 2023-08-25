@@ -4,7 +4,6 @@
     "config:base",
     "helpers:pinGitHubActionDigests",
     ":gitSignOff"
-
   ],
   "addLabels": ["dependencies"],
   "postUpdateOptions": [

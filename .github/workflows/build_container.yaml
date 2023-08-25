@@ -137,7 +137,7 @@ jobs:
           platforms: linux/amd64,linux/arm64
           target: production
           tags: |
-            quay.io/spectrocloud-labs/valid8or/${{ env.IMAGE_NAME }}:dev-${{ env.DATETIME }}
+            quay.io/spectrocloud-labs/${{ env.IMAGE_NAME }}:dev-${{ env.DATETIME }}
           build-args: |
             GIT_HASH=${{ env.GIT_SHA }}
             RELEASE_VERSION=dev-${{ env.DATETIME }}
