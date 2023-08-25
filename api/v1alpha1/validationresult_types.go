@@ -47,8 +47,10 @@ type ValidationResultStatus struct {
 }
 
 type ValidationCondition struct {
+	// Unique, one-word description of the validation type associated with the condition.
+	ValidationType string `json:"validationType"`
 	// Unique, one-word description of the validation rule associated with the condition.
-	ValidationRule string `json:"validationRule,omitempty"`
+	ValidationRule string `json:"validationRule"`
 	// Human-readable message indicating details about the last transition.
 	Message string `json:"message,omitempty"`
 	// Human-readable messages indicating additional details for the last transition.
@@ -58,7 +60,7 @@ type ValidationCondition struct {
 	// True if the validation rule succeeded, otherwise False
 	Status corev1.ConditionStatus `json:"status"`
 	// Timestamp of most recent execution of the validation rule associated with the condition.
-	LastValidationTime metav1.Time `json:"lastValidationTime,omitempty"`
+	LastValidationTime metav1.Time `json:"lastValidationTime"`
 }
 
 // DefaultValidationCondition returns a default ValidationCondition

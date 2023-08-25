@@ -87,8 +87,15 @@ spec:
                       description: Unique, one-word description of the validation
                         rule associated with the condition.
                       type: string
+                    validationType:
+                      description: Unique, one-word description of the validation
+                        type associated with the condition.
+                      type: string
                   required:
+                  - lastValidationTime
                   - status
+                  - validationRule
+                  - validationType
                   type: object
                 type: array
               state:
