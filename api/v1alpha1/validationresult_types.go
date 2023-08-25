@@ -66,6 +66,7 @@ type ValidationCondition struct {
 // DefaultValidationCondition returns a default ValidationCondition
 func DefaultValidationCondition() ValidationCondition {
 	return ValidationCondition{
+		Details:            make([]string, 0),
 		Status:             corev1.ConditionTrue,
 		LastValidationTime: metav1.Time{Time: time.Now()},
 	}
