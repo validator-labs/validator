@@ -52,7 +52,7 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           charts_dir: chart
           owner: spectrocloud-labs
-          branch: main
+          branch: ${{ env.GITHUB_PAGES_BRANCH }}
           commit_username: spectrocloud-labs-bot
           commit_email: bot@noreply.spectrocloud-labs.io
           
