@@ -183,14 +183,14 @@ $(HELMIFY): $(LOCALBIN)
 helm-build: helm helmify manifests kustomize
 	cd config/manager && $(KUSTOMIZE) edit set image controller=$(IMG) && cd ../../
 	$(KUSTOMIZE) build config/default | $(HELMIFY) -crd-dir
-	cat hack/plugin-values.yaml >> chart/values.yaml
+	cat hack/plugin-values.yaml >> chart/valid8or/values.yaml
 
 .PHONY: helm-package
 helm-package: generate manifests
-	$(HELM) package --version $(CHART_VERSION) chart/operator/
+	$(HELM) package --version $(CHART_VERSION) chart/valid8or/
 	mkdir -p charts && mv valid8or-*.tgz charts
 	$(HELM) repo index --url https://charts.spectrocloud-labs.io/charts charts
-	mv charts/operator/index.yaml index.yaml
+	mv charts/valid8or/index.yaml index.yaml
 
 .PHONY: frigate
 frigate:

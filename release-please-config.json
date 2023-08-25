@@ -8,9 +8,9 @@
       "bump-patch-for-minor-pre-major": true,
       "draft": false,
       "extra-files": [
-        "chart/Chart.yaml",
-        "chart/README.md",
-        "chart/values.yaml"
+        "chart/valid8or/Chart.yaml",
+        "chart/valid8or/README.md",
+        "chart/valid8or/values.yaml"
       ],
       "changelog-sections": [
         {
