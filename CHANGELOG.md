@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.0.2](https://github.com/spectrocloud-labs/valid8or/compare/v0.0.1...v0.0.2) (2023-08-25)
+
+
+### Other
+
+* release 0.0.2 ([40cdd88](https://github.com/spectrocloud-labs/valid8or/commit/40cdd88ebb8b75f9908c5dab6aa29337f5d778d8))
+
 ## [0.0.1](https://github.com/spectrocloud-labs/valid8or/compare/v0.0.1...v0.0.1) (2023-08-25)
 
 
