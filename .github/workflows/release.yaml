@@ -51,9 +51,7 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           charts_dir: chart
-          charts_url: https://charts.spectrocloud-labs.io
           owner: spectrocloud-labs
-          repository: charts
           branch: main
           commit_username: spectrocloud-labs-bot
           commit_email: bot@noreply.spectrocloud-labs.io
