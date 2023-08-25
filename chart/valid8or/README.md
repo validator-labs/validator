@@ -24,9 +24,7 @@ The following table lists the configurable parameters of the Valid8or chart and 
 | `controllerManager.manager.containerSecurityContext.allowPrivilegeEscalation` |  | `false` |
 | `controllerManager.manager.containerSecurityContext.capabilities.drop` |  | `["ALL"]` |
 | `controllerManager.manager.image.repository` |  | `"quay.io/spectrocloud-labs/valid8or"` |
-<!---x-release-please-start-version-->
-| `controllerManager.manager.image.tag` | x-release-please-version | `"v0.0.1"` |
-<!---x-release-please-end-->
+| `controllerManager.manager.image.tag` |  | `"v0.0.1"` |
 | `controllerManager.manager.resources.limits.cpu` |  | `"500m"` |
 | `controllerManager.manager.resources.limits.memory` |  | `"128Mi"` |
 | `controllerManager.manager.resources.requests.cpu` |  | `"10m"` |
