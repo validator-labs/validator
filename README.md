@@ -10,9 +10,9 @@ Plugins:
 
 ## Installation
 ```bash
-git clone github.com/spectrocloud-labs/valid8or
-cd valid8or
-helm install valid8or chart/ -f chart/values.yaml -n valid8or --create-namespace
+helm repo add valid8or https://spectrocloud-labs.github.io/valid8or/
+helm repo update
+helm install valid8or valid8or/valid8or -n valid8or --create-namespace
 ```
 
 ## Getting Started

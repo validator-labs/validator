@@ -4,7 +4,3 @@ description: valid8or monitors ValidationResults created by one or more valid8or
 type: application
 version: 0.0.1 # x-release-please-version
 appVersion: "0.0.1" # x-release-please-version
-dependencies:
-  - name: valid8or-plugin-aws
-    condition: valid8orPluginAws.enabled
-    version: 0.0.1
