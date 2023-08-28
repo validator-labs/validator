@@ -36,7 +36,7 @@ controllerManager:
     resources:
       limits:
         cpu: 500m
-        memory: 128Mi
+        memory: 512Mi
       requests:
         cpu: 10m
         memory: 64Mi
@@ -95,7 +95,7 @@ plugins:
         resources:
           limits:
             cpu: 500m
-            memory: 512Mi
+            memory: 128Mi
           requests:
             cpu: 10m
             memory: 64Mi
