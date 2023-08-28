@@ -8,7 +8,7 @@ rules:
 - apiGroups:
   - validation.spectrocloud.labs
   resources:
-  - valid8orconfigs
+  - '*'
   verbs:
   - create
   - delete
@@ -18,23 +18,12 @@ rules:
   - update
   - watch
 - apiGroups:
-  - validation.spectrocloud.labs
+  - ""
   resources:
-  - valid8orconfigs/finalizers
-  verbs:
-  - update
-- apiGroups:
-  - validation.spectrocloud.labs
-  resources:
-  - valid8orconfigs/status
-  verbs:
-  - get
-  - patch
-  - update
-- apiGroups:
-  - validation.spectrocloud.labs
-  resources:
-  - validationresults
+  - namespaces
+  - secrets
+  - serviceaccounts
+  - services
   verbs:
   - create
   - delete
@@ -44,19 +33,48 @@ rules:
   - update
   - watch
 - apiGroups:
-  - validation.spectrocloud.labs
+  - apiextensions.k8s.io
   resources:
-  - validationresults/finalizers
+  - customresourcedefinitions
   verbs:
-  - update
-- apiGroups:
-  - validation.spectrocloud.labs
-  resources:
-  - validationresults/status
-  verbs:
+  - create
+  - delete
   - get
+  - list
   - patch
   - update
+  - watch
+- apiGroups:
+  - rbac.authorization.k8s.io
+  resources:
+  - clusterroles
+  - clusterrolebindings
+  - roles
+  - rolebindings
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - apps
+  resources:
+  - deployments
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- nonResourceURLs:
+  - /metrics
+  verbs:
+  - get
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
