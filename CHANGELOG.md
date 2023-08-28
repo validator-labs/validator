@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.0.4](https://github.com/spectrocloud-labs/valid8or/compare/v0.0.3...v0.0.4) (2023-08-28)
+
+
+### Features
+
+* log ValidationResult metadata on completion ([8095353](https://github.com/spectrocloud-labs/valid8or/commit/80953530d8ac0ee26c6a929a47456211abc0957b))
+
 ## [0.0.3](https://github.com/spectrocloud-labs/valid8or/compare/v0.0.2...v0.0.3) (2023-08-28)
 
 
