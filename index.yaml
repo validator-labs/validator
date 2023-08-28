@@ -3,10 +3,10 @@ entries:
   valid8or:
   - apiVersion: v2
     appVersion: 0.0.3
-    created: "2023-08-28T19:46:59.244904632Z"
+    created: "2023-08-28T20:01:59.207203453Z"
     description: valid8or monitors ValidationResults created by one or more valid8or
       plugins and uploads them to a configurable sink
-    digest: 40a55300112eaac80ecba8f5ffac84e5ffbece8484b3456d7d7d69b2e425da0a
+    digest: b674cd880735463cedaa139e0ed9eb7636c17fb5c1eb5c95acd5be2576c5c263
     name: valid8or
     type: application
     urls:
@@ -44,4 +44,4 @@ entries:
     urls:
     - https://spectrocloud-labs.github.io/valid8or/valid8or-0.0.1.tgz
     version: 0.0.1
-generated: "2023-08-28T19:46:59.239183867Z"
+generated: "2023-08-28T20:01:59.205512934Z"
