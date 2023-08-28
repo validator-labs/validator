@@ -1,9 +1,0 @@
-{{- if and .Values.valid8orPluginAws.enabled .Values.valid8orPluginAws.auth.accessKey }}
-apiVersion: v1
-kind: Secret
-metadata:
-  name: {{ .Values.valid8orPluginAws.auth.secretName }}
-data:
-  AWS_ACCESS_KEY_ID: {{ .Values.valid8orPluginAws.auth.accessKey | b64enc }}
-  AWS_SECRET_ACCESS_KEY: {{ .Values.valid8orPluginAws.auth.secretKey | b64enc }}
-{{- end }}

@@ -1,0 +1,38 @@
+resources:
+- ../default
+
+images:
+- name: quay.io/spectrocloud-labs/valid8or:latest
+  newTag: dev
+
+patches:
+- target:
+    group: apps
+    version: v1
+    kind: Deployment
+    name: valid8or-controller-manager
+  patch: |-
+    apiVersion: apps/v1
+    kind: Deployment
+    metadata:
+      labels:
+        control-plane: controller-manager
+      name: valid8or-controller-manager
+      namespace: valid8or
+    spec:
+      template:
+        spec:
+          containers:
+          - name: manager
+            args:
+            - while true; do sleep 30; done;
+            command:
+            - /bin/bash
+            - -c
+            - --
+            imagePullPolicy: Always
+            resources: null
+            livenessProbe: null
+            readinessProbe: null
+            securityContext: null
+          securityContext: null

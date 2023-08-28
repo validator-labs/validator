@@ -1,6 +1,0 @@
-valid8orPluginAws:
-  enabled: false
-  auth:
-    secretName: "aws-creds"
-    accessKey: ""
-    secretKey: ""

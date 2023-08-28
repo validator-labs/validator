@@ -1,0 +1,27 @@
+# permissions for end users to view valid8orconfigs.
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  labels:
+    app.kubernetes.io/name: clusterrole
+    app.kubernetes.io/instance: valid8orconfig-viewer-role
+    app.kubernetes.io/component: rbac
+    app.kubernetes.io/created-by: valid8or
+    app.kubernetes.io/part-of: valid8or
+    app.kubernetes.io/managed-by: kustomize
+  name: valid8orconfig-viewer-role
+rules:
+- apiGroups:
+  - validation.spectrocloud.labs
+  resources:
+  - valid8orconfigs
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
+  - validation.spectrocloud.labs
+  resources:
+  - valid8orconfigs/status
+  verbs:
+  - get

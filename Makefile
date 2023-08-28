@@ -183,7 +183,7 @@ $(HELMIFY): $(LOCALBIN)
 helm-build: helm helmify manifests kustomize
 	cd config/manager && $(KUSTOMIZE) edit set image controller=$(IMG) && cd ../../
 	$(KUSTOMIZE) build config/default | $(HELMIFY) -crd-dir
-	cat hack/plugin-values.yaml >> chart/valid8or/values.yaml
+	cat hack/extra-values.yaml >> chart/valid8or/values.yaml
 
 .PHONY: helm-package
 helm-package: generate manifests

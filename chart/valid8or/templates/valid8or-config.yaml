@@ -1,0 +1,7 @@
+apiVersion: validation.spectrocloud.labs/v1alpha1
+kind: Valid8orConfig
+metadata:
+  name: valid8or-config
+spec:
+  plugins:
+{{ toYaml .Values.plugins | indent 2 }} 
