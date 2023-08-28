@@ -56,7 +56,15 @@ func (r *ValidationResultReconciler) Reconcile(ctx context.Context, req ctrl.Req
 	r.Log.V(0).Info("Plugin", "name", vr.Spec.Plugin)
 
 	if vr.Status.State == validationv1alpha1.ValidationFailed || vr.Status.State == validationv1alpha1.ValidationSucceeded {
-		r.Log.V(0).Info("Validation complete", "state", vr.Status.State)
+		r.Log.V(0).Info("ValidationResult complete", "name", vr.Name, "state", vr.Status.State)
+
+		for _, c := range vr.Status.Conditions {
+			r.Log.V(0).Info("ValidationResult metadata", "type", c.ValidationType,
+				"rule", c.ValidationRule, "status", c.Status,
+				"message", c.Message, "details", c.Details,
+				"failures", c.Failures, "time", c.LastValidationTime,
+			)
+		}
 
 		// TODO: send result to a sink
 	}
