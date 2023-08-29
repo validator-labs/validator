@@ -1,6 +1,6 @@
 apiVersion: v2
 name: valid8or
-description: valid8or monitors ValidationResults created by one or more valid8or plugins and uploads them to a configurable sink
+description: Monitor results created by valid8or plugins and upload them to a configurable sink
 type: application
 version: 0.0.3 # x-release-please-version
 appVersion: "0.0.3" # x-release-please-version
