@@ -18,6 +18,8 @@ package controller
 
 import (
 	"context"
+	"crypto/sha256"
+	"encoding/base64"
 	"fmt"
 	"strings"
 	"time"
@@ -37,8 +39,11 @@ import (
 )
 
 const (
-	// A finalizer that is added to the Valid8orConfig CR to ensure that helm delete is executed.
+	// A finalizer added to a Valid8orConfig to ensure that plugin Helm releases are properly garbage collected
 	CleanupFinalizer = "valid8or/cleanup"
+
+	// An annotation added to a Valid8orConfig to determine whether or not to update a plugin's Helm release
+	PluginValuesHash = "valid8or/plugin-values"
 )
 
 // Valid8orConfigReconciler reconciles a Valid8orConfig object
@@ -128,8 +133,12 @@ func (r *Valid8orConfigReconciler) redeployIfNeeded(ctx context.Context, vc *v1a
 	for _, p := range vc.Spec.Plugins {
 		specPlugins[p.Chart.Name] = true
 
-		// skip plugin if already deployed
-		if isConditionTrue(vc, p.Chart.Name, v1alpha1.HelmChartDeployedCondition) {
+		// update plugin's values hash
+		valuesUnchanged := r.updatePluginHash(vc, p)
+
+		// skip plugin if already deployed & no change in values
+		if isConditionTrue(vc, p.Chart.Name, v1alpha1.HelmChartDeployedCondition) && valuesUnchanged {
+			r.Log.V(0).Info("Values unchanged. Skipping upgrade for plugin Helm chart", "namespace", vc.Namespace, "name", p.Chart.Name)
 			return nil
 		}
 
@@ -151,6 +160,11 @@ func (r *Valid8orConfigReconciler) redeployIfNeeded(ctx context.Context, vc *v1a
 			return fmt.Errorf("error installing / upgrading Valid8orConfig: %v", err)
 		}
 		updateHelmChartDeployedCondition(vc, p.Chart.Name, true)
+
+		// update Valid8orConfig annotations
+		if err := r.Client.Update(ctx, vc); err != nil {
+			return err
+		}
 	}
 
 	// delete any plugins that have been removed
@@ -163,6 +177,27 @@ func (r *Valid8orConfigReconciler) redeployIfNeeded(ctx context.Context, vc *v1a
 	}
 
 	return nil
+}
+
+// updatePluginHash compares the current plugin's values hash annotation to a hash of its current values,
+// updates the values hash annotation on the Valid8orConfig for the current plugin, and returns a flag
+// indicating whether the values have changed or not since the last reconciliation
+func (r *Valid8orConfigReconciler) updatePluginHash(vc *v1alpha1.Valid8orConfig, p v1alpha1.HelmRelease) bool {
+	valuesUnchanged := false
+
+	pluginValuesHashLatest := sha256.Sum256([]byte(p.Values))
+	pluginValuesHashLatestB64 := base64.StdEncoding.EncodeToString(pluginValuesHashLatest[:])
+
+	pluginValuesHashKey := fmt.Sprintf("%s-%s", PluginValuesHash, p.Chart.Name)
+	pluginValuesHash, ok := vc.Annotations[pluginValuesHashKey]
+	if !ok {
+		vc.Annotations = make(map[string]string, 0)
+	} else {
+		valuesUnchanged = pluginValuesHash == pluginValuesHashLatestB64
+	}
+
+	vc.Annotations[pluginValuesHashKey] = pluginValuesHashLatestB64
+	return valuesUnchanged
 }
 
 // deletePlugins deletes each valid8or plugin's Helm release
