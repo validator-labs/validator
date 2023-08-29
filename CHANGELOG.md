@@ -1,5 +1,32 @@
 # Changelog
 
+## [0.0.3](https://github.com/spectrocloud-labs/valid8or/compare/v0.0.2...v0.0.3) (2023-08-29)
+
+
+### Features
+
+* handle plugin updates via values hashes ([7f485b4](https://github.com/spectrocloud-labs/valid8or/commit/7f485b41f5dfba40e8c08a5da79410dfc0c97e0c))
+* log ValidationResult metadata on completion ([0cc38e5](https://github.com/spectrocloud-labs/valid8or/commit/0cc38e5cf464d6f9342865f3a41787dfe9bc3c5c))
+* plugin management w/ helm ([537faac](https://github.com/spectrocloud-labs/valid8or/commit/537faac4c3f1c6695f1db34114401a14ad292906))
+* update status and handle plugin removal ([bae7e9d](https://github.com/spectrocloud-labs/valid8or/commit/bae7e9dc36a1a22e8f08828421d0cc7e73deb54f))
+
+
+### Bug Fixes
+
+* increase memory limit for helm upgrade ([660a80d](https://github.com/spectrocloud-labs/valid8or/commit/660a80d57fcae2dc3a16e610699b60a5749e0786))
+* update RBAC in helm templates ([6ff735c](https://github.com/spectrocloud-labs/valid8or/commit/6ff735c891e40328bba0524f4b8b240d3e85a6c9))
+
+
+### Other
+
+* add pull_request test trigger ([3e75bdb](https://github.com/spectrocloud-labs/valid8or/commit/3e75bdbff56bab925ca98b81c57fe9f4b1a60471))
+* release 0.0.3 ([5b2473d](https://github.com/spectrocloud-labs/valid8or/commit/5b2473dce974a160b14640e86e88028f66c94f5e))
+
+
+### Docs
+
+* update README, fix release-please annotations ([c2c96e8](https://github.com/spectrocloud-labs/valid8or/commit/c2c96e8e3e91820826242b36d6760ab1d2530baf))
+
 ## [0.0.2](https://github.com/spectrocloud-labs/valid8or/compare/v0.0.1...v0.0.2) (2023-08-25)
 
 
