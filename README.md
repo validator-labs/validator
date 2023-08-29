@@ -6,7 +6,8 @@ valid8or (AKA Validation Controller) monitors ValidationResults created by one o
 The valid8or repository is fairly minimal - all the heavy lifting is done by the valid8or plugins. Installation of valid8or and one or more plugins is accomplished via Helm.
 
 Plugins:
-- https://github.com/spectrocloud-labs/valid8or-plugin-aws
+- [AWS](https://github.com/spectrocloud-labs/valid8or-plugin-aws)
+- [Network](https://github.com/spectrocloud-labs/valid8or-plugin-network)
 
 ## Installation
 ```bash
