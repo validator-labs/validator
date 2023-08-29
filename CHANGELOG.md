@@ -1,5 +1,18 @@
 # Changelog
 
+## [0.0.4](https://github.com/spectrocloud-labs/valid8or/compare/v0.0.3...v0.0.4) (2023-08-29)
+
+
+### Features
+
+* handle plugin updates via values hashes ([516892c](https://github.com/spectrocloud-labs/valid8or/commit/516892ce3cb9dd85e436ceec405a22eede70d35b))
+* log ValidationResult metadata on completion ([8095353](https://github.com/spectrocloud-labs/valid8or/commit/80953530d8ac0ee26c6a929a47456211abc0957b))
+
+
+### Other
+
+* add pull_request test trigger ([f552142](https://github.com/spectrocloud-labs/valid8or/commit/f552142b37063ce70969a9b4d0b73da801967bec))
+
 ## [0.0.3](https://github.com/spectrocloud-labs/valid8or/compare/v0.0.2...v0.0.3) (2023-08-28)
 
 
