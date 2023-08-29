@@ -1,5 +1,18 @@
 # Changelog
 
+## [0.0.4](https://github.com/spectrocloud-labs/valid8or/compare/v0.0.3...v0.0.4) (2023-08-29)
+
+
+### Other
+
+* add public validation result utils ([528be5f](https://github.com/spectrocloud-labs/valid8or/commit/528be5f91e8bfb7d6f1530002dd99971e4983a7e))
+* release 0.0.4 ([28f8418](https://github.com/spectrocloud-labs/valid8or/commit/28f8418356694ad5c86b97d2b9df9d51c2f6d279))
+
+
+### Docs
+
+* update chart description ([0a5635f](https://github.com/spectrocloud-labs/valid8or/commit/0a5635f94f949c39592dbe7f20e5301f4836f291))
+
 ## [0.0.3](https://github.com/spectrocloud-labs/valid8or/compare/v0.0.2...v0.0.3) (2023-08-29)
 
 
