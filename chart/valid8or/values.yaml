@@ -147,8 +147,10 @@ plugins:
         - --metrics-bind-address=127.0.0.1:8080
         - --leader-elect
         containerSecurityContext:
-          allowPrivilegeEscalation: false
+          allowPrivilegeEscalation: true
           capabilities:
+            add:
+            - NET_ADMIN
             drop:
             - ALL
         image:
