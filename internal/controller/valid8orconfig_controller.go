@@ -129,20 +129,23 @@ func (r *Valid8orConfigReconciler) updateStatus(ctx context.Context, vc *v1alpha
 // redeployIfNeeded deploys/redeploys each valid8or plugin in a Valid8orConfig and deletes plugins that have been removed
 func (r *Valid8orConfigReconciler) redeployIfNeeded(ctx context.Context, vc *v1alpha1.Valid8orConfig) error {
 	specPlugins := make(map[string]bool)
+	conditions := make([]v1alpha1.Valid8orPluginCondition, len(vc.Spec.Plugins))
 
-	for _, p := range vc.Spec.Plugins {
+	for i, p := range vc.Spec.Plugins {
 		specPlugins[p.Chart.Name] = true
 
 		// update plugin's values hash
 		valuesUnchanged := r.updatePluginHash(vc, p)
 
 		// skip plugin if already deployed & no change in values
-		if isConditionTrue(vc, p.Chart.Name, v1alpha1.HelmChartDeployedCondition) && valuesUnchanged {
+		condition, ok := isConditionTrue(vc, p.Chart.Name, v1alpha1.HelmChartDeployedCondition)
+		if ok && valuesUnchanged {
 			r.Log.V(0).Info("Values unchanged. Skipping upgrade for plugin Helm chart", "namespace", vc.Namespace, "name", p.Chart.Name)
-			return nil
+			conditions[i] = condition
+			continue
 		}
 
-		r.Log.V(0).Info("Installed/upgraded plugin Helm chart", "namespace", vc.Namespace, "name", p.Chart.Name)
+		r.Log.V(0).Info("Installing/upgrading plugin Helm chart", "namespace", vc.Namespace, "name", p.Chart.Name)
 
 		err := r.HelmClient.Upgrade(p.Chart.Name, vc.Namespace, helm.UpgradeOptions{
 			Chart:   p.Chart.Name,
@@ -159,23 +162,26 @@ func (r *Valid8orConfigReconciler) redeployIfNeeded(ctx context.Context, vc *v1a
 			}
 			return fmt.Errorf("error installing / upgrading Valid8orConfig: %v", err)
 		}
-		updateHelmChartDeployedCondition(vc, p.Chart.Name, true)
-
-		// update Valid8orConfig annotations
-		if err := r.Client.Update(ctx, vc); err != nil {
-			return err
-		}
+		conditions[i] = getHelmChartCondition(p.Chart.Name, true)
 	}
 
 	// delete any plugins that have been removed
-	for _, c := range vc.Status.Conditions {
+	for i, c := range vc.Status.Conditions {
 		_, ok := specPlugins[c.PluginName]
 		if !ok && c.Type == v1alpha1.HelmChartDeployedCondition && c.Status == corev1.ConditionTrue {
+			r.Log.V(0).Info("Deleting plugin Helm chart", "namespace", vc.Namespace, "name", c.PluginName)
 			r.deletePlugin(vc, c.PluginName)
-			updateHelmChartDeployedCondition(vc, c.PluginName, false)
+			delete(vc.Annotations, getPluginHashKey(c.PluginName))
+			conditions[i] = getHelmChartCondition(c.PluginName, false)
 		}
 	}
 
+	// update Valid8orConfig annotations
+	if err := r.Client.Update(ctx, vc); err != nil {
+		return err
+	}
+
+	vc.Status.Conditions = conditions
 	return nil
 }
 
@@ -186,18 +192,23 @@ func (r *Valid8orConfigReconciler) updatePluginHash(vc *v1alpha1.Valid8orConfig,
 	valuesUnchanged := false
 	pluginValuesHashLatest := sha256.Sum256([]byte(p.Values))
 	pluginValuesHashLatestB64 := base64.StdEncoding.EncodeToString(pluginValuesHashLatest[:])
-	pluginValuesHashKey := fmt.Sprintf("%s-%s", PluginValuesHash, p.Chart.Name)
+	key := getPluginHashKey(p.Chart.Name)
 
 	if vc.Annotations == nil {
 		vc.Annotations = make(map[string]string)
 	}
-	pluginValuesHash, ok := vc.Annotations[pluginValuesHashKey]
+	pluginValuesHash, ok := vc.Annotations[key]
 	if ok {
 		valuesUnchanged = pluginValuesHash == pluginValuesHashLatestB64
 	}
-	vc.Annotations[pluginValuesHashKey] = pluginValuesHashLatestB64
+	vc.Annotations[key] = pluginValuesHashLatestB64
 
 	return valuesUnchanged
+}
+
+// getPluginHashKey generates an annotation key used to retrieve a plugin's values hash
+func getPluginHashKey(pluginName string) string {
+	return fmt.Sprintf("%s-%s", PluginValuesHash, pluginName)
 }
 
 // deletePlugins deletes each valid8or plugin's Helm release
@@ -271,16 +282,16 @@ func conditionIndex(vc *v1alpha1.Valid8orConfig, chartName string, conditionType
 }
 
 // isConditionTrue checks whether a Valid8orPluginCondition is true
-func isConditionTrue(vc *v1alpha1.Valid8orConfig, chartName string, conditionType v1alpha1.ConditionType) bool {
+func isConditionTrue(vc *v1alpha1.Valid8orConfig, chartName string, conditionType v1alpha1.ConditionType) (v1alpha1.Valid8orPluginCondition, bool) {
 	idx := conditionIndex(vc, chartName, conditionType)
 	if idx == -1 {
-		return false
+		return v1alpha1.Valid8orPluginCondition{}, false
 	}
-	return vc.Status.Conditions[idx].Status == corev1.ConditionTrue
+	return vc.Status.Conditions[idx], vc.Status.Conditions[idx].Status == corev1.ConditionTrue
 }
 
-// updateHelmChartDeployedCondition marks a Valid8orPluginCondition true or false for a plugin
-func updateHelmChartDeployedCondition(vc *v1alpha1.Valid8orConfig, chartName string, installed bool) {
+// getHelmChartCondition builds a Valid8orPluginCondition for a plugin
+func getHelmChartCondition(chartName string, installed bool) v1alpha1.Valid8orPluginCondition {
 	condition := v1alpha1.Valid8orPluginCondition{
 		Type:               v1alpha1.HelmChartDeployedCondition,
 		PluginName:         chartName,
@@ -292,10 +303,5 @@ func updateHelmChartDeployedCondition(vc *v1alpha1.Valid8orConfig, chartName str
 		condition.Status = corev1.ConditionFalse
 		condition.Message = fmt.Sprintf("Plugin %s was uninstalled", chartName)
 	}
-	idx := conditionIndex(vc, chartName, v1alpha1.HelmChartDeployedCondition)
-	if idx == -1 {
-		vc.Status.Conditions = append(vc.Status.Conditions, condition)
-	} else {
-		vc.Status.Conditions[idx] = condition
-	}
+	return condition
 }
