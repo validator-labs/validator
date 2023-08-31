@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.0.6](https://github.com/spectrocloud-labs/valid8or/compare/v0.0.5...v0.0.6) (2023-08-31)
+
+
+### Bug Fixes
+
+* NET_ADMIN -&gt; NET_RAW ([122cc80](https://github.com/spectrocloud-labs/valid8or/commit/122cc808ed6b83eb6a33dc38e031d86805440784))
+
 ## [0.0.5](https://github.com/spectrocloud-labs/valid8or/compare/v0.0.4...v0.0.5) (2023-08-31)
 
 
