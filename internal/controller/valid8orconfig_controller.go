@@ -166,13 +166,12 @@ func (r *Valid8orConfigReconciler) redeployIfNeeded(ctx context.Context, vc *v1a
 	}
 
 	// delete any plugins that have been removed
-	for i, c := range vc.Status.Conditions {
+	for _, c := range vc.Status.Conditions {
 		_, ok := specPlugins[c.PluginName]
 		if !ok && c.Type == v1alpha1.HelmChartDeployedCondition && c.Status == corev1.ConditionTrue {
 			r.Log.V(0).Info("Deleting plugin Helm chart", "namespace", vc.Namespace, "name", c.PluginName)
 			r.deletePlugin(vc, c.PluginName)
 			delete(vc.Annotations, getPluginHashKey(c.PluginName))
-			conditions[i] = getHelmChartCondition(c.PluginName, false)
 		}
 	}
 
