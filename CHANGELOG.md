@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.0.6](https://github.com/spectrocloud-labs/valid8or/compare/v0.0.5...v0.0.6) (2023-08-31)
+
+
+### Bug Fixes
+
+* securityContext blocking MTU check w/ ping ([030fec0](https://github.com/spectrocloud-labs/valid8or/commit/030fec063ecfe31030ff43071a7055f81151116f))
+
 ## [0.0.5](https://github.com/spectrocloud-labs/valid8or/compare/v0.0.4...v0.0.5) (2023-08-31)
 
 
