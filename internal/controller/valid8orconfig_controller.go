@@ -184,19 +184,19 @@ func (r *Valid8orConfigReconciler) redeployIfNeeded(ctx context.Context, vc *v1a
 // indicating whether the values have changed or not since the last reconciliation
 func (r *Valid8orConfigReconciler) updatePluginHash(vc *v1alpha1.Valid8orConfig, p v1alpha1.HelmRelease) bool {
 	valuesUnchanged := false
-
 	pluginValuesHashLatest := sha256.Sum256([]byte(p.Values))
 	pluginValuesHashLatestB64 := base64.StdEncoding.EncodeToString(pluginValuesHashLatest[:])
-
 	pluginValuesHashKey := fmt.Sprintf("%s-%s", PluginValuesHash, p.Chart.Name)
+
+	if vc.Annotations == nil {
+		vc.Annotations = make(map[string]string)
+	}
 	pluginValuesHash, ok := vc.Annotations[pluginValuesHashKey]
-	if !ok {
-		vc.Annotations = make(map[string]string, 0)
-	} else {
+	if ok {
 		valuesUnchanged = pluginValuesHash == pluginValuesHashLatestB64
 	}
-
 	vc.Annotations[pluginValuesHashKey] = pluginValuesHashLatestB64
+
 	return valuesUnchanged
 }
 
