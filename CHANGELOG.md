@@ -1,5 +1,23 @@
 # Changelog
 
+## [0.0.5](https://github.com/spectrocloud-labs/valid8or/compare/v0.0.4...v0.0.5) (2023-08-31)
+
+
+### Bug Fixes
+
+* preserve VC annotations when updating plugin hashes ([19c9463](https://github.com/spectrocloud-labs/valid8or/commit/19c9463a4ed7b516731fdaf76cf487e682a6a2c4))
+
+
+### Other
+
+* release 0.0.5 ([62aa2e5](https://github.com/spectrocloud-labs/valid8or/commit/62aa2e5fae1cd33f36591f13ca37eef03caafbf5))
+* update README ([f8254d4](https://github.com/spectrocloud-labs/valid8or/commit/f8254d4a0bca6db90523ace43503cf6d80d3af30))
+
+
+### Docs
+
+* add valid8or-plugin-network to default values.yaml ([1aada24](https://github.com/spectrocloud-labs/valid8or/commit/1aada2492d518e7ed50934d2cb6e184da5d1e031))
+
 ## [0.0.4](https://github.com/spectrocloud-labs/valid8or/compare/v0.0.3...v0.0.4) (2023-08-29)
 
 
