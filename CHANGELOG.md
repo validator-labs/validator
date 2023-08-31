@@ -1,5 +1,26 @@
 # Changelog
 
+## [0.0.5](https://github.com/spectrocloud-labs/valid8or/compare/v0.0.4...v0.0.5) (2023-08-31)
+
+
+### Bug Fixes
+
+* omit conditions for uninstalled plugins ([c9f430d](https://github.com/spectrocloud-labs/valid8or/commit/c9f430d81bfdbb077edfa5d3cc48f314bf831c45))
+* preserve VC annotations when updating plugin hashes ([19c9463](https://github.com/spectrocloud-labs/valid8or/commit/19c9463a4ed7b516731fdaf76cf487e682a6a2c4))
+* securityContext blocking MTU check w/ ping ([131e5d9](https://github.com/spectrocloud-labs/valid8or/commit/131e5d91015b54b470b61708bfe8675f7eb26a0e))
+* update 2+ plugin conditions properly ([a12488f](https://github.com/spectrocloud-labs/valid8or/commit/a12488f9dc376d1b0a8b413791b3aa2e25b185a5))
+
+
+### Other
+
+* release 0.0.5 ([24e9712](https://github.com/spectrocloud-labs/valid8or/commit/24e9712ffbf6fb8d33333d5d8c063f3935c7ceae))
+* update README ([f8254d4](https://github.com/spectrocloud-labs/valid8or/commit/f8254d4a0bca6db90523ace43503cf6d80d3af30))
+
+
+### Docs
+
+* add valid8or-plugin-network to default values.yaml ([1aada24](https://github.com/spectrocloud-labs/valid8or/commit/1aada2492d518e7ed50934d2cb6e184da5d1e031))
+
 ## [0.0.4](https://github.com/spectrocloud-labs/valid8or/compare/v0.0.3...v0.0.4) (2023-08-29)
 
 
