@@ -1,5 +1,23 @@
 # Changelog
 
+## [0.0.6](https://github.com/spectrocloud-labs/valid8or/compare/v0.0.5...v0.0.6) (2023-09-01)
+
+
+### Bug Fixes
+
+* **deps:** update kubernetes packages to v0.28.1 ([#30](https://github.com/spectrocloud-labs/valid8or/issues/30)) ([f94b40d](https://github.com/spectrocloud-labs/valid8or/commit/f94b40d7d9b0be097cad185b0426727380cef822))
+* **deps:** update module github.com/onsi/ginkgo/v2 to v2.12.0 ([#31](https://github.com/spectrocloud-labs/valid8or/issues/31)) ([98a7aa7](https://github.com/spectrocloud-labs/valid8or/commit/98a7aa785946534db076a093c0715ac63782d72f))
+* **deps:** update module github.com/onsi/gomega to v1.27.10 ([#29](https://github.com/spectrocloud-labs/valid8or/issues/29)) ([8697124](https://github.com/spectrocloud-labs/valid8or/commit/8697124f495004f71ed9ba694ab8116880a4ae7f))
+* **deps:** update module sigs.k8s.io/controller-runtime to v0.16.1 ([#33](https://github.com/spectrocloud-labs/valid8or/issues/33)) ([94bf0ad](https://github.com/spectrocloud-labs/valid8or/commit/94bf0ad33b8524a82427b12320ba70493af9ac21))
+* NET_ADMIN -&gt; NET_RAW ([122cc80](https://github.com/spectrocloud-labs/valid8or/commit/122cc808ed6b83eb6a33dc38e031d86805440784))
+
+
+### Other
+
+* **deps:** update actions/checkout digest to f43a0e5 ([#25](https://github.com/spectrocloud-labs/valid8or/issues/25)) ([fa0b3d9](https://github.com/spectrocloud-labs/valid8or/commit/fa0b3d95f74e70226f07114bffcde2e1b270ad33))
+* **deps:** update actions/setup-go digest to 93397be ([#26](https://github.com/spectrocloud-labs/valid8or/issues/26)) ([e32d52b](https://github.com/spectrocloud-labs/valid8or/commit/e32d52bc1243451b6a0f6a27f228869da9497761))
+* **deps:** update docker/setup-buildx-action digest to 885d146 ([#28](https://github.com/spectrocloud-labs/valid8or/issues/28)) ([f4b1dd1](https://github.com/spectrocloud-labs/valid8or/commit/f4b1dd10a4170f2596bf2cebf64a363d21efcc44))
+
 ## [0.0.5](https://github.com/spectrocloud-labs/valid8or/compare/v0.0.4...v0.0.5) (2023-08-31)
 
 
