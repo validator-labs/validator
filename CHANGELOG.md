@@ -1,5 +1,19 @@
 # Changelog
 
+## [0.0.6](https://github.com/spectrocloud-labs/valid8or/compare/v0.0.5...v0.0.6) (2023-09-01)
+
+
+### Bug Fixes
+
+* NET_ADMIN -&gt; NET_RAW ([122cc80](https://github.com/spectrocloud-labs/valid8or/commit/122cc808ed6b83eb6a33dc38e031d86805440784))
+
+
+### Other
+
+* **deps:** update actions/checkout digest to f43a0e5 ([#25](https://github.com/spectrocloud-labs/valid8or/issues/25)) ([fa0b3d9](https://github.com/spectrocloud-labs/valid8or/commit/fa0b3d95f74e70226f07114bffcde2e1b270ad33))
+* **deps:** update actions/setup-go digest to 93397be ([#26](https://github.com/spectrocloud-labs/valid8or/issues/26)) ([e32d52b](https://github.com/spectrocloud-labs/valid8or/commit/e32d52bc1243451b6a0f6a27f228869da9497761))
+* **deps:** update docker/setup-buildx-action digest to 885d146 ([#28](https://github.com/spectrocloud-labs/valid8or/issues/28)) ([f4b1dd1](https://github.com/spectrocloud-labs/valid8or/commit/f4b1dd10a4170f2596bf2cebf64a363d21efcc44))
+
 ## [0.0.5](https://github.com/spectrocloud-labs/valid8or/compare/v0.0.4...v0.0.5) (2023-08-31)
 
 
