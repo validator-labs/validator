@@ -20,6 +20,7 @@ RUN go mod download
 COPY cmd/main.go cmd/main.go
 COPY api/ api/
 COPY internal/ internal/
+COPY pkg/ pkg/
 
 RUN curl -s https://get.helm.sh/helm-v3.10.1-linux-amd64.tar.gz | tar -xzf - && \
     mv linux-amd64/helm . && rm -rf linux-amd64
