@@ -54,7 +54,7 @@ plugins:
 - chart:
     name: valid8or-plugin-aws
     repository: "https://spectrocloud-labs.github.io/valid8or-plugin-aws"
-    version: "v0.0.2"
+    version: "v0.0.4"
   values: |-
     controllerManager:
       kubeRbacProxy:
@@ -81,7 +81,6 @@ plugins:
       manager:
         args:
         - --health-probe-bind-address=:8081
-        - --metrics-bind-address=127.0.0.1:8080
         - --leader-elect
         containerSecurityContext:
           allowPrivilegeEscalation: false
@@ -90,7 +89,7 @@ plugins:
             - ALL
         image:
           repository: quay.io/spectrocloud-labs/valid8or-plugin-aws
-          tag: v0.0.2
+          tag: v0.0.4
         resources:
           limits:
             cpu: 500m
@@ -111,8 +110,10 @@ plugins:
       type: ClusterIP
     auth:
       secretName: aws-creds
+      createSecret: true
       accessKeyId: ""
       secretAccessKey: ""
+      sessionToken: ""
 - chart:
     name: valid8or-plugin-network
     repository: "https://spectrocloud-labs.github.io/valid8or-plugin-network"
@@ -143,7 +144,6 @@ plugins:
       manager:
         args:
         - --health-probe-bind-address=:8081
-        - --metrics-bind-address=127.0.0.1:8080
         - --leader-elect
         containerSecurityContext:
           allowPrivilegeEscalation: true
