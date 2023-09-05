@@ -35,7 +35,7 @@ import (
 	"sigs.k8s.io/controller-runtime/pkg/client"
 
 	v1alpha1 "github.com/spectrocloud-labs/valid8or/api/v1alpha1"
-	"github.com/spectrocloud-labs/valid8or/internal/helm"
+	"github.com/spectrocloud-labs/valid8or/pkg/helm"
 )
 
 const (

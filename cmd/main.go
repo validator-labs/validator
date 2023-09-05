@@ -32,8 +32,8 @@ import (
 
 	validationv1alpha1 "github.com/spectrocloud-labs/valid8or/api/v1alpha1"
 	"github.com/spectrocloud-labs/valid8or/internal/controller"
-	"github.com/spectrocloud-labs/valid8or/internal/helm"
 	"github.com/spectrocloud-labs/valid8or/internal/kube"
+	"github.com/spectrocloud-labs/valid8or/pkg/helm"
 	//+kubebuilder:scaffold:imports
 )
 
