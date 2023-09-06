@@ -89,7 +89,7 @@ plugins:
             - ALL
         image:
           repository: quay.io/spectrocloud-labs/valid8or-plugin-aws
-          tag: v0.0.4
+          tag: v0.0.5
         resources:
           limits:
             cpu: 500m
@@ -154,7 +154,7 @@ plugins:
             - ALL
         image:
           repository: quay.io/spectrocloud-labs/valid8or-plugin-network
-          tag: v0.0.1
+          tag: v0.0.2
         resources:
           limits:
             cpu: 500m
