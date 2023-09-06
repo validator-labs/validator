@@ -1,5 +1,25 @@
 # Changelog
 
+## [0.0.7](https://github.com/spectrocloud-labs/valid8or/compare/v0.0.6...v0.0.7) (2023-09-06)
+
+
+### Bug Fixes
+
+* **deps:** update golang.org/x/exp digest to 9212866 ([#41](https://github.com/spectrocloud-labs/valid8or/issues/41)) ([50ad9cb](https://github.com/spectrocloud-labs/valid8or/commit/50ad9cbd72f531ab3e29eb43d59f75026efc96b0))
+* include pkg/ in dockerfiles ([b45bb22](https://github.com/spectrocloud-labs/valid8or/commit/b45bb22532adc3e860aea56edf7ab3f3a95519fd))
+
+
+### Other
+
+* bump plugin versions ([6658d19](https://github.com/spectrocloud-labs/valid8or/commit/6658d190022815cf56d1a345ae66d46fd260c10c))
+* **deps:** update actions/checkout action to v4 ([#39](https://github.com/spectrocloud-labs/valid8or/issues/39)) ([3c848b6](https://github.com/spectrocloud-labs/valid8or/commit/3c848b61c3294cdd1ceed376c3e4a48521221b6f))
+* update AWS plugin version; fix default values.yaml ([516213b](https://github.com/spectrocloud-labs/valid8or/commit/516213ba35d80c4e8692b1448b22f6e1b9756c5d))
+
+
+### Refactoring
+
+* expose helm package ([2a34e0a](https://github.com/spectrocloud-labs/valid8or/commit/2a34e0ae780b287a8a1a48ee00f5016e667c8304))
+
 ## [0.0.6](https://github.com/spectrocloud-labs/valid8or/compare/v0.0.5...v0.0.6) (2023-09-01)
 
 
