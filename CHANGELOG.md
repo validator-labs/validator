@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.0.8](https://github.com/spectrocloud-labs/valid8or/compare/v0.0.7...v0.0.8) (2023-09-06)
+
+
+### Other
+
+* bump aws plugin version ([bac567e](https://github.com/spectrocloud-labs/valid8or/commit/bac567e69ac6a957b78f29b5bcec81d2f3b0c6b8))
+* **deps:** update actions/upload-artifact digest to a8a3f3a ([#43](https://github.com/spectrocloud-labs/valid8or/issues/43)) ([fc33646](https://github.com/spectrocloud-labs/valid8or/commit/fc3364674e45c9dd3fdbf15773a7fbe2f04e3395))
+
 ## [0.0.7](https://github.com/spectrocloud-labs/valid8or/compare/v0.0.6...v0.0.7) (2023-09-06)
 
 
