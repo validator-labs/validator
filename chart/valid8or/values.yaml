@@ -117,7 +117,7 @@ plugins:
 - chart:
     name: valid8or-plugin-vsphere
     repository: "https://spectrocloud-labs.github.io/valid8or-plugin-vsphere"
-    version: "v0.0.1"
+    version: "v0.0.6"
   values: |-
     controllerManager:
       kubeRbacProxy:
@@ -152,7 +152,7 @@ plugins:
             - ALL
         image:
           repository: quay.io/spectrocloud-labs/valid8or-plugin-vsphere
-          tag: v0.0.1
+          tag: v0.0.2
         resources:
           limits:
             cpu: 500m
