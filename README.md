@@ -8,6 +8,7 @@ The valid8or repository is fairly minimal - all the heavy lifting is done by the
 Plugins:
 - [AWS](https://github.com/spectrocloud-labs/valid8or-plugin-aws)
 - [Network](https://github.com/spectrocloud-labs/valid8or-plugin-network)
+- [vSphere](https://github.com/spectrocloud-labs/valid8or-plugin-vsphere)
 
 ## Installation
 ```bash
