@@ -1,5 +1,27 @@
 # Changelog
 
+## [0.0.9](https://github.com/spectrocloud-labs/valid8or/compare/v0.0.8...v0.0.9) (2023-10-10)
+
+
+### Bug Fixes
+
+* **deps:** update golang.org/x/exp digest to 7918f67 ([#55](https://github.com/spectrocloud-labs/valid8or/issues/55)) ([3f173d4](https://github.com/spectrocloud-labs/valid8or/commit/3f173d4dc256415d9f447133afc70024d0115021))
+* **deps:** update kubernetes packages to v0.28.2 ([#51](https://github.com/spectrocloud-labs/valid8or/issues/51)) ([f43d5a0](https://github.com/spectrocloud-labs/valid8or/commit/f43d5a098d6d5923fa540564279defe31701f3c7))
+* **deps:** update module github.com/onsi/ginkgo/v2 to v2.12.1 ([#52](https://github.com/spectrocloud-labs/valid8or/issues/52)) ([516693e](https://github.com/spectrocloud-labs/valid8or/commit/516693e3d150dfceb0a6be3a5f00bfbe260a1cb6))
+* **deps:** update module github.com/onsi/ginkgo/v2 to v2.13.0 ([#57](https://github.com/spectrocloud-labs/valid8or/issues/57)) ([be32cb8](https://github.com/spectrocloud-labs/valid8or/commit/be32cb85ea38e8ddfd03e9d6837dddda1967c4b7))
+* **deps:** update module github.com/onsi/gomega to v1.28.0 ([#54](https://github.com/spectrocloud-labs/valid8or/issues/54)) ([e89431e](https://github.com/spectrocloud-labs/valid8or/commit/e89431e5685fc9ab83dd7dd2a87864f57b835bcb))
+* **deps:** update module sigs.k8s.io/controller-runtime to v0.16.2 ([#50](https://github.com/spectrocloud-labs/valid8or/issues/50)) ([1a07c2a](https://github.com/spectrocloud-labs/valid8or/commit/1a07c2a134bc26d86a17c04fcf71bae2f601c3e5))
+
+
+### Other
+
+* **deps:** update actions/checkout digest to 8ade135 ([#53](https://github.com/spectrocloud-labs/valid8or/issues/53)) ([d42a8a6](https://github.com/spectrocloud-labs/valid8or/commit/d42a8a6832c15b76eac882a7f35fc3a2f8ba842a))
+* **deps:** update docker/build-push-action action to v5 ([#47](https://github.com/spectrocloud-labs/valid8or/issues/47)) ([40d0053](https://github.com/spectrocloud-labs/valid8or/commit/40d0053011c9d05582d96ab07c7e743867fbed8d))
+* **deps:** update docker/build-push-action digest to 0a97817 ([#45](https://github.com/spectrocloud-labs/valid8or/issues/45)) ([91a951b](https://github.com/spectrocloud-labs/valid8or/commit/91a951b03d40db29020af68cb7b1a22db8cad19c))
+* **deps:** update docker/login-action action to v3 ([#48](https://github.com/spectrocloud-labs/valid8or/issues/48)) ([9c940d7](https://github.com/spectrocloud-labs/valid8or/commit/9c940d7acebf0e237ed5129cc3b25aca596a257f))
+* **deps:** update docker/setup-buildx-action action to v3 ([#49](https://github.com/spectrocloud-labs/valid8or/issues/49)) ([a3fe730](https://github.com/spectrocloud-labs/valid8or/commit/a3fe730ae38b9655583be333e255e48767c2cf0c))
+* release 0.0.9 ([3cbcfa9](https://github.com/spectrocloud-labs/valid8or/commit/3cbcfa9e3f1e5c75dcfc083df1494aab0c41c31f))
+
 ## [0.0.8](https://github.com/spectrocloud-labs/valid8or/compare/v0.0.7...v0.0.8) (2023-09-06)
 
 
