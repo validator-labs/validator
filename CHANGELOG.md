@@ -10,6 +10,19 @@
 
 ### Other
 
+* **main:** release 0.0.10 ([#70](https://github.com/spectrocloud-labs/validator/issues/70)) ([6c5e4fc](https://github.com/spectrocloud-labs/validator/commit/6c5e4fcc1182862e3902044e543309800e96b31e))
+* release 0.0.10 ([65ce207](https://github.com/spectrocloud-labs/validator/commit/65ce2076727fd3d1da49afd884329c55a6394c91))
+
+## [0.0.10](https://github.com/spectrocloud-labs/validator/compare/v0.0.10...v0.0.10) (2023-10-20)
+
+
+### Bug Fixes
+
+* update plugin versions in default values.yaml ([6f7f90d](https://github.com/spectrocloud-labs/validator/commit/6f7f90d15fbeb105df6c5b6c568c35fa4f12121f))
+
+
+### Other
+
 * release 0.0.10 ([65ce207](https://github.com/spectrocloud-labs/validator/commit/65ce2076727fd3d1da49afd884329c55a6394c91))
 
 ## [0.0.10](https://github.com/spectrocloud-labs/validator/compare/v0.0.9...v0.0.10) (2023-10-20)
