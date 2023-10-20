@@ -54,69 +54,6 @@ plugins:
 - chart:
     name: validator-plugin-aws
     repository: "https://spectrocloud-labs.github.io/validator-plugin-aws"
-    version: "v0.0.4"
-  values: |-
-    controllerManager:
-      kubeRbacProxy:
-        args:
-        - --secure-listen-address=0.0.0.0:8443
-        - --upstream=http://127.0.0.1:8080/
-        - --logtostderr=true
-        - --v=0
-        containerSecurityContext:
-          allowPrivilegeEscalation: false
-          capabilities:
-            drop:
-            - ALL
-        image:
-          repository: gcr.io/kubebuilder/kube-rbac-proxy
-          tag: v0.14.1
-        resources:
-          limits:
-            cpu: 500m
-            memory: 128Mi
-          requests:
-            cpu: 5m
-            memory: 64Mi
-      manager:
-        args:
-        - --health-probe-bind-address=:8081
-        - --leader-elect
-        containerSecurityContext:
-          allowPrivilegeEscalation: false
-          capabilities:
-            drop:
-            - ALL
-        image:
-          repository: quay.io/spectrocloud-labs/validator-plugin-aws
-          tag: v0.0.6
-        resources:
-          limits:
-            cpu: 500m
-            memory: 128Mi
-          requests:
-            cpu: 10m
-            memory: 64Mi
-      replicas: 1
-      serviceAccount:
-        annotations: {}
-    kubernetesClusterDomain: cluster.local
-    metricsService:
-      ports:
-      - name: https
-        port: 8443
-        protocol: TCP
-        targetPort: https
-      type: ClusterIP
-    auth:
-      secretName: aws-creds
-      createSecret: true
-      accessKeyId: ""
-      secretAccessKey: ""
-      sessionToken: ""
-- chart:
-    name: validator-plugin-vsphere
-    repository: "https://spectrocloud-labs.github.io/validator-plugin-vsphere"
     version: "v0.0.8"
   values: |-
     controllerManager:
@@ -151,8 +88,71 @@ plugins:
             drop:
             - ALL
         image:
-          repository: quay.io/spectrocloud-labs/validator-plugin-vsphere
+          repository: quay.io/spectrocloud-labs/validator-plugin-aws
           tag: v0.0.8
+        resources:
+          limits:
+            cpu: 500m
+            memory: 128Mi
+          requests:
+            cpu: 10m
+            memory: 64Mi
+      replicas: 1
+      serviceAccount:
+        annotations: {}
+    kubernetesClusterDomain: cluster.local
+    metricsService:
+      ports:
+      - name: https
+        port: 8443
+        protocol: TCP
+        targetPort: https
+      type: ClusterIP
+    auth:
+      secretName: aws-creds
+      createSecret: true
+      accessKeyId: ""
+      secretAccessKey: ""
+      sessionToken: ""
+- chart:
+    name: validator-plugin-vsphere
+    repository: "https://spectrocloud-labs.github.io/validator-plugin-vsphere"
+    version: "v0.0.11"
+  values: |-
+    controllerManager:
+      kubeRbacProxy:
+        args:
+        - --secure-listen-address=0.0.0.0:8443
+        - --upstream=http://127.0.0.1:8080/
+        - --logtostderr=true
+        - --v=0
+        containerSecurityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+            - ALL
+        image:
+          repository: gcr.io/kubebuilder/kube-rbac-proxy
+          tag: v0.14.1
+        resources:
+          limits:
+            cpu: 500m
+            memory: 128Mi
+          requests:
+            cpu: 5m
+            memory: 64Mi
+      manager:
+        args:
+        - --health-probe-bind-address=:8081
+        - --leader-elect
+        containerSecurityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+            - ALL
+        image:
+          repository: quay.io/spectrocloud-labs/validator-plugin-vsphere
+          tag: v0.0.11
         resources:
           limits:
             cpu: 500m
@@ -180,7 +180,7 @@ plugins:
 - chart:
     name: validator-plugin-network
     repository: "https://spectrocloud-labs.github.io/validator-plugin-network"
-    version: "v0.0.1"
+    version: "v0.0.4"
   values: |-
     controllerManager:
       kubeRbacProxy:
@@ -217,7 +217,7 @@ plugins:
             - ALL
         image:
           repository: quay.io/spectrocloud-labs/validator-plugin-network
-          tag: v0.0.2
+          tag: v0.0.4
         resources:
           limits:
             cpu: 500m
