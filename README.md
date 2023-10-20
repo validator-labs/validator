@@ -1,18 +1,20 @@
-# valid8or
-valid8or (AKA Validation Controller) monitors ValidationResults created by one or more valid8or plugins and uploads them to a sink of your choosing, e.g., Slack or Spectro Cloud Palette.
-![image](https://github.com/spectrocloud-labs/valid8or/assets/1795270/4945941e-4c42-4cae-909d-6d9cecf631fd)
+# validator
+validator (AKA Validation Controller) monitors ValidationResults created by one or more validator plugins and uploads them to a sink of your choosing, e.g., Slack or Spectro Cloud Palette.
+<img width="1364" alt="image" src="https://github.com/spectrocloud-labs/validator/assets/1795270/e68dfdf5-25bf-4336-ad87-f783c4825c7e">
 
 ## Description
-The valid8or repository is fairly minimal - all the heavy lifting is done by the valid8or plugins. Installation of valid8or and one or more plugins is accomplished via Helm.
+The validator repository is fairly minimal - all the heavy lifting is done by the validator plugins. Installation of validator and one or more plugins is accomplished via Helm.
 
 Plugins:
-- https://github.com/spectrocloud-labs/valid8or-plugin-aws
+- [AWS](https://github.com/spectrocloud-labs/validator-plugin-aws)
+- [Network](https://github.com/spectrocloud-labs/validator-plugin-network)
+- [vSphere](https://github.com/spectrocloud-labs/validator-plugin-vsphere)
 
 ## Installation
 ```bash
-git clone github.com/spectrocloud-labs/valid8or
-cd valid8or
-helm install valid8or chart/ -f chart/values.yaml -n valid8or --create-namespace
+helm repo add validator https://spectrocloud-labs.github.io/validator/
+helm repo update
+helm install validator validator/validator -n validator --create-namespace
 ```
 
 ## Getting Started
@@ -29,13 +31,13 @@ kubectl apply -f config/samples/
 2. Build and push your image to the location specified by `IMG`:
 
 ```sh
-make docker-build docker-push IMG=<some-registry>/valid8or:tag
+make docker-build docker-push IMG=<some-registry>/validator:tag
 ```
 
 3. Deploy the controller to the cluster with the image specified by `IMG`:
 
 ```sh
-make deploy IMG=<some-registry>/valid8or:tag
+make deploy IMG=<some-registry>/validator:tag
 ```
 
 ### Uninstall CRDs
@@ -54,6 +56,15 @@ make undeploy
 
 ## Contributing
 All contributions are welcome! Feel free to reach out on the [Spectro Cloud community Slack](https://spectrocloudcommunity.slack.com/join/shared_invite/zt-g8gfzrhf-cKavsGD_myOh30K24pImLA#/shared-invite/email).
+
+Make sure `pre-commit` is [installed](https://pre-commit.com#install).
+
+Install the `pre-commit` scripts:
+
+```console
+pre-commit install --hook-type commit-msg
+pre-commit install --hook-type pre-commit
+```
 
 ### How it works
 This project aims to follow the Kubernetes [Operator pattern](https://kubernetes.io/docs/concepts/extend-kubernetes/operator/).

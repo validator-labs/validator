@@ -1,0 +1,10 @@
+repos:
+  - repo: https://github.com/zricethezav/gitleaks
+    rev: v8.18.0
+    hooks:
+      - id: gitleaks
+  - repo: https://github.com/compilerla/conventional-pre-commit
+    rev: v2.4.0
+    hooks:
+      - id: conventional-pre-commit
+        stages: [commit-msg]

@@ -1,0 +1,27 @@
+# permissions for end users to view validatorconfigs.
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  labels:
+    app.kubernetes.io/name: clusterrole
+    app.kubernetes.io/instance: validatorconfig-viewer-role
+    app.kubernetes.io/component: rbac
+    app.kubernetes.io/created-by: validator
+    app.kubernetes.io/part-of: validator
+    app.kubernetes.io/managed-by: kustomize
+  name: validatorconfig-viewer-role
+rules:
+- apiGroups:
+  - validation.spectrocloud.labs
+  resources:
+  - validatorconfigs
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
+  - validation.spectrocloud.labs
+  resources:
+  - validatorconfigs/status
+  verbs:
+  - get

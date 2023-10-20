@@ -1,7 +1,9 @@
 # Build the manager binary
-FROM golang:1.20 AS builder
+FROM golang:alpine3.17 AS builder
 ARG TARGETOS
 ARG TARGETARCH
+
+RUN apk add --no-cache curl
 
 WORKDIR /workspace
 # Copy the Go Modules manifests
@@ -14,7 +16,12 @@ RUN go mod download
 # Copy the go source
 COPY cmd/main.go cmd/main.go
 COPY api/ api/
-COPY internal/controller/ internal/controller/
+COPY internal/ internal/
+COPY pkg/ pkg/
+
+# Get Helm
+RUN curl -s https://get.helm.sh/helm-v3.10.1-linux-amd64.tar.gz | tar -xzf - && \
+    mv linux-amd64/helm . && rm -rf linux-amd64
 
 # Build
 # the GOARCH has not a default value to allow the binary be built according to the host where the command
@@ -28,6 +35,7 @@ RUN CGO_ENABLED=0 GOOS=${TARGETOS:-linux} GOARCH=${TARGETARCH} go build -a -o ma
 FROM gcr.io/distroless/static:nonroot AS production
 WORKDIR /
 COPY --from=builder /workspace/manager .
+COPY --from=builder /workspace/helm .
 USER 65532:65532
 
 ENTRYPOINT ["/manager"]

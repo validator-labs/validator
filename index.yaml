@@ -1,6 +1,6 @@
 apiVersion: v1
 entries:
-  valid8or:
+  validator:
   - apiVersion: v2
     appVersion: 0.0.9
     created: "2023-10-10T17:49:26.471411122Z"
@@ -98,17 +98,17 @@ entries:
     appVersion: 0.0.1
     created: "2023-08-25T22:18:10.531294222Z"
     dependencies:
-    - condition: valid8orPluginAws.enabled
-      name: valid8or-plugin-aws
+    - condition: validatorPluginAws.enabled
+      name: validator-plugin-aws
       repository: ""
       version: 0.0.1
-    description: valid8or monitors ValidationResults created by one or more valid8or
+    description: validator monitors ValidationResults created by one or more validator
       plugins and uploads them to a configurable sink
     digest: 4873d6ecb4d929209157668bc331857c7f3873019dc5c61b5bfa36757981348b
-    name: valid8or
+    name: validator
     type: application
     urls:
-    - https://spectrocloud-labs.github.io/valid8or/valid8or-0.0.1.tgz
+    - https://spectrocloud-labs.github.io/validator/validator-0.0.1.tgz
     version: 0.0.1
   validator:
   - apiVersion: v2

@@ -1,0 +1,7 @@
+apiVersion: validation.spectrocloud.labs/v1alpha1
+kind: ValidatorConfig
+metadata:
+  name: validator-config
+spec:
+  plugins:
+{{ toYaml .Values.plugins | indent 2 }} 

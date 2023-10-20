@@ -1,6 +1,6 @@
 
 # Image URL to use all building/pushing image targets
-IMG ?= quay.io/spectrocloud-labs/valid8or:latest
+IMG ?= quay.io/spectrocloud-labs/validator:latest
 
 # Get the currently used golang install path (in GOPATH/bin, unless GOBIN is set)
 ifeq (,$(shell go env GOBIN))
@@ -183,15 +183,15 @@ $(HELMIFY): $(LOCALBIN)
 helm-build: helm helmify manifests kustomize
 	cd config/manager && $(KUSTOMIZE) edit set image controller=$(IMG) && cd ../../
 	$(KUSTOMIZE) build config/default | $(HELMIFY) -crd-dir
-	cat hack/plugin-values.yaml >> chart/valid8or/values.yaml
+	cat hack/extra-values.yaml >> chart/validator/values.yaml
 
 .PHONY: helm-package
 helm-package: generate manifests
-	$(HELM) package --version $(CHART_VERSION) chart/valid8or/
-	mkdir -p charts && mv valid8or-*.tgz charts
-	$(HELM) repo index --url https://charts.spectrocloud-labs.io/charts charts
-	mv charts/valid8or/index.yaml index.yaml
+	$(HELM) package --version $(CHART_VERSION) chart/validator/
+	mkdir -p charts && mv validator-*.tgz charts
+	$(HELM) repo index --url https://spectrocloud-labs.github.io/validator ./chart
+	mv charts/validator/index.yaml index.yaml
 
 .PHONY: frigate
 frigate:
-	frigate gen chart --no-deps -o markdown > chart/README.md
+	frigate gen chart/validator --no-deps -o markdown > chart/validator/README.md

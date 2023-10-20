@@ -22,17 +22,18 @@ import (
 
 	// Import all Kubernetes client auth plugins (e.g. Azure, GCP, OIDC, etc.)
 	// to ensure that exec-entrypoint and run can make use of them.
-	_ "k8s.io/client-go/plugin/pkg/client/auth"
-
 	"k8s.io/apimachinery/pkg/runtime"
 	utilruntime "k8s.io/apimachinery/pkg/util/runtime"
 	clientgoscheme "k8s.io/client-go/kubernetes/scheme"
+	_ "k8s.io/client-go/plugin/pkg/client/auth"
 	ctrl "sigs.k8s.io/controller-runtime"
 	"sigs.k8s.io/controller-runtime/pkg/healthz"
 	"sigs.k8s.io/controller-runtime/pkg/log/zap"
 
-	validationv1alpha1 "github.com/spectrocloud-labs/valid8or/api/v1alpha1"
-	"github.com/spectrocloud-labs/valid8or/internal/controller"
+	validationv1alpha1 "github.com/spectrocloud-labs/validator/api/v1alpha1"
+	"github.com/spectrocloud-labs/validator/internal/controller"
+	"github.com/spectrocloud-labs/validator/internal/kube"
+	"github.com/spectrocloud-labs/validator/pkg/helm"
 	//+kubebuilder:scaffold:imports
 )
 
@@ -49,14 +50,11 @@ func init() {
 }
 
 func main() {
-	var metricsAddr string
 	var enableLeaderElection bool
 	var probeAddr string
-	flag.StringVar(&metricsAddr, "metrics-bind-address", ":8080", "The address the metric endpoint binds to.")
 	flag.StringVar(&probeAddr, "health-probe-bind-address", ":8081", "The address the probe endpoint binds to.")
-	flag.BoolVar(&enableLeaderElection, "leader-elect", false,
-		"Enable leader election for controller manager. "+
-			"Enabling this will ensure there is only one active controller manager.")
+	flag.BoolVar(&enableLeaderElection, "leader-elect", false, "Enable leader election for controller manager. "+
+		"Enabling this will ensure there is only one active controller manager.")
 	opts := zap.Options{
 		Development: true,
 	}
@@ -67,8 +65,6 @@ func main() {
 
 	mgr, err := ctrl.NewManager(ctrl.GetConfigOrDie(), ctrl.Options{
 		Scheme:                 scheme,
-		MetricsBindAddress:     metricsAddr,
-		Port:                   9443,
 		HealthProbeBindAddress: probeAddr,
 		LeaderElection:         enableLeaderElection,
 		LeaderElectionID:       "0d82a3fe.spectrocloud.labs",
@@ -89,6 +85,12 @@ func main() {
 		os.Exit(1)
 	}
 
+	rawConfig, err := kube.ConvertRestConfigToRawConfig(mgr.GetConfig())
+	if err != nil {
+		setupLog.Error(err, "unable to get config")
+		os.Exit(1)
+	}
+
 	if err = (&controller.ValidationResultReconciler{
 		Client: mgr.GetClient(),
 		Log:    ctrl.Log.WithName("controllers").WithName("ValidationResult"),
@@ -97,6 +99,18 @@ func main() {
 		setupLog.Error(err, "unable to create controller", "controller", "ValidationResult")
 		os.Exit(1)
 	}
+
+	if err = (&controller.ValidatorConfigReconciler{
+		Client:            mgr.GetClient(),
+		HelmClient:        helm.NewHelmClient(rawConfig),
+		HelmSecretsClient: helm.NewSecretsClient(mgr.GetClient()),
+		Log:               ctrl.Log.WithName("controllers").WithName("ValidatorConfig"),
+		Scheme:            mgr.GetScheme(),
+	}).SetupWithManager(mgr); err != nil {
+		setupLog.Error(err, "unable to create controller", "controller", "ValidatorConfig")
+		os.Exit(1)
+	}
+
 	//+kubebuilder:scaffold:builder
 
 	if err := mgr.AddHealthzCheck("healthz", healthz.Ping); err != nil {

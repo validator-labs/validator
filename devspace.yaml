@@ -1,0 +1,49 @@
+name: validator
+version: v2beta1
+
+vars:
+  IMAGE: quay.io/spectrocloud-labs/validator
+
+images:
+  validator:
+    image: ${IMAGE}
+    tags:
+    - dev
+    createPullSecret: false
+    dockerfile: ./Dockerfile.devspace
+    rebuildStrategy: ignoreContextChanges
+    docker: {}
+
+deployments:
+  validator:
+    namespace: validator
+    kubectl:
+      kustomize: true
+      manifests:
+      - config/devspace
+
+dev:
+  validator:
+    imageSelector: ${IMAGE}
+    terminal:
+      enabled: true
+      disableReplace: true
+      workDir: /workspace
+      command: ./devspace-start.sh
+    ports:
+    - port: "2343"
+    sync:
+    - path: .:/workspace
+      excludePaths:
+        - '**'
+        - '!/pkg'
+        - '!/api'
+        - '!/cmd'
+        - '!/config'
+        - '!/internal'
+        - '!/devspace-start.sh'
+        - '!/hack'
+        - '!/go.mod'
+        - '!/go.sum'
+        - '!/main.go'
+        - 'Makefile'
