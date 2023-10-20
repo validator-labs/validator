@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.0.11](https://github.com/spectrocloud-labs/validator/compare/v0.0.10...v0.0.11) (2023-10-20)
+
+
+### Bug Fixes
+
+* update plugin versions in default values.yaml ([6f7f90d](https://github.com/spectrocloud-labs/validator/commit/6f7f90d15fbeb105df6c5b6c568c35fa4f12121f))
+
 ## [0.0.10](https://github.com/spectrocloud-labs/validator/compare/v0.0.9...v0.0.10) (2023-10-20)
 
 
