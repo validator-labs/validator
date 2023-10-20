@@ -7,7 +7,7 @@ rules:
 - apiGroups:
   - validation.spectrocloud.labs
   resources:
-  - valid8orconfigs
+  - validatorconfigs
   verbs:
   - create
   - delete
@@ -19,13 +19,13 @@ rules:
 - apiGroups:
   - validation.spectrocloud.labs
   resources:
-  - valid8orconfigs/finalizers
+  - validatorconfigs/finalizers
   verbs:
   - update
 - apiGroups:
   - validation.spectrocloud.labs
   resources:
-  - valid8orconfigs/status
+  - validatorconfigs/status
   verbs:
   - get
   - patch

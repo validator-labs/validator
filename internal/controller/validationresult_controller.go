@@ -26,7 +26,7 @@ import (
 	"sigs.k8s.io/controller-runtime/pkg/client"
 
 	"github.com/go-logr/logr"
-	validationv1alpha1 "github.com/spectrocloud-labs/valid8or/api/v1alpha1"
+	validationv1alpha1 "github.com/spectrocloud-labs/validator/api/v1alpha1"
 )
 
 // ValidationResultReconciler reconciles a ValidationResult object

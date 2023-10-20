@@ -17,10 +17,10 @@ echo -e "${COLOR_CYAN}
 ${COLOR_RESET}
 Welcome to your development container!
 This is how you can work with it:
-- Run \`${COLOR_CYAN}${RUN_CMD}${COLOR_RESET}\` to start valid8or
+- Run \`${COLOR_CYAN}${RUN_CMD}${COLOR_RESET}\` to start validator
 - ${COLOR_CYAN}Files will be synchronized${COLOR_RESET} between your local machine and this container
 
-If you wish to run valid8or in the debug mode with delve, run:
+If you wish to run validator in the debug mode with delve, run:
   \`${COLOR_CYAN}${DEBUG_CMD}${COLOR_RESET}\`
   Wait until the \`${COLOR_CYAN}API server listening at: [::]:2343${COLOR_RESET}\` message appears
   Start the \"Debug (localhost:2343)\" configuration in VSCode to connect your debugger session.

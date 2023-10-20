@@ -66,8 +66,8 @@ jobs:
       packages: write
       id-token: write
     env:
-      IMAGE_TAG: quay.io/spectrocloud-labs/valid8or:${{ needs.release-please.outputs.tag_name }}
-      IMAGE_NAME: valid8or
+      IMAGE_TAG: quay.io/spectrocloud-labs/validator:${{ needs.release-please.outputs.tag_name }}
+      IMAGE_NAME: validator
     steps:
       - name: Checkout
         uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4

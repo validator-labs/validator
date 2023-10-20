@@ -1,6 +1,6 @@
 package types
 
-import "github.com/spectrocloud-labs/valid8or/api/v1alpha1"
+import "github.com/spectrocloud-labs/validator/api/v1alpha1"
 
 // ValidationResult is the result of the execution of a validation rule by a validator
 type ValidationResult struct {

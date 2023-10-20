@@ -1,7 +1,7 @@
 plugins:
 - chart:
-    name: valid8or-plugin-aws
-    repository: "https://spectrocloud-labs.github.io/valid8or-plugin-aws"
+    name: validator-plugin-aws
+    repository: "https://spectrocloud-labs.github.io/validator-plugin-aws"
     version: "v0.0.2"
   values: |-
     controllerManager:
@@ -37,7 +37,7 @@ plugins:
             drop:
             - ALL
         image:
-          repository: quay.io/spectrocloud-labs/valid8or-plugin-aws
+          repository: quay.io/spectrocloud-labs/validator-plugin-aws
           tag: v0.0.2
         resources:
           limits:

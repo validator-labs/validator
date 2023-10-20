@@ -21,8 +21,8 @@ import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
-// Valid8orConfigSpec defines the desired state of Valid8orConfig
-type Valid8orConfigSpec struct {
+// ValidatorConfigSpec defines the desired state of ValidatorConfig
+type ValidatorConfigSpec struct {
 	Plugins []HelmRelease `json:"plugins,omitempty"`
 }
 
@@ -37,22 +37,22 @@ type HelmChart struct {
 	Version    string `json:"version"`
 }
 
-// Valid8orConfigStatus defines the observed state of Valid8orConfig
-type Valid8orConfigStatus struct {
+// ValidatorConfigStatus defines the observed state of ValidatorConfig
+type ValidatorConfigStatus struct {
 	// +optional
 	// +patchMergeKey=type
 	// +patchStrategy=merge
-	Conditions []Valid8orPluginCondition `json:"conditions,omitempty" patchStrategy:"merge" patchMergeKey:"type"`
+	Conditions []ValidatorPluginCondition `json:"conditions,omitempty" patchStrategy:"merge" patchMergeKey:"type"`
 }
 
-type Valid8orPluginCondition struct {
+type ValidatorPluginCondition struct {
 	// Type of condition in CamelCase or in foo.example.com/CamelCase.
 	// Many .condition.type values are consistent across resources like Available, but because arbitrary conditions
 	// can be useful (see .node.status.conditions), the ability to deconflict is important.
 	// +required
 	Type ConditionType `json:"type"`
 
-	// Name of the Valid8or plugin.
+	// Name of the Validator plugin.
 	// +required
 	PluginName string `json:"pluginName"`
 
@@ -81,24 +81,24 @@ const HelmChartDeployedCondition ConditionType = "HelmChartDeployed"
 //+kubebuilder:object:root=true
 //+kubebuilder:subresource:status
 
-// Valid8orConfig is the Schema for the valid8orconfigs API
-type Valid8orConfig struct {
+// ValidatorConfig is the Schema for the validatorconfigs API
+type ValidatorConfig struct {
 	metav1.TypeMeta   `json:",inline"`
 	metav1.ObjectMeta `json:"metadata,omitempty"`
 
-	Spec   Valid8orConfigSpec   `json:"spec,omitempty"`
-	Status Valid8orConfigStatus `json:"status,omitempty"`
+	Spec   ValidatorConfigSpec   `json:"spec,omitempty"`
+	Status ValidatorConfigStatus `json:"status,omitempty"`
 }
 
 //+kubebuilder:object:root=true
 
-// Valid8orConfigList contains a list of Valid8orConfig
-type Valid8orConfigList struct {
+// ValidatorConfigList contains a list of ValidatorConfig
+type ValidatorConfigList struct {
 	metav1.TypeMeta `json:",inline"`
 	metav1.ListMeta `json:"metadata,omitempty"`
-	Items           []Valid8orConfig `json:"items"`
+	Items           []ValidatorConfig `json:"items"`
 }
 
 func init() {
-	SchemeBuilder.Register(&Valid8orConfig{}, &Valid8orConfigList{})
+	SchemeBuilder.Register(&ValidatorConfig{}, &ValidatorConfigList{})
 }

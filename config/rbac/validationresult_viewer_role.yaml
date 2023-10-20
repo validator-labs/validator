@@ -6,8 +6,8 @@ metadata:
     app.kubernetes.io/name: clusterrole
     app.kubernetes.io/instance: validationresult-viewer-role
     app.kubernetes.io/component: rbac
-    app.kubernetes.io/created-by: valid8or
-    app.kubernetes.io/part-of: valid8or
+    app.kubernetes.io/created-by: validator
+    app.kubernetes.io/part-of: validator
     app.kubernetes.io/managed-by: kustomize
   name: validationresult-viewer-role
 rules:
