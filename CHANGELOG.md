@@ -1,5 +1,28 @@
 # Changelog
 
+## [0.0.10](https://github.com/spectrocloud-labs/validator/compare/v0.0.9...v0.0.10) (2023-10-20)
+
+
+### Bug Fixes
+
+* **deps:** update module sigs.k8s.io/controller-runtime to v0.16.3 ([#63](https://github.com/spectrocloud-labs/validator/issues/63)) ([6f79f8a](https://github.com/spectrocloud-labs/validator/commit/6f79f8af8f7a10c70ce403fadeb16d6eb9e13020))
+
+
+### Other
+
+* **deps:** bump golang.org/x/net from 0.16.0 to 0.17.0 ([#61](https://github.com/spectrocloud-labs/validator/issues/61)) ([eca7abd](https://github.com/spectrocloud-labs/validator/commit/eca7abd8da204cabb28d7fb6ee8c381d1cb60e7b))
+* **deps:** update actions/checkout digest to b4ffde6 ([#64](https://github.com/spectrocloud-labs/validator/issues/64)) ([d9bbd21](https://github.com/spectrocloud-labs/validator/commit/d9bbd21fe962de4f14e0e734d697ebd2ceb7e144))
+* **deps:** update actions/setup-python digest to 65d7f2d ([#65](https://github.com/spectrocloud-labs/validator/issues/65)) ([bdb95d0](https://github.com/spectrocloud-labs/validator/commit/bdb95d038149ed9eab6c8372018bb771b848157c))
+* **deps:** update gcr.io/kubebuilder/kube-rbac-proxy docker tag to v0.14.4 ([#59](https://github.com/spectrocloud-labs/validator/issues/59)) ([78847f5](https://github.com/spectrocloud-labs/validator/commit/78847f54c35f6fc684d333a286e1315cc558e6e2))
+* **deps:** update google-github-actions/release-please-action digest to 4c5670f ([#66](https://github.com/spectrocloud-labs/validator/issues/66)) ([2c24d48](https://github.com/spectrocloud-labs/validator/commit/2c24d48035b7ebddbbd20ca182e3352fa6c2f09e))
+* enable renovate automerges ([84ad3cd](https://github.com/spectrocloud-labs/validator/commit/84ad3cdee59ed634e5f9577d801dc13701958e46))
+* release 0.0.10 ([9a324e9](https://github.com/spectrocloud-labs/validator/commit/9a324e9e666b0da68a1e0c3be225ab19bfd04a6b))
+
+
+### Refactoring
+
+* valid8or -&gt; validator ([#67](https://github.com/spectrocloud-labs/validator/issues/67)) ([ff88026](https://github.com/spectrocloud-labs/validator/commit/ff8802656d8115dd6afbbfbaf12613c4f205feb5))
+
 ## [0.0.9](https://github.com/spectrocloud-labs/validator/compare/v0.0.8...v0.0.9) (2023-10-10)
 
 
