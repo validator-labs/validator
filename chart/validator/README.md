@@ -1,13 +1,13 @@
 
-Valid8or
+Validator
 ===========
 
-valid8or monitors ValidationResults created by one or more valid8or plugins and uploads them to a configurable sink
+validator monitors ValidationResults created by one or more validator plugins and uploads them to a configurable sink
 
 
 ## Configuration
 
-The following table lists the configurable parameters of the Valid8or chart and their default values.
+The following table lists the configurable parameters of the Validator chart and their default values.
 
 | Parameter                | Description             | Default        |
 | ------------------------ | ----------------------- | -------------- |
@@ -23,7 +23,7 @@ The following table lists the configurable parameters of the Valid8or chart and 
 | `controllerManager.manager.args` |  | `["--health-probe-bind-address=:8081", "--metrics-bind-address=127.0.0.1:8080", "--leader-elect"]` |
 | `controllerManager.manager.containerSecurityContext.allowPrivilegeEscalation` |  | `false` |
 | `controllerManager.manager.containerSecurityContext.capabilities.drop` |  | `["ALL"]` |
-| `controllerManager.manager.image.repository` |  | `"quay.io/spectrocloud-labs/valid8or"` |
+| `controllerManager.manager.image.repository` |  | `"quay.io/spectrocloud-labs/validator"` |
 | `controllerManager.manager.image.tag` | x-release-please-version | `"v0.0.9"` |
 | `controllerManager.manager.resources.limits.cpu` |  | `"500m"` |
 | `controllerManager.manager.resources.limits.memory` |  | `"128Mi"` |
@@ -34,7 +34,7 @@ The following table lists the configurable parameters of the Valid8or chart and 
 | `kubernetesClusterDomain` |  | `"cluster.local"` |
 | `metricsService.ports` |  | `[{"name": "https", "port": 8443, "protocol": "TCP", "targetPort": "https"}]` |
 | `metricsService.type` |  | `"ClusterIP"` |
-| `plugins` |  | `[{"chart": {"name": "valid8or-plugin-aws", "repository": "https://spectrocloud-labs.github.io/valid8or-plugin-aws", "version": "v0.0.2"}, "values": "controllerManager:\n  kubeRbacProxy:\n    args:\n    - --secure-listen-address=0.0.0.0:8443\n    - --upstream=http://127.0.0.1:8080/\n    - --logtostderr=true\n    - --v=0\n    containerSecurityContext:\n      allowPrivilegeEscalation: false\n      capabilities:\n        drop:\n        - ALL\n    image:\n      repository: gcr.io/kubebuilder/kube-rbac-proxy\n      tag: v0.14.1\n    resources:\n      limits:\n        cpu: 500m\n        memory: 128Mi\n      requests:\n        cpu: 5m\n        memory: 64Mi\n  manager:\n    args:\n    - --health-probe-bind-address=:8081\n    - --metrics-bind-address=127.0.0.1:8080\n    - --leader-elect\n    containerSecurityContext:\n      allowPrivilegeEscalation: false\n      capabilities:\n        drop:\n        - ALL\n    image:\n      repository: quay.io/spectrocloud-labs/valid8or-plugin-aws\n      tag: v0.0.2\n    resources:\n      limits:\n        cpu: 500m\n        memory: 128Mi\n      requests:\n        cpu: 10m\n        memory: 64Mi\n  replicas: 1\n  serviceAccount:\n    annotations: {}\nkubernetesClusterDomain: cluster.local\nmetricsService:\n  ports:\n  - name: https\n    port: 8443\n    protocol: TCP\n    targetPort: https\n  type: ClusterIP\nauth:\n  secretName: aws-creds\n  accessKeyId: \"\"\n  secretAccessKey: \"\""}]` |
+| `plugins` |  | `[{"chart": {"name": "validator-plugin-aws", "repository": "https://spectrocloud-labs.github.io/validator-plugin-aws", "version": "v0.0.2"}, "values": "controllerManager:\n  kubeRbacProxy:\n    args:\n    - --secure-listen-address=0.0.0.0:8443\n    - --upstream=http://127.0.0.1:8080/\n    - --logtostderr=true\n    - --v=0\n    containerSecurityContext:\n      allowPrivilegeEscalation: false\n      capabilities:\n        drop:\n        - ALL\n    image:\n      repository: gcr.io/kubebuilder/kube-rbac-proxy\n      tag: v0.14.1\n    resources:\n      limits:\n        cpu: 500m\n        memory: 128Mi\n      requests:\n        cpu: 5m\n        memory: 64Mi\n  manager:\n    args:\n    - --health-probe-bind-address=:8081\n    - --metrics-bind-address=127.0.0.1:8080\n    - --leader-elect\n    containerSecurityContext:\n      allowPrivilegeEscalation: false\n      capabilities:\n        drop:\n        - ALL\n    image:\n      repository: quay.io/spectrocloud-labs/validator-plugin-aws\n      tag: v0.0.2\n    resources:\n      limits:\n        cpu: 500m\n        memory: 128Mi\n      requests:\n        cpu: 10m\n        memory: 64Mi\n  replicas: 1\n  serviceAccount:\n    annotations: {}\nkubernetesClusterDomain: cluster.local\nmetricsService:\n  ports:\n  - name: https\n    port: 8443\n    protocol: TCP\n    targetPort: https\n  type: ClusterIP\nauth:\n  secretName: aws-creds\n  accessKeyId: \"\"\n  secretAccessKey: \"\""}]` |
 
 
 

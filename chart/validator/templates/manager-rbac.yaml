@@ -82,8 +82,8 @@ metadata:
   name: {{ include "chart.fullname" . }}-manager-rolebinding
   labels:
     app.kubernetes.io/component: rbac
-    app.kubernetes.io/created-by: valid8or
-    app.kubernetes.io/part-of: valid8or
+    app.kubernetes.io/created-by: validator
+    app.kubernetes.io/part-of: validator
   {{- include "chart.labels" . | nindent 4 }}
 roleRef:
   apiGroup: rbac.authorization.k8s.io

@@ -1,4 +1,4 @@
-module github.com/spectrocloud-labs/valid8or
+module github.com/spectrocloud-labs/validator
 
 go 1.20
 

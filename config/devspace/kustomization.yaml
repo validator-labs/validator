@@ -2,7 +2,7 @@ resources:
 - ../default
 
 images:
-- name: quay.io/spectrocloud-labs/valid8or:latest
+- name: quay.io/spectrocloud-labs/validator:latest
   newTag: dev
 
 patches:
@@ -10,15 +10,15 @@ patches:
     group: apps
     version: v1
     kind: Deployment
-    name: valid8or-controller-manager
+    name: validator-controller-manager
   patch: |-
     apiVersion: apps/v1
     kind: Deployment
     metadata:
       labels:
         control-plane: controller-manager
-      name: valid8or-controller-manager
-      namespace: valid8or
+      name: validator-controller-manager
+      namespace: validator
     spec:
       template:
         spec:

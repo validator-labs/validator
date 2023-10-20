@@ -34,20 +34,20 @@ import (
 	ctrl "sigs.k8s.io/controller-runtime"
 	"sigs.k8s.io/controller-runtime/pkg/client"
 
-	v1alpha1 "github.com/spectrocloud-labs/valid8or/api/v1alpha1"
-	"github.com/spectrocloud-labs/valid8or/pkg/helm"
+	v1alpha1 "github.com/spectrocloud-labs/validator/api/v1alpha1"
+	"github.com/spectrocloud-labs/validator/pkg/helm"
 )
 
 const (
-	// A finalizer added to a Valid8orConfig to ensure that plugin Helm releases are properly garbage collected
-	CleanupFinalizer = "valid8or/cleanup"
+	// A finalizer added to a ValidatorConfig to ensure that plugin Helm releases are properly garbage collected
+	CleanupFinalizer = "validator/cleanup"
 
-	// An annotation added to a Valid8orConfig to determine whether or not to update a plugin's Helm release
-	PluginValuesHash = "valid8or/plugin-values"
+	// An annotation added to a ValidatorConfig to determine whether or not to update a plugin's Helm release
+	PluginValuesHash = "validator/plugin-values"
 )
 
-// Valid8orConfigReconciler reconciles a Valid8orConfig object
-type Valid8orConfigReconciler struct {
+// ValidatorConfigReconciler reconciles a ValidatorConfig object
+type ValidatorConfigReconciler struct {
 	client.Client
 	HelmClient        helm.HelmClient
 	HelmSecretsClient helm.SecretsClient
@@ -55,29 +55,29 @@ type Valid8orConfigReconciler struct {
 	Scheme            *runtime.Scheme
 }
 
-//+kubebuilder:rbac:groups=validation.spectrocloud.labs,resources=valid8orconfigs,verbs=get;list;watch;create;update;patch;delete
-//+kubebuilder:rbac:groups=validation.spectrocloud.labs,resources=valid8orconfigs/status,verbs=get;update;patch
-//+kubebuilder:rbac:groups=validation.spectrocloud.labs,resources=valid8orconfigs/finalizers,verbs=update
+//+kubebuilder:rbac:groups=validation.spectrocloud.labs,resources=validatorconfigs,verbs=get;list;watch;create;update;patch;delete
+//+kubebuilder:rbac:groups=validation.spectrocloud.labs,resources=validatorconfigs/status,verbs=get;update;patch
+//+kubebuilder:rbac:groups=validation.spectrocloud.labs,resources=validatorconfigs/finalizers,verbs=update
 
-func (r *Valid8orConfigReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.Result, error) {
-	r.Log.V(0).Info("Reconciling Valid8orConfig", "name", req.Name, "namespace", req.Namespace)
+func (r *ValidatorConfigReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.Result, error) {
+	r.Log.V(0).Info("Reconciling ValidatorConfig", "name", req.Name, "namespace", req.Namespace)
 
-	vc := &v1alpha1.Valid8orConfig{}
+	vc := &v1alpha1.ValidatorConfig{}
 	if err := r.Get(ctx, req.NamespacedName, vc); err != nil {
 		// ignore not-found errors, since they can't be fixed by an immediate requeue
 		if apierrs.IsNotFound(err) {
 			return ctrl.Result{}, nil
 		}
-		r.Log.Error(err, "failed to fetch Valid8orConfig")
+		r.Log.Error(err, "failed to fetch ValidatorConfig")
 		return ctrl.Result{}, client.IgnoreNotFound(err)
 	}
 
-	// Always update the Valid8orConfig's Status
+	// Always update the ValidatorConfig's Status
 	defer func() {
 		r.updateStatus(ctx, vc)
 	}()
 
-	// handle Valid8orConfig deletion
+	// handle ValidatorConfig deletion
 	if vc.DeletionTimestamp != nil {
 		// if namespace is deleting, remove finalizer & the rest will follow
 		namespace := &corev1.Namespace{}
@@ -100,11 +100,11 @@ func (r *Valid8orConfigReconciler) Reconcile(ctx context.Context, req ctrl.Reque
 		r.Log.Error(err, "Error ensuring finalizer")
 		return ctrl.Result{}, err
 	}
-	r.Log.V(0).Info("Ensured Valid8orConfig finalizer")
+	r.Log.V(0).Info("Ensured ValidatorConfig finalizer")
 
 	// deploy/redeploy plugins as required
 	if err := r.redeployIfNeeded(ctx, vc); err != nil {
-		r.Log.V(0).Error(err, "Valid8orConfig plugin deployment failed", "namespace", vc.Namespace, "name", vc.Name)
+		r.Log.V(0).Error(err, "ValidatorConfig plugin deployment failed", "namespace", vc.Namespace, "name", vc.Name)
 		return ctrl.Result{RequeueAfter: time.Second * 5}, err
 	}
 
@@ -112,24 +112,24 @@ func (r *Valid8orConfigReconciler) Reconcile(ctx context.Context, req ctrl.Reque
 }
 
 // SetupWithManager sets up the controller with the Manager.
-func (r *Valid8orConfigReconciler) SetupWithManager(mgr ctrl.Manager) error {
+func (r *ValidatorConfigReconciler) SetupWithManager(mgr ctrl.Manager) error {
 	return ctrl.NewControllerManagedBy(mgr).
-		For(&v1alpha1.Valid8orConfig{}).
+		For(&v1alpha1.ValidatorConfig{}).
 		Complete(r)
 }
 
-// updateStatus updates the Valid8orConfig's status subresource
-func (r *Valid8orConfigReconciler) updateStatus(ctx context.Context, vc *v1alpha1.Valid8orConfig) {
+// updateStatus updates the ValidatorConfig's status subresource
+func (r *ValidatorConfigReconciler) updateStatus(ctx context.Context, vc *v1alpha1.ValidatorConfig) {
 	if err := r.Status().Update(context.Background(), vc); err != nil {
-		r.Log.V(0).Error(err, "failed to update Valid8orConfig status")
+		r.Log.V(0).Error(err, "failed to update ValidatorConfig status")
 	}
-	r.Log.V(0).Info("Updated Valid8orConfig", "conditions", vc.Status.Conditions, "time", time.Now())
+	r.Log.V(0).Info("Updated ValidatorConfig", "conditions", vc.Status.Conditions, "time", time.Now())
 }
 
-// redeployIfNeeded deploys/redeploys each valid8or plugin in a Valid8orConfig and deletes plugins that have been removed
-func (r *Valid8orConfigReconciler) redeployIfNeeded(ctx context.Context, vc *v1alpha1.Valid8orConfig) error {
+// redeployIfNeeded deploys/redeploys each validator plugin in a ValidatorConfig and deletes plugins that have been removed
+func (r *ValidatorConfigReconciler) redeployIfNeeded(ctx context.Context, vc *v1alpha1.ValidatorConfig) error {
 	specPlugins := make(map[string]bool)
-	conditions := make([]v1alpha1.Valid8orPluginCondition, len(vc.Spec.Plugins))
+	conditions := make([]v1alpha1.ValidatorPluginCondition, len(vc.Spec.Plugins))
 
 	for i, p := range vc.Spec.Plugins {
 		specPlugins[p.Chart.Name] = true
@@ -160,7 +160,7 @@ func (r *Valid8orConfigReconciler) redeployIfNeeded(ctx context.Context, vc *v1a
 					r.Log.V(0).Error(err, "failed to delete Helm release")
 				}
 			}
-			return fmt.Errorf("error installing / upgrading Valid8orConfig: %v", err)
+			return fmt.Errorf("error installing / upgrading ValidatorConfig: %v", err)
 		}
 		conditions[i] = getHelmChartCondition(p.Chart.Name, true)
 	}
@@ -175,7 +175,7 @@ func (r *Valid8orConfigReconciler) redeployIfNeeded(ctx context.Context, vc *v1a
 		}
 	}
 
-	// update Valid8orConfig annotations
+	// update ValidatorConfig annotations
 	if err := r.Client.Update(ctx, vc); err != nil {
 		return err
 	}
@@ -185,9 +185,9 @@ func (r *Valid8orConfigReconciler) redeployIfNeeded(ctx context.Context, vc *v1a
 }
 
 // updatePluginHash compares the current plugin's values hash annotation to a hash of its current values,
-// updates the values hash annotation on the Valid8orConfig for the current plugin, and returns a flag
+// updates the values hash annotation on the ValidatorConfig for the current plugin, and returns a flag
 // indicating whether the values have changed or not since the last reconciliation
-func (r *Valid8orConfigReconciler) updatePluginHash(vc *v1alpha1.Valid8orConfig, p v1alpha1.HelmRelease) bool {
+func (r *ValidatorConfigReconciler) updatePluginHash(vc *v1alpha1.ValidatorConfig, p v1alpha1.HelmRelease) bool {
 	valuesUnchanged := false
 	pluginValuesHashLatest := sha256.Sum256([]byte(p.Values))
 	pluginValuesHashLatestB64 := base64.StdEncoding.EncodeToString(pluginValuesHashLatest[:])
@@ -210,8 +210,8 @@ func getPluginHashKey(pluginName string) string {
 	return fmt.Sprintf("%s-%s", PluginValuesHash, pluginName)
 }
 
-// deletePlugins deletes each valid8or plugin's Helm release
-func (r *Valid8orConfigReconciler) deletePlugins(ctx context.Context, vc *v1alpha1.Valid8orConfig) error {
+// deletePlugins deletes each validator plugin's Helm release
+func (r *ValidatorConfigReconciler) deletePlugins(ctx context.Context, vc *v1alpha1.ValidatorConfig) error {
 	for _, p := range vc.Spec.Plugins {
 		release, err := r.HelmSecretsClient.Get(ctx, p.Chart.Name, vc.Namespace)
 		if err != nil {
@@ -228,12 +228,12 @@ func (r *Valid8orConfigReconciler) deletePlugins(ctx context.Context, vc *v1alph
 	return nil
 }
 
-// deletePlugin deletes the Helm release associated with a Valid8orConfig plugin
-func (r *Valid8orConfigReconciler) deletePlugin(vc *v1alpha1.Valid8orConfig, name string) {
+// deletePlugin deletes the Helm release associated with a ValidatorConfig plugin
+func (r *ValidatorConfigReconciler) deletePlugin(vc *v1alpha1.ValidatorConfig, name string) {
 	if err := r.HelmClient.Delete(name, vc.Namespace); err != nil {
-		r.Log.V(0).Error(err, "failed to delete valid8or plugin", "namespace", vc.Namespace, "name", name)
+		r.Log.V(0).Error(err, "failed to delete validator plugin", "namespace", vc.Namespace, "name", name)
 	}
-	r.Log.V(0).Info("Deleted Helm release for valid8or plugin", "namespace", vc.Namespace, "name", name)
+	r.Log.V(0).Info("Deleted Helm release for validator plugin", "namespace", vc.Namespace, "name", name)
 }
 
 // ensureFinalizer ensures that an object's finalizers include a certain finalizer
@@ -270,8 +270,8 @@ func removeFinalizer(ctx context.Context, client client.Client, obj client.Objec
 	return nil
 }
 
-// conditionIndex retrieves the index of a Valid8orPluginCondition from a Valid8orConfig's status
-func conditionIndex(vc *v1alpha1.Valid8orConfig, chartName string, conditionType v1alpha1.ConditionType) int {
+// conditionIndex retrieves the index of a ValidatorPluginCondition from a ValidatorConfig's status
+func conditionIndex(vc *v1alpha1.ValidatorConfig, chartName string, conditionType v1alpha1.ConditionType) int {
 	for i, c := range vc.Status.Conditions {
 		if c.Type == conditionType && c.PluginName == chartName {
 			return i
@@ -280,18 +280,18 @@ func conditionIndex(vc *v1alpha1.Valid8orConfig, chartName string, conditionType
 	return -1
 }
 
-// isConditionTrue checks whether a Valid8orPluginCondition is true
-func isConditionTrue(vc *v1alpha1.Valid8orConfig, chartName string, conditionType v1alpha1.ConditionType) (v1alpha1.Valid8orPluginCondition, bool) {
+// isConditionTrue checks whether a ValidatorPluginCondition is true
+func isConditionTrue(vc *v1alpha1.ValidatorConfig, chartName string, conditionType v1alpha1.ConditionType) (v1alpha1.ValidatorPluginCondition, bool) {
 	idx := conditionIndex(vc, chartName, conditionType)
 	if idx == -1 {
-		return v1alpha1.Valid8orPluginCondition{}, false
+		return v1alpha1.ValidatorPluginCondition{}, false
 	}
 	return vc.Status.Conditions[idx], vc.Status.Conditions[idx].Status == corev1.ConditionTrue
 }
 
-// getHelmChartCondition builds a Valid8orPluginCondition for a plugin
-func getHelmChartCondition(chartName string, installed bool) v1alpha1.Valid8orPluginCondition {
-	condition := v1alpha1.Valid8orPluginCondition{
+// getHelmChartCondition builds a ValidatorPluginCondition for a plugin
+func getHelmChartCondition(chartName string, installed bool) v1alpha1.ValidatorPluginCondition {
+	condition := v1alpha1.ValidatorPluginCondition{
 		Type:               v1alpha1.HelmChartDeployedCondition,
 		PluginName:         chartName,
 		Status:             corev1.ConditionTrue,

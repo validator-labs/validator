@@ -1,11 +1,11 @@
-name: valid8or
+name: validator
 version: v2beta1
 
 vars:
-  IMAGE: quay.io/spectrocloud-labs/valid8or
+  IMAGE: quay.io/spectrocloud-labs/validator
 
 images:
-  valid8or:
+  validator:
     image: ${IMAGE}
     tags:
     - dev
@@ -15,15 +15,15 @@ images:
     docker: {}
 
 deployments:
-  valid8or:
-    namespace: valid8or
+  validator:
+    namespace: validator
     kubectl:
       kustomize: true
       manifests:
       - config/devspace
 
 dev:
-  valid8or:
+  validator:
     imageSelector: ${IMAGE}
     terminal:
       enabled: true

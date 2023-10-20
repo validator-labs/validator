@@ -15,7 +15,7 @@ on:
 
 env:
   GO_VERSION: "~1.20"
-  IMAGE_NAME: "valid8or"
+  IMAGE_NAME: "validator"
 defaults:
   run:
     shell: bash
@@ -68,7 +68,7 @@ jobs:
       DATETIME: ${{ needs.prepare_ci_run.outputs.DATETIME }}
       BUILD_TIME: ${{ needs.prepare_ci_run.outputs.BUILD_TIME }}
       GIT_SHA: ${{ needs.prepare_ci_run.outputs.GIT_SHA }}
-      RELEASE_REGISTRY: "localhost:5000/valid8or"
+      RELEASE_REGISTRY: "localhost:5000/validator"
     steps:
       - name: Check out code
         uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4

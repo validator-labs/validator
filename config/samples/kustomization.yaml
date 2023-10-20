@@ -2,5 +2,5 @@
 resources:
 - validation_v1alpha1_validationresult.yaml
 - validation_v1alpha1_awsvalidator.yaml
-- validation_v1alpha1_valid8orconfig.yaml
+- validation_v1alpha1_validatorconfig.yaml
 #+kubebuilder:scaffold:manifestskustomizesamples

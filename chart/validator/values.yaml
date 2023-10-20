@@ -30,7 +30,7 @@ controllerManager:
         drop:
         - ALL
     image:
-      repository: quay.io/spectrocloud-labs/valid8or
+      repository: quay.io/spectrocloud-labs/validator
       tag: v0.0.9  # x-release-please-version
     resources:
       limits:
@@ -52,8 +52,8 @@ metricsService:
   type: ClusterIP
 plugins:
 - chart:
-    name: valid8or-plugin-aws
-    repository: "https://spectrocloud-labs.github.io/valid8or-plugin-aws"
+    name: validator-plugin-aws
+    repository: "https://spectrocloud-labs.github.io/validator-plugin-aws"
     version: "v0.0.4"
   values: |-
     controllerManager:
@@ -88,7 +88,7 @@ plugins:
             drop:
             - ALL
         image:
-          repository: quay.io/spectrocloud-labs/valid8or-plugin-aws
+          repository: quay.io/spectrocloud-labs/validator-plugin-aws
           tag: v0.0.6
         resources:
           limits:
@@ -115,8 +115,8 @@ plugins:
       secretAccessKey: ""
       sessionToken: ""
 - chart:
-    name: valid8or-plugin-vsphere
-    repository: "https://spectrocloud-labs.github.io/valid8or-plugin-vsphere"
+    name: validator-plugin-vsphere
+    repository: "https://spectrocloud-labs.github.io/validator-plugin-vsphere"
     version: "v0.0.8"
   values: |-
     controllerManager:
@@ -151,7 +151,7 @@ plugins:
             drop:
             - ALL
         image:
-          repository: quay.io/spectrocloud-labs/valid8or-plugin-vsphere
+          repository: quay.io/spectrocloud-labs/validator-plugin-vsphere
           tag: v0.0.8
         resources:
           limits:
@@ -178,8 +178,8 @@ plugins:
       vcenterServer: ""
       insecureSkipVerify: ""
 - chart:
-    name: valid8or-plugin-network
-    repository: "https://spectrocloud-labs.github.io/valid8or-plugin-network"
+    name: validator-plugin-network
+    repository: "https://spectrocloud-labs.github.io/validator-plugin-network"
     version: "v0.0.1"
   values: |-
     controllerManager:
@@ -216,7 +216,7 @@ plugins:
             drop:
             - ALL
         image:
-          repository: quay.io/spectrocloud-labs/valid8or-plugin-network
+          repository: quay.io/spectrocloud-labs/validator-plugin-network
           tag: v0.0.2
         resources:
           limits:

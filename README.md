@@ -1,20 +1,20 @@
-# valid8or
-valid8or (AKA Validation Controller) monitors ValidationResults created by one or more valid8or plugins and uploads them to a sink of your choosing, e.g., Slack or Spectro Cloud Palette.
-<img width="1364" alt="image" src="https://github.com/spectrocloud-labs/valid8or/assets/1795270/e68dfdf5-25bf-4336-ad87-f783c4825c7e">
+# validator
+validator (AKA Validation Controller) monitors ValidationResults created by one or more validator plugins and uploads them to a sink of your choosing, e.g., Slack or Spectro Cloud Palette.
+<img width="1364" alt="image" src="https://github.com/spectrocloud-labs/validator/assets/1795270/e68dfdf5-25bf-4336-ad87-f783c4825c7e">
 
 ## Description
-The valid8or repository is fairly minimal - all the heavy lifting is done by the valid8or plugins. Installation of valid8or and one or more plugins is accomplished via Helm.
+The validator repository is fairly minimal - all the heavy lifting is done by the validator plugins. Installation of validator and one or more plugins is accomplished via Helm.
 
 Plugins:
-- [AWS](https://github.com/spectrocloud-labs/valid8or-plugin-aws)
-- [Network](https://github.com/spectrocloud-labs/valid8or-plugin-network)
-- [vSphere](https://github.com/spectrocloud-labs/valid8or-plugin-vsphere)
+- [AWS](https://github.com/spectrocloud-labs/validator-plugin-aws)
+- [Network](https://github.com/spectrocloud-labs/validator-plugin-network)
+- [vSphere](https://github.com/spectrocloud-labs/validator-plugin-vsphere)
 
 ## Installation
 ```bash
-helm repo add valid8or https://spectrocloud-labs.github.io/valid8or/
+helm repo add validator https://spectrocloud-labs.github.io/validator/
 helm repo update
-helm install valid8or valid8or/valid8or -n valid8or --create-namespace
+helm install validator validator/validator -n validator --create-namespace
 ```
 
 ## Getting Started
@@ -31,13 +31,13 @@ kubectl apply -f config/samples/
 2. Build and push your image to the location specified by `IMG`:
 
 ```sh
-make docker-build docker-push IMG=<some-registry>/valid8or:tag
+make docker-build docker-push IMG=<some-registry>/validator:tag
 ```
 
 3. Deploy the controller to the cluster with the image specified by `IMG`:
 
 ```sh
-make deploy IMG=<some-registry>/valid8or:tag
+make deploy IMG=<some-registry>/validator:tag
 ```
 
 ### Uninstall CRDs

@@ -30,10 +30,10 @@ import (
 	"sigs.k8s.io/controller-runtime/pkg/healthz"
 	"sigs.k8s.io/controller-runtime/pkg/log/zap"
 
-	validationv1alpha1 "github.com/spectrocloud-labs/valid8or/api/v1alpha1"
-	"github.com/spectrocloud-labs/valid8or/internal/controller"
-	"github.com/spectrocloud-labs/valid8or/internal/kube"
-	"github.com/spectrocloud-labs/valid8or/pkg/helm"
+	validationv1alpha1 "github.com/spectrocloud-labs/validator/api/v1alpha1"
+	"github.com/spectrocloud-labs/validator/internal/controller"
+	"github.com/spectrocloud-labs/validator/internal/kube"
+	"github.com/spectrocloud-labs/validator/pkg/helm"
 	//+kubebuilder:scaffold:imports
 )
 
@@ -100,14 +100,14 @@ func main() {
 		os.Exit(1)
 	}
 
-	if err = (&controller.Valid8orConfigReconciler{
+	if err = (&controller.ValidatorConfigReconciler{
 		Client:            mgr.GetClient(),
 		HelmClient:        helm.NewHelmClient(rawConfig),
 		HelmSecretsClient: helm.NewSecretsClient(mgr.GetClient()),
-		Log:               ctrl.Log.WithName("controllers").WithName("Valid8orConfig"),
+		Log:               ctrl.Log.WithName("controllers").WithName("ValidatorConfig"),
 		Scheme:            mgr.GetScheme(),
 	}).SetupWithManager(mgr); err != nil {
-		setupLog.Error(err, "unable to create controller", "controller", "Valid8orConfig")
+		setupLog.Error(err, "unable to create controller", "controller", "ValidatorConfig")
 		os.Exit(1)
 	}
 
