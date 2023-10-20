@@ -33,7 +33,7 @@
 
 ### Refactoring
 
-* valid8or -&gt; validator ([#67](https://github.com/spectrocloud-labs/validator/issues/67)) ([ff88026](https://github.com/spectrocloud-labs/validator/commit/ff8802656d8115dd6afbbfbaf12613c4f205feb5))
+* validator -&gt; validator ([#67](https://github.com/spectrocloud-labs/validator/issues/67)) ([ff88026](https://github.com/spectrocloud-labs/validator/commit/ff8802656d8115dd6afbbfbaf12613c4f205feb5))
 
 ## [0.0.9](https://github.com/spectrocloud-labs/validator/compare/v0.0.8...v0.0.9) (2023-10-10)
 

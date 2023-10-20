@@ -15,95 +15,95 @@ entries:
   - apiVersion: v2
     appVersion: 0.0.9
     created: "2023-10-10T17:49:26.471411122Z"
-    description: Monitor results created by valid8or plugins and upload them to a
+    description: Monitor results created by validator plugins and upload them to a
       configurable sink
     digest: 82aef371dff70aa0cf8974389d18e0c3be5b918a9a0871056b3c57c20acfe8e7
-    name: valid8or
+    name: validator
     type: application
     urls:
-    - https://spectrocloud-labs.github.io/valid8or/valid8or-0.0.9.tgz
+    - https://spectrocloud-labs.github.io/validator/validator-0.0.9.tgz
     version: 0.0.9
   - apiVersion: v2
     appVersion: 0.0.8
     created: "2023-09-07T01:01:35.893005848Z"
-    description: Monitor results created by valid8or plugins and upload them to a
+    description: Monitor results created by validator plugins and upload them to a
       configurable sink
     digest: aa7a684ea93fa89ae08d270dc98b1a8e7c72106ca5b8894b502f46b1e80a72ec
-    name: valid8or
+    name: validator
     type: application
     urls:
-    - https://spectrocloud-labs.github.io/valid8or/valid8or-0.0.8.tgz
+    - https://spectrocloud-labs.github.io/validator/validator-0.0.8.tgz
     version: 0.0.8
   - apiVersion: v2
     appVersion: 0.0.7
     created: "2023-09-06T17:55:11.068399085Z"
-    description: Monitor results created by valid8or plugins and upload them to a
+    description: Monitor results created by validator plugins and upload them to a
       configurable sink
     digest: 509259a5857b7dd924c045bd776e4d433cd0f082945fc7926f730b4291bdfac1
-    name: valid8or
+    name: validator
     type: application
     urls:
-    - https://spectrocloud-labs.github.io/valid8or/valid8or-0.0.7.tgz
+    - https://spectrocloud-labs.github.io/validator/validator-0.0.7.tgz
     version: 0.0.7
   - apiVersion: v2
     appVersion: 0.0.6
     created: "2023-09-01T16:53:36.090074961Z"
-    description: Monitor results created by valid8or plugins and upload them to a
+    description: Monitor results created by validator plugins and upload them to a
       configurable sink
     digest: 9287cd5144d25c91b0400454e97356c2c34cddfae565e2465a46cfb2ff097955
-    name: valid8or
+    name: validator
     type: application
     urls:
-    - https://spectrocloud-labs.github.io/valid8or/valid8or-0.0.6.tgz
+    - https://spectrocloud-labs.github.io/validator/validator-0.0.6.tgz
     version: 0.0.6
   - apiVersion: v2
     appVersion: 0.0.5
     created: "2023-08-31T20:24:59.934060541Z"
-    description: Monitor results created by valid8or plugins and upload them to a
+    description: Monitor results created by validator plugins and upload them to a
       configurable sink
     digest: 61bee4767aea07f9e7f529358e6c1eb8c5f2d10164ea43dd47d0bb411dc3ee54
-    name: valid8or
+    name: validator
     type: application
     urls:
-    - https://spectrocloud-labs.github.io/valid8or/valid8or-0.0.5.tgz
+    - https://spectrocloud-labs.github.io/validator/validator-0.0.5.tgz
     version: 0.0.5
   - apiVersion: v2
     appVersion: 0.0.4
     created: "2023-08-29T21:41:32.125634312Z"
-    description: Monitor results created by valid8or plugins and upload them to a
+    description: Monitor results created by validator plugins and upload them to a
       configurable sink
     digest: 2f16b79b7a786b59fd68692fae16d1cc1dcc3346c6b0eb846c0c83a6a0b8da79
-    name: valid8or
+    name: validator
     type: application
     urls:
-    - https://spectrocloud-labs.github.io/valid8or/valid8or-0.0.4.tgz
+    - https://spectrocloud-labs.github.io/validator/validator-0.0.4.tgz
     version: 0.0.4
   - apiVersion: v2
     appVersion: 0.0.3
     created: "2023-08-29T13:15:40.747918158Z"
-    description: valid8or monitors ValidationResults created by one or more valid8or
+    description: validator monitors ValidationResults created by one or more validator
       plugins and uploads them to a configurable sink
     digest: a308932e25e7e1eb93b7af57e74812923b056802a3b1bb5fcbb3bdb5a4ba5305
-    name: valid8or
+    name: validator
     type: application
     urls:
-    - https://spectrocloud-labs.github.io/valid8or/valid8or-0.0.3.tgz
+    - https://spectrocloud-labs.github.io/validator/validator-0.0.3.tgz
     version: 0.0.3
   - apiVersion: v2
     appVersion: 0.0.2
     created: "2023-08-25T23:04:34.116672107Z"
     dependencies:
-    - condition: valid8orPluginAws.enabled
-      name: valid8or-plugin-aws
+    - condition: validatorPluginAws.enabled
+      name: validator-plugin-aws
       repository: ""
       version: 0.0.1
-    description: valid8or monitors ValidationResults created by one or more valid8or
+    description: validator monitors ValidationResults created by one or more validator
       plugins and uploads them to a configurable sink
     digest: ce1c05773ef724189fbfc081acb7ec59033b67b152d8418bf075f4b6d165719a
-    name: valid8or
+    name: validator
     type: application
     urls:
-    - https://spectrocloud-labs.github.io/valid8or/valid8or-0.0.2.tgz
+    - https://spectrocloud-labs.github.io/validator/validator-0.0.2.tgz
     version: 0.0.2
   - apiVersion: v2
     appVersion: 0.0.1
