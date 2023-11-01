@@ -12,7 +12,9 @@ The validator repository is fairly minimal - all the heavy lifting is done by th
 
 Plugins:
 - [AWS](https://github.com/spectrocloud-labs/validator-plugin-aws)
+- [Azure](https://github.com/spectrocloud-labs/validator-plugin-azure)
 - [Network](https://github.com/spectrocloud-labs/validator-plugin-network)
+- [OCI](https://github.com/spectrocloud-labs/validator-plugin-oci)
 - [vSphere](https://github.com/spectrocloud-labs/validator-plugin-vsphere)
 
 ## Installation
