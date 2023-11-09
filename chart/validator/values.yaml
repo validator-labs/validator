@@ -67,7 +67,7 @@ plugins:
 - chart:
     name: validator-plugin-aws
     repository: "https://spectrocloud-labs.github.io/validator-plugin-aws"
-    version: "v0.0.8"
+    version: "v0.0.10"
   values: |-
     controllerManager:
       kubeRbacProxy:
@@ -122,15 +122,23 @@ plugins:
         targetPort: https
       type: ClusterIP
     auth:
-      secretName: aws-creds
-      createSecret: true
-      accessKeyId: ""
-      secretAccessKey: ""
-      sessionToken: ""
+      # Leave secret undefined for implicit auth (node instance role, IMDSv2, etc.)
+      secret: {}
+        # secretName: aws-creds
+        # accessKeyId: ""
+        # secretAccessKey: ""
+        # sessionToken: ""
+        # By default, a secret will be created. Leave the above fields blank and specify 'createSecret: false' to use an existing secret.
+        # WARNING: the existing secret must match the format used in auth-secret.yaml
+        # createSecret: true
+    
+      # Override the service account used by AWS validator (optional, could be used for IMDSv2 on EKS)
+      # WARNING: the chosen service account must have the same RBAC privileges as seen in manager-rbac.yaml
+      serviceAccountName: ""
 - chart:
     name: validator-plugin-vsphere
     repository: "https://spectrocloud-labs.github.io/validator-plugin-vsphere"
-    version: "v0.0.11"
+    version: "v0.0.12"
   values: |-
     controllerManager:
       kubeRbacProxy:
