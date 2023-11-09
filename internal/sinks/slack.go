@@ -61,43 +61,57 @@ func (s *SlackSink) Emit(r v1alpha1.ValidationResult) error {
 }
 
 func (s *SlackSink) buildSlackBlocks(r v1alpha1.ValidationResult) []slack.Block {
-	c := r.Status.Conditions[0] // there should only ever be 1 condition + this is validated in the controller
 
-	// Basics
+	// Overall State
+	state := fmt.Sprintf("*State:* %s :white_check_mark:", r.Status.State)
+	if r.Status.State != v1alpha1.ValidationSucceeded {
+		state = fmt.Sprintf("*State:* %s :red_circle:", r.Status.State)
+	}
 	blocks := []slack.Block{
-		slack.NewSectionBlock(newTextBlockObject(fmt.Sprintf("*ValidationResult: %s*", r.Spec.Plugin)), nil, nil),
-		slack.NewSectionBlock(newTextBlockObject(":information_source: Metadata"), nil, nil),
-		slack.NewSectionBlock(newTextBlockObject(fmt.Sprintf("*Name:* %s", r.Name)), nil, nil),
-		slack.NewSectionBlock(newTextBlockObject(fmt.Sprintf("*Validation Type:* %s", c.ValidationType)), nil, nil),
-		slack.NewSectionBlock(newTextBlockObject(fmt.Sprintf("*Validation Rule:* %s", c.ValidationRule)), nil, nil),
-		slack.NewSectionBlock(newTextBlockObject(fmt.Sprintf("*State:* %s", r.Status.State)), nil, nil),
-		slack.NewSectionBlock(newTextBlockObject(fmt.Sprintf("*Message:* %s", c.Message)), nil, nil),
+		slack.NewSectionBlock(newTextBlockObject(fmt.Sprintf("*%s Validator*: %s", r.Spec.Plugin, r.Name)), nil, nil),
+		slack.NewSectionBlock(newTextBlockObject(state), nil, nil),
+		slack.NewDividerBlock(),
 	}
 
-	// Details
-	if len(c.Details) > 0 {
-		detailsText := newTextBlockObject(":mag_right: Details")
-		detailsSection := slack.NewSectionBlock(detailsText, nil, nil)
-		blocks = append(blocks, detailsSection)
+	for i, c := range r.Status.Conditions {
 
-		for _, d := range c.Details {
-			detail := newTextBlockObject(fmt.Sprintf("- %s", d))
-			detailSection := slack.NewSectionBlock(detail, nil, nil)
-			blocks = append(blocks, detailSection)
+		// Basics
+		blocks = append(blocks, []slack.Block{
+			slack.NewSectionBlock(newTextBlockObject(fmt.Sprintf("*ValidationResult* %d", i+1)), nil, nil),
+			slack.NewSectionBlock(newTextBlockObject(":information_source: Metadata"), nil, nil),
+			slack.NewSectionBlock(newTextBlockObject(fmt.Sprintf("*Name:* %s", r.Name)), nil, nil),
+			slack.NewSectionBlock(newTextBlockObject(fmt.Sprintf("*Validation Type:* %s", c.ValidationType)), nil, nil),
+			slack.NewSectionBlock(newTextBlockObject(fmt.Sprintf("*Validation Rule:* %s", c.ValidationRule)), nil, nil),
+			slack.NewSectionBlock(newTextBlockObject(fmt.Sprintf("*Message:* %s", c.Message)), nil, nil),
+		}...)
+
+		// Details
+		if len(c.Details) > 0 {
+			detailsText := newTextBlockObject(":mag_right: Details")
+			detailsSection := slack.NewSectionBlock(detailsText, nil, nil)
+			blocks = append(blocks, detailsSection)
+
+			for _, d := range c.Details {
+				detail := newTextBlockObject(fmt.Sprintf("- %s", d))
+				detailSection := slack.NewSectionBlock(detail, nil, nil)
+				blocks = append(blocks, detailSection)
+			}
 		}
-	}
 
-	// Failures
-	if len(c.Failures) > 0 {
-		failuresText := newTextBlockObject(":x: Failures")
-		failuresSection := slack.NewSectionBlock(failuresText, nil, nil)
-		blocks = append(blocks, failuresSection)
+		// Failures
+		if len(c.Failures) > 0 {
+			failuresText := newTextBlockObject(":x: Failures")
+			failuresSection := slack.NewSectionBlock(failuresText, nil, nil)
+			blocks = append(blocks, failuresSection)
 
-		for i, f := range c.Failures {
-			failure := newTextBlockObject(fmt.Sprintf("%d. %s", i+1, f))
-			failureSection := slack.NewSectionBlock(failure, nil, nil)
-			blocks = append(blocks, failureSection)
+			for i, f := range c.Failures {
+				failure := newTextBlockObject(fmt.Sprintf("%d. %s", i+1, f))
+				failureSection := slack.NewSectionBlock(failure, nil, nil)
+				blocks = append(blocks, failureSection)
+			}
 		}
+
+		blocks = append(blocks, slack.NewDividerBlock())
 	}
 
 	payload, _ := json.Marshal(blocks)

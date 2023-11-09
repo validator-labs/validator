@@ -105,8 +105,8 @@ func (r *ValidationResult) Hash() string {
 	fmt.Fprint(digester, r.Spec)
 	fmt.Fprint(digester, r.Status.State)
 
-	if len(r.Status.Conditions) > 0 {
-		c := r.Status.Conditions[0].DeepCopy()
+	for _, condition := range r.Status.Conditions {
+		c := condition.DeepCopy()
 		c.LastValidationTime = metav1.Time{}
 		fmt.Fprint(digester, c)
 	}
