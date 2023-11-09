@@ -105,7 +105,7 @@ func (r *ValidatorConfigReconciler) Reconcile(ctx context.Context, req ctrl.Requ
 	// deploy/redeploy plugins as required
 	if err := r.redeployIfNeeded(ctx, vc); err != nil {
 		r.Log.V(0).Error(err, "ValidatorConfig plugin deployment failed", "namespace", vc.Namespace, "name", vc.Name)
-		return ctrl.Result{RequeueAfter: time.Second * 5}, err
+		return ctrl.Result{}, err
 	}
 
 	return ctrl.Result{RequeueAfter: time.Second * 30}, nil

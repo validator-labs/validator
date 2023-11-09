@@ -110,14 +110,14 @@ func (r *ValidationResultReconciler) Reconcile(ctx context.Context, req ctrl.Req
 				sinkConfigKey := types.NamespacedName{Namespace: r.Namespace, Name: vc.Spec.Sink.SecretName}
 				if err := r.Client.Get(ctx, sinkConfigKey, sinkSecret); err != nil {
 					r.Log.Error(err, "failed to fetch sink configuration secret")
-					return ctrl.Result{RequeueAfter: time.Second * 30}, err
+					return ctrl.Result{}, err
 				}
 				sinkConfig = sinkSecret.Data
 			}
 
 			if err := sink.Configure(*r.SinkClient, *vc, sinkConfig); err != nil {
 				r.Log.Error(err, "failed to configure sink")
-				return ctrl.Result{RequeueAfter: time.Second * 30}, err
+				return ctrl.Result{}, err
 			}
 
 			if err := sink.Emit(*vr); err != nil {
@@ -135,7 +135,7 @@ func (r *ValidationResultReconciler) Reconcile(ctx context.Context, req ctrl.Req
 		}
 		vr.ObjectMeta.Annotations[ValidationResultHash] = currHash
 		if err := r.Client.Update(ctx, vr); err != nil {
-			return ctrl.Result{RequeueAfter: time.Second * 30}, err
+			return ctrl.Result{}, err
 		}
 	}
 

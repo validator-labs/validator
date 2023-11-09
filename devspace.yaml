@@ -36,7 +36,7 @@ dev:
       workDir: /workspace
       command: ./devspace-start.sh
     ports:
-    - port: "2343"
+    - port: "2342"
     sync:
     - path: .:/workspace
       excludePaths:

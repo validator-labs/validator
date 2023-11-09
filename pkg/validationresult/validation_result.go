@@ -9,7 +9,6 @@ import (
 	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	ktypes "k8s.io/apimachinery/pkg/types"
-	ctrl "sigs.k8s.io/controller-runtime"
 	"sigs.k8s.io/controller-runtime/pkg/client"
 
 	"github.com/spectrocloud-labs/validator/api/v1alpha1"
@@ -19,7 +18,7 @@ import (
 )
 
 // HandleExistingValidationResult processes a preexisting validation result for the active validator
-func HandleExistingValidationResult(nn ktypes.NamespacedName, vr *v1alpha1.ValidationResult, l logr.Logger) (*ctrl.Result, error) {
+func HandleExistingValidationResult(nn ktypes.NamespacedName, vr *v1alpha1.ValidationResult, l logr.Logger) {
 	switch vr.Status.State {
 
 	case v1alpha1.ValidationInProgress:
@@ -42,12 +41,10 @@ func HandleExistingValidationResult(nn ktypes.NamespacedName, vr *v1alpha1.Valid
 		// log validation success, continue to re-validate
 		l.V(0).Info("Previous validation succeeded. Re-validating.", "name", nn.Name, "namespace", nn.Namespace)
 	}
-
-	return nil, nil
 }
 
 // HandleNewValidationResult creates a new validation result for the active validator
-func HandleNewValidationResult(c client.Client, plugin string, nn ktypes.NamespacedName, vr *v1alpha1.ValidationResult, l logr.Logger) (*ctrl.Result, error) {
+func HandleNewValidationResult(c client.Client, plugin string, nn ktypes.NamespacedName, vr *v1alpha1.ValidationResult, l logr.Logger) error {
 
 	// Create the ValidationResult
 	vr.ObjectMeta = metav1.ObjectMeta{
@@ -59,7 +56,7 @@ func HandleNewValidationResult(c client.Client, plugin string, nn ktypes.Namespa
 	}
 	if err := c.Create(context.Background(), vr, &client.CreateOptions{}); err != nil {
 		l.V(0).Error(err, "failed to create ValidationResult", "name", nn.Name, "namespace", nn.Namespace)
-		return &ctrl.Result{}, err
+		return err
 	}
 
 	// Update the ValidationResult's status
@@ -68,10 +65,10 @@ func HandleNewValidationResult(c client.Client, plugin string, nn ktypes.Namespa
 	}
 	if err := c.Status().Update(context.Background(), vr); err != nil {
 		l.V(0).Error(err, "failed to update ValidationResult status", "name", nn.Name, "namespace", nn.Namespace)
-		return &ctrl.Result{}, err
+		return err
 	}
 
-	return nil, nil
+	return nil
 }
 
 // SafeUpdateValidationResult updates the overall validation result, ensuring
