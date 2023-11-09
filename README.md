@@ -3,8 +3,10 @@
 [![Contributions Welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)](https://github.com/spectrocloud-labs/validator/issues)
 [![Go Reference](https://pkg.go.dev/badge/github.com/spectrocloud-labs/validator.svg)](https://pkg.go.dev/github.com/spectrocloud-labs/validator)
 
-# validator
+![twitter_profile_image](https://github.com/spectrocloud-labs/validator/assets/1795270/fffe151d-596f-4951-8b72-19aa0410deb3)
+
 validator (AKA Validation Controller) monitors ValidationResults created by one or more validator plugins and uploads them to a sink of your choosing, e.g., Slack or Spectro Cloud Palette.
+
 <img width="1364" alt="image" src="https://github.com/spectrocloud-labs/validator/assets/1795270/e68dfdf5-25bf-4336-ad87-f783c4825c7e">
 
 ## Description
