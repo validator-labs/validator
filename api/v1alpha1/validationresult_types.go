@@ -17,7 +17,9 @@ limitations under the License.
 package v1alpha1
 
 import (
-	"time"
+	"crypto"
+	"encoding/base64"
+	"fmt"
 
 	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -36,9 +38,18 @@ const (
 	ValidationSucceeded  ValidationState = "Succeeded"
 )
 
+type SinkState string
+
+const (
+	SinkEmitNone      SinkState = "N/A"
+	SinkEmitFailed    SinkState = "Failed"
+	SinkEmitSucceeded SinkState = "Succeeded"
+)
+
 // ValidationResultStatus defines the observed state of ValidationResult
 type ValidationResultStatus struct {
-	State ValidationState `json:"state"`
+	State     ValidationState `json:"state"`
+	SinkState SinkState       `json:"sinkState,omitempty"`
 
 	// +optional
 	// +patchMergeKey=type
@@ -68,7 +79,7 @@ func DefaultValidationCondition() ValidationCondition {
 	return ValidationCondition{
 		Details:            make([]string, 0),
 		Status:             corev1.ConditionTrue,
-		LastValidationTime: metav1.Time{Time: time.Now()},
+		LastValidationTime: metav1.Now(),
 	}
 }
 
@@ -85,6 +96,24 @@ type ValidationResult struct {
 
 	Spec   ValidationResultSpec   `json:"spec,omitempty"`
 	Status ValidationResultStatus `json:"status,omitempty"`
+}
+
+func (r *ValidationResult) Hash() string {
+	digester := crypto.MD5.New()
+
+	fmt.Fprint(digester, r.ObjectMeta.UID)
+	fmt.Fprint(digester, r.Spec)
+	fmt.Fprint(digester, r.Status.State)
+	fmt.Fprint(digester, r.Status.SinkState)
+
+	if len(r.Status.Conditions) > 0 {
+		c := r.Status.Conditions[0].DeepCopy()
+		c.LastValidationTime = metav1.Time{}
+		fmt.Fprint(digester, c)
+	}
+
+	hash := digester.Sum(nil)
+	return base64.StdEncoding.EncodeToString(hash)
 }
 
 //+kubebuilder:object:root=true

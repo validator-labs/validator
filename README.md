@@ -26,6 +26,24 @@ helm repo update
 helm install validator validator/validator -n validator --create-namespace
 ```
 
+## Sinks
+Validator can be configured to emit updates to various event sinks whenever a `ValidationResult` is created or updated. See configuration details below for each supported sink.
+
+### Slack
+1. Go to https://api.slack.com/apps and click **Create New App**, then select **From scratch**. Pick an App Name and Slack Workspace, then click **Create App**.
+
+   <img src="https://github.com/spectrocloud-labs/validator/assets/1795270/58cbb5a0-12a4-4a83-a0dd-20ae87a8105d" width="500">
+
+2. Go to `OAuth & Permissions` and copy the `Bot User OAuth Token` under the `OAuth Tokens for Your Workspace` section. Save it somewhere for later. Scroll down to `Scopes` and click **Add an OAuth Scope**. Enable the `chat:write` scope for your bot.
+
+   <img src="https://github.com/spectrocloud-labs/validator/assets/1795270/7b4d80be-5799-497a-9a4b-480793b26d59" width="500">
+
+3. Find and/or create a channel in Slack and note its Channel ID (at the very bottom of the model when you view channel details). Add the bot you just created to the channel via `View channel details > Integrations > Apps > Add apps`.
+
+   <img src="https://github.com/spectrocloud-labs/validator/assets/1795270/a78c852c-7aeb-41a4-aa76-6afbe9b2ec81" width="500">
+
+4. Install validator and/or upgrade your validator Helm release, configuring `values.sink` accordingly.
+
 ## Getting Started
 You’ll need a Kubernetes cluster to run against. You can use [KIND](https://sigs.k8s.io/kind) to get a local cluster for testing, or run against a remote cluster.
 **Note:** Your controller will automatically use the current context in your kubeconfig file (i.e. whatever cluster `kubectl cluster-info` shows).

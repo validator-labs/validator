@@ -39,6 +39,7 @@ controllerManager:
       requests:
         cpu: 10m
         memory: 64Mi
+    sinkWebhookTimeout: 30s
   replicas: 1
   serviceAccount:
     annotations: {}
@@ -50,6 +51,18 @@ metricsService:
     protocol: TCP
     targetPort: https
   type: ClusterIP
+
+# Optional sink configuration
+sink: {}
+  # type: slack
+  # secretName: "slack-secret"
+  # apiToken: ""
+  # channelId: ""
+  # By default, a secret will be created. Leave the above fields blank and specify 'createSecret: false' to use an existing secret.
+  # WARNING: the existing secret must match the format used in sink-secret.yaml
+  # createSecret: true
+
+# Validation plugin charts
 plugins:
 - chart:
     name: validator-plugin-aws

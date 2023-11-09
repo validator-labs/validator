@@ -2,6 +2,8 @@
 # Image URL to use all building/pushing image targets
 IMG ?= quay.io/spectrocloud-labs/validator:latest
 
+GOARCH ?= $(shell go env GOARCH)
+
 # Get the currently used golang install path (in GOPATH/bin, unless GOBIN is set)
 ifeq (,$(shell go env GOBIN))
 GOBIN=$(shell go env GOPATH)/bin
@@ -77,7 +79,7 @@ run: manifests generate fmt vet ## Run a controller from your host.
 # More info: https://docs.docker.com/develop/develop-images/build_enhancements/
 .PHONY: docker-build
 docker-build: test ## Build docker image with the manager.
-	$(CONTAINER_TOOL) build -t ${IMG} .
+	$(CONTAINER_TOOL) build -t ${IMG} . --platform linux/$(GOARCH)
 
 .PHONY: docker-push
 docker-push: ## Push docker image with the manager.
@@ -141,7 +143,7 @@ CHART_VERSION=v0.0.1 # x-release-please-version
 CONTROLLER_TOOLS_VERSION ?= v0.12.0
 ENVTEST_K8S_VERSION = 1.27.1
 HELM_VERSION=v3.10.1
-KUSTOMIZE_VERSION ?= v5.0.1
+KUSTOMIZE_VERSION ?= v5.2.1
 
 .PHONY: kustomize
 kustomize: $(KUSTOMIZE) ## Download kustomize locally if necessary. If wrong version is installed, it will be removed before downloading.

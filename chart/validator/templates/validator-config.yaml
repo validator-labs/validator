@@ -1,0 +1,12 @@
+apiVersion: validation.spectrocloud.labs/v1alpha1
+kind: ValidatorConfig
+metadata:
+  name: validator-config
+spec:
+  plugins:
+{{ toYaml .Values.plugins | indent 2 }} 
+{{- if .Values.sink }}
+  sink:
+    type: {{ required ".Values.sink.type is required!" .Values.sink.type }}
+    secretName: {{ required ".Values.sink.secretName is required!" .Values.sink.secretName }}
+{{- end }}

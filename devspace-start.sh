@@ -24,8 +24,8 @@ If you wish to run validator in the debug mode with delve, run:
   \`${COLOR_CYAN}${DEBUG_CMD}${COLOR_RESET}\`
   Wait until the \`${COLOR_CYAN}API server listening at: [::]:2343${COLOR_RESET}\` message appears
   Start the \"Debug (localhost:2343)\" configuration in VSCode to connect your debugger session.
-  ${COLOR_CYAN}Note:${COLOR_RESET} drive won't start until you connect with the debugger.
-  ${COLOR_CYAN}Note:${COLOR_RESET} drive will be stopped once you detach your debugger session.
+  ${COLOR_CYAN}Note:${COLOR_RESET} validator won't start until you connect with the debugger.
+  ${COLOR_CYAN}Note:${COLOR_RESET} validator will be stopped once you detach your debugger session.
 
 ${COLOR_CYAN}TIP:${COLOR_RESET} hit an up arrow on your keyboard to find the commands mentioned above :) 
 "

@@ -24,6 +24,14 @@ import (
 // ValidatorConfigSpec defines the desired state of ValidatorConfig
 type ValidatorConfigSpec struct {
 	Plugins []HelmRelease `json:"plugins,omitempty"`
+	Sink    *Sink         `json:"sink,omitempty"`
+}
+
+type Sink struct {
+	// +kubebuilder:validation:Enum=slack
+	Type string `json:"type"`
+	// Name of a K8s secret containing configuration details for the sink
+	SecretName string `json:"secretName"`
 }
 
 type HelmRelease struct {

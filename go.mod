@@ -7,6 +7,7 @@ require (
 	github.com/onsi/ginkgo/v2 v2.13.0
 	github.com/onsi/gomega v1.30.0
 	github.com/pkg/errors v0.9.1
+	github.com/slack-go/slack v0.12.3
 	golang.org/x/exp v0.0.0-20231108232855-2478ac86f678
 	k8s.io/api v0.28.3
 	k8s.io/apimachinery v0.28.3
@@ -35,6 +36,7 @@ require (
 	github.com/google/gofuzz v1.2.0 // indirect
 	github.com/google/pprof v0.0.0-20210720184732-4bb14d4b1be1 // indirect
 	github.com/google/uuid v1.3.0 // indirect
+	github.com/gorilla/websocket v1.4.2 // indirect
 	github.com/imdario/mergo v0.3.6 // indirect
 	github.com/josharian/intern v1.0.0 // indirect
 	github.com/json-iterator/go v1.1.12 // indirect
