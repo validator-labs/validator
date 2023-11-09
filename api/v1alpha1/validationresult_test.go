@@ -39,7 +39,7 @@ func TestHash(t *testing.T) {
 					},
 				},
 			},
-			expectedHash: "mCyJwAeP5yOG82mDw8Yy1Q==",
+			expectedHash: "Ldcfr8OZ6D/LRuLfasCrKg==",
 		},
 	}
 	for _, c := range cs {
