@@ -1,3 +1,4 @@
+---
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
@@ -56,6 +57,20 @@ spec:
                   - values
                   type: object
                 type: array
+              sink:
+                properties:
+                  secretName:
+                    description: Name of a K8s secret containing configuration details
+                      for the sink
+                    type: string
+                  type:
+                    enum:
+                    - slack
+                    type: string
+                required:
+                - secretName
+                - type
+                type: object
             type: object
           status:
             description: ValidatorConfigStatus defines the observed state of ValidatorConfig

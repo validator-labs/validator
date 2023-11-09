@@ -2,6 +2,9 @@ name: validator
 version: v2beta1
 
 vars:
+  GOARCH:
+    command: go
+    args: ["env", "GOARCH"]
   IMAGE: quay.io/spectrocloud-labs/validator
 
 images:
@@ -12,7 +15,9 @@ images:
     createPullSecret: false
     dockerfile: ./Dockerfile.devspace
     rebuildStrategy: ignoreContextChanges
-    docker: {}
+    docker:
+      args:
+      - --platform=linux/${GOARCH}
 
 deployments:
   validator:

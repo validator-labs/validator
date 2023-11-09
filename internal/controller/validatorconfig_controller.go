@@ -180,7 +180,9 @@ func (r *ValidatorConfigReconciler) redeployIfNeeded(ctx context.Context, vc *v1
 		return err
 	}
 
+	// all status modifications must happen after r.Client.Update
 	vc.Status.Conditions = conditions
+
 	return nil
 }
 

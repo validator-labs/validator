@@ -19,9 +19,11 @@ package main
 import (
 	"flag"
 	"os"
+	"time"
 
 	// Import all Kubernetes client auth plugins (e.g. Azure, GCP, OIDC, etc.)
 	// to ensure that exec-entrypoint and run can make use of them.
+
 	"k8s.io/apimachinery/pkg/runtime"
 	utilruntime "k8s.io/apimachinery/pkg/util/runtime"
 	clientgoscheme "k8s.io/client-go/kubernetes/scheme"
@@ -33,6 +35,7 @@ import (
 	validationv1alpha1 "github.com/spectrocloud-labs/validator/api/v1alpha1"
 	"github.com/spectrocloud-labs/validator/internal/controller"
 	"github.com/spectrocloud-labs/validator/internal/kube"
+	"github.com/spectrocloud-labs/validator/internal/sinks"
 	"github.com/spectrocloud-labs/validator/pkg/helm"
 	//+kubebuilder:scaffold:imports
 )
@@ -63,6 +66,8 @@ func main() {
 
 	ctrl.SetLogger(zap.New(zap.UseFlagOptions(&opts)))
 
+	ns := os.Getenv("NAMESPACE")
+
 	mgr, err := ctrl.NewManager(ctrl.GetConfigOrDie(), ctrl.Options{
 		Scheme:                 scheme,
 		HealthProbeBindAddress: probeAddr,
@@ -79,6 +84,13 @@ func main() {
 		// if you are doing or is intended to do any operation such as perform cleanups
 		// after the manager stops then its usage might be unsafe.
 		// LeaderElectionReleaseOnCancel: true,
+
+		// NewCache: func(config *rest.Config, opts cache.Options) (cache.Cache, error) {
+		// 	opts.DefaultNamespaces = map[string]cache.Config{
+		// 		ns: {},
+		// 	}
+		// 	return cache.New(config, opts)
+		// },
 	})
 	if err != nil {
 		setupLog.Error(err, "unable to start manager")
@@ -91,10 +103,23 @@ func main() {
 		os.Exit(1)
 	}
 
+	timeout, ok := os.LookupEnv("SINK_WEBHOOK_TIMEOUT_SECONDS")
+	if !ok {
+		timeout = "30s"
+	}
+	sinkTimeout, err := time.ParseDuration(timeout)
+	if err != nil {
+		setupLog.Error(err, "failed to parse webhook timeout")
+		os.Exit(1)
+	}
+	sinkClient := sinks.NewClient(sinkTimeout)
+
 	if err = (&controller.ValidationResultReconciler{
-		Client: mgr.GetClient(),
-		Log:    ctrl.Log.WithName("controllers").WithName("ValidationResult"),
-		Scheme: mgr.GetScheme(),
+		Client:     mgr.GetClient(),
+		Log:        ctrl.Log.WithName("controllers").WithName("ValidationResult"),
+		Namespace:  ns,
+		Scheme:     mgr.GetScheme(),
+		SinkClient: sinkClient,
 	}).SetupWithManager(mgr); err != nil {
 		setupLog.Error(err, "unable to create controller", "controller", "ValidationResult")
 		os.Exit(1)
