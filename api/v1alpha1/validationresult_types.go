@@ -104,7 +104,6 @@ func (r *ValidationResult) Hash() string {
 	fmt.Fprint(digester, r.ObjectMeta.UID)
 	fmt.Fprint(digester, r.Spec)
 	fmt.Fprint(digester, r.Status.State)
-	fmt.Fprint(digester, r.Status.SinkState)
 
 	if len(r.Status.Conditions) > 0 {
 		c := r.Status.Conditions[0].DeepCopy()
