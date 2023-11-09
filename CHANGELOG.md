@@ -1,5 +1,34 @@
 # Changelog
 
+## [0.0.10](https://github.com/spectrocloud-labs/validator/compare/v0.0.10...v0.0.10) (2023-11-09)
+
+
+### Features
+
+* add sink interface, Slack sink ([#84](https://github.com/spectrocloud-labs/validator/issues/84)) ([dac2c3a](https://github.com/spectrocloud-labs/validator/commit/dac2c3a83eebbe433790aa439cab1433eadfb0ec))
+
+
+### Bug Fixes
+
+* **deps:** update golang.org/x/exp digest to 2478ac8 ([#83](https://github.com/spectrocloud-labs/validator/issues/83)) ([0d5200f](https://github.com/spectrocloud-labs/validator/commit/0d5200faf789343c10149d5f1333894a51d13ff8))
+* **deps:** update module github.com/go-logr/logr to v1.3.0 ([#77](https://github.com/spectrocloud-labs/validator/issues/77)) ([532fd6f](https://github.com/spectrocloud-labs/validator/commit/532fd6f82cf6a9f8322a74428e0834bb023ff67e))
+* **deps:** update module github.com/onsi/gomega to v1.28.1 ([#74](https://github.com/spectrocloud-labs/validator/issues/74)) ([eb7d990](https://github.com/spectrocloud-labs/validator/commit/eb7d990a840d14c5700dffc549de8f27feb0b614))
+* **deps:** update module github.com/onsi/gomega to v1.29.0 ([#76](https://github.com/spectrocloud-labs/validator/issues/76)) ([ca58e8c](https://github.com/spectrocloud-labs/validator/commit/ca58e8c622c75ce345550e2115f8311428bfceb5))
+* **deps:** update module github.com/onsi/gomega to v1.30.0 ([#82](https://github.com/spectrocloud-labs/validator/issues/82)) ([7bfa8f7](https://github.com/spectrocloud-labs/validator/commit/7bfa8f71aa77db2953aaba698f6acf4f2700a03e))
+* **deps:** update module k8s.io/klog/v2 to v2.110.1 ([#78](https://github.com/spectrocloud-labs/validator/issues/78)) ([8a79219](https://github.com/spectrocloud-labs/validator/commit/8a79219a40a4beb47182da4f5aea0d8045dd119f))
+* update plugin versions in default values.yaml ([6f7f90d](https://github.com/spectrocloud-labs/validator/commit/6f7f90d15fbeb105df6c5b6c568c35fa4f12121f))
+
+
+### Other
+
+* add license ([065ef97](https://github.com/spectrocloud-labs/validator/commit/065ef97d16dadf35a54b84fe3cd1026e14f172d5))
+* **deps:** update gcr.io/kubebuilder/kube-rbac-proxy docker tag to v0.15.0 ([#72](https://github.com/spectrocloud-labs/validator/issues/72)) ([4f0fc63](https://github.com/spectrocloud-labs/validator/commit/4f0fc630bc3ab969d6411fb1d31d968e313a20be))
+* **deps:** update google-github-actions/release-please-action digest to db8f2c6 ([#81](https://github.com/spectrocloud-labs/validator/issues/81)) ([20956a3](https://github.com/spectrocloud-labs/validator/commit/20956a3fa864d5cc0e37349ba0632da61879b8b8))
+* **deps:** update helm/chart-testing-action action to v2.6.0 ([#79](https://github.com/spectrocloud-labs/validator/issues/79)) ([3272b22](https://github.com/spectrocloud-labs/validator/commit/3272b226df2586344efd1dcf3f077483ca3f45a7))
+* **deps:** update helm/chart-testing-action action to v2.6.1 ([#80](https://github.com/spectrocloud-labs/validator/issues/80)) ([cbb430e](https://github.com/spectrocloud-labs/validator/commit/cbb430e70a8aad6558816d3ce2c5c42cacefcab8))
+* **main:** release 0.0.10 ([#70](https://github.com/spectrocloud-labs/validator/issues/70)) ([6c5e4fc](https://github.com/spectrocloud-labs/validator/commit/6c5e4fcc1182862e3902044e543309800e96b31e))
+* release 0.0.10 ([65ce207](https://github.com/spectrocloud-labs/validator/commit/65ce2076727fd3d1da49afd884329c55a6394c91))
+
 ## [0.0.10](https://github.com/spectrocloud-labs/validator/compare/v0.0.10...v0.0.10) (2023-10-20)
 
 
