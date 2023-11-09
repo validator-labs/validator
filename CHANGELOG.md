@@ -1,5 +1,18 @@
 # Changelog
 
+## [0.0.13](https://github.com/spectrocloud-labs/validator/compare/v0.0.12...v0.0.13) (2023-11-09)
+
+
+### Bug Fixes
+
+* omit sink state from hash to avoid double-emitting on VR creation ([ee17581](https://github.com/spectrocloud-labs/validator/commit/ee175817257449943bdfdba5ef1279c886cd1536))
+
+
+### Other
+
+* Merge branch 'main' of https://github.com/spectrocloud-labs/validator ([3fda24c](https://github.com/spectrocloud-labs/validator/commit/3fda24c4a1e4d5224722b934189a5305576c8b8e))
+* release 0.0.13 ([c2a7a34](https://github.com/spectrocloud-labs/validator/commit/c2a7a340787f2ad91ea389965921fb8ea8d5bc0a))
+
 ## [0.0.12](https://github.com/spectrocloud-labs/validator/compare/v0.0.11...v0.0.12) (2023-11-09)
 
 
