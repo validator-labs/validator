@@ -1,5 +1,23 @@
 # Changelog
 
+## [0.0.12](https://github.com/spectrocloud-labs/validator/compare/v0.0.11...v0.0.12) (2023-11-09)
+
+
+### Bug Fixes
+
+* omit sink state from hash to avoid double-emitting on VR creation ([071b960](https://github.com/spectrocloud-labs/validator/commit/071b9602fee35262a66a9f403ceb878ac4a422b4))
+
+
+### Other
+
+* release 0.0.12 ([4903786](https://github.com/spectrocloud-labs/validator/commit/49037866402a7f16ef2c15cf172a11626392b9ff))
+* Update default values.yaml ([f9af283](https://github.com/spectrocloud-labs/validator/commit/f9af2832bd652c9ea404d08936a6879930d29753))
+
+
+### Refactoring
+
+* change devspace port; always use exponential backoff; tidy validation result helpers ([c866429](https://github.com/spectrocloud-labs/validator/commit/c866429772e8d301916eed7ea8908b811cad3e7c))
+
 ## [0.0.11](https://github.com/spectrocloud-labs/validator/compare/v0.0.10...v0.0.11) (2023-11-09)
 
 
