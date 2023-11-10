@@ -38,7 +38,7 @@ Validator can be configured to emit updates to various event sinks whenever a `V
 
    <img src="https://github.com/spectrocloud-labs/validator/assets/1795270/7b4d80be-5799-497a-9a4b-480793b26d59" width="500">
 
-3. Find and/or create a channel in Slack and note its Channel ID (at the very bottom of the model when you view channel details). Add the bot you just created to the channel via `View channel details > Integrations > Apps > Add apps`.
+3. Find and/or create a channel in Slack and note its Channel ID (at the very bottom of the modal when you view channel details). Add the bot you just created to the channel via `View channel details > Integrations > Apps > Add apps`.
 
    <img src="https://github.com/spectrocloud-labs/validator/assets/1795270/a78c852c-7aeb-41a4-aa76-6afbe9b2ec81" width="500">
 
