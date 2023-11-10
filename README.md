@@ -31,6 +31,13 @@ helm install validator validator/validator -n validator --create-namespace
 Validator can be configured to emit updates to various event sinks whenever a `ValidationResult` is created or updated. See configuration details below for each supported sink.
 
 ### Slack
+
+#### Sample Output
+<img width="704" alt="Screen Shot 2023-11-10 at 4 30 12 PM" src="https://github.com/spectrocloud-labs/validator/assets/1795270/c011143a-4d4b-4299-b88b-699188f4bda2">
+<img width="700" alt="Screen Shot 2023-11-10 at 4 18 22 PM" src="https://github.com/spectrocloud-labs/validator/assets/1795270/9f2c4ab7-34d6-496a-9f60-68655a7ee3d6">
+
+#### Setup
+
 1. Go to https://api.slack.com/apps and click **Create New App**, then select **From scratch**. Pick an App Name and Slack Workspace, then click **Create App**.
 
    <img src="https://github.com/spectrocloud-labs/validator/assets/1795270/58cbb5a0-12a4-4a83-a0dd-20ae87a8105d" width="500">
