@@ -131,7 +131,7 @@ plugins:
         # By default, a secret will be created. Leave the above fields blank and specify 'createSecret: false' to use an existing secret.
         # WARNING: the existing secret must match the format used in auth-secret.yaml
         # createSecret: true
-    
+
       # Override the service account used by AWS validator (optional, could be used for IMDSv2 on EKS)
       # WARNING: the chosen service account must have the same RBAC privileges as seen in manager-rbac.yaml
       serviceAccountName: ""
