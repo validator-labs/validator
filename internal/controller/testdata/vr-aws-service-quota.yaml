@@ -1,0 +1,56 @@
+apiVersion: validation.spectrocloud.labs/v1alpha1
+kind: ValidationResult
+metadata:
+  name: validator-plugin-aws-service-quota
+spec:
+  expectedResults: 4
+  plugin: AWS
+status:
+  conditions:
+  - details:
+    - 'EC2-VPC Elastic IPs: quota: 5, buffer: 1, max. usage: 3, max. usage entity:
+      us-east-2'
+    - 'Public AMIs: quota: 5, buffer: 1, max. usage: 0, max. usage entity: us-east-2'
+    lastValidationTime: "2023-11-10T16:24:21Z"
+    message: Usage for all service quotas is below specified buffer
+    status: "True"
+    validationRule: validation-ec2
+    validationType: aws-service-quota
+  - details:
+    - 'File systems per account: quota: 1000, buffer: 4, max. usage: 0, max. usage
+      entity: us-east-2'
+    lastValidationTime: "2023-11-10T16:24:24Z"
+    message: Usage for all service quotas is below specified buffer
+    status: "True"
+    validationRule: validation-elasticfilesystem
+    validationType: aws-service-quota
+  - details:
+    - 'Application Load Balancers per Region: quota: 50, buffer: 5, max. usage: 0,
+      max. usage entity: us-east-2'
+    - 'Classic Load Balancers per Region: quota: 20, buffer: 4, max. usage: 3, max.
+      usage entity: us-east-2'
+    - 'Network Load Balancers per Region: quota: 50, buffer: 5, max. usage: 0, max.
+      usage entity: us-east-2'
+    lastValidationTime: "2023-11-10T16:24:25Z"
+    message: Usage for all service quotas is below specified buffer
+    status: "True"
+    validationRule: validation-elasticloadbalancing
+    validationType: aws-service-quota
+  - details:
+    - 'Subnets per VPC: quota: 200, buffer: 5, max. usage: 6, max. usage entity: vpc-00288d3415348f34c'
+    - 'NAT gateways per Availability Zone: quota: 5, buffer: 30, max. usage: 1, max.
+      usage entity: us-east-2a'
+    - 'Network interfaces per Region: quota: 5000, buffer: 6, max. usage: 18, max.
+      usage entity: us-east-2'
+    - 'Internet gateways per Region: quota: 5, buffer: 1, max. usage: 3, max. usage
+      entity: us-east-2'
+    failures:
+    - Remaining quota 4, less than buffer 30, for service vpc and quota NAT gateways
+      per Availability Zone
+    lastValidationTime: "2023-11-10T16:24:26Z"
+    message: Usage for one or more service quotas exceeded the specified buffer
+    status: "False"
+    validationRule: validation-vpc
+    validationType: aws-service-quota
+  sinkState: Succeeded
+  state: Failed

@@ -17,29 +17,59 @@ limitations under the License.
 package controller
 
 import (
+	"context"
+	"fmt"
+	"os"
 	"path/filepath"
+	"runtime"
 	"testing"
+	"time"
 
 	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
+	"github.com/onsi/gomega/gexec"
 
+	corev1 "k8s.io/api/core/v1"
+	apierrs "k8s.io/apimachinery/pkg/api/errors"
+	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	"k8s.io/apimachinery/pkg/types"
 	"k8s.io/client-go/kubernetes/scheme"
 	"k8s.io/client-go/rest"
+	ctrl "sigs.k8s.io/controller-runtime"
 	"sigs.k8s.io/controller-runtime/pkg/client"
 	"sigs.k8s.io/controller-runtime/pkg/envtest"
 	logf "sigs.k8s.io/controller-runtime/pkg/log"
 	"sigs.k8s.io/controller-runtime/pkg/log/zap"
 
-	validationv1alpha1 "github.com/spectrocloud-labs/validator/api/v1alpha1"
+	"github.com/spectrocloud-labs/validator/api/v1alpha1"
+	"github.com/spectrocloud-labs/validator/internal/kube"
+	"github.com/spectrocloud-labs/validator/internal/sinks"
+	"github.com/spectrocloud-labs/validator/pkg/helm"
+	"github.com/spectrocloud-labs/validator/pkg/util/ptr"
 	//+kubebuilder:scaffold:imports
 )
 
 // These tests use Ginkgo (BDD-style Go testing framework). Refer to
 // http://onsi.github.io/ginkgo/ to learn more about Ginkgo.
 
-var cfg *rest.Config
-var k8sClient client.Client
-var testEnv *envtest.Environment
+const (
+	k8sVersion         = "1.27.1"
+	validatorNamespace = "validator"
+
+	timeout  = time.Second * 30
+	interval = time.Millisecond * 250
+)
+
+var (
+	cfg       *rest.Config
+	k8sClient client.Client
+	testEnv   *envtest.Environment
+	ctx       context.Context
+	cancel    context.CancelFunc
+
+	validatorNs    *corev1.Namespace
+	validatorNsKey = types.NamespacedName{Name: validatorNamespace, Namespace: validatorNamespace}
+)
 
 func TestControllers(t *testing.T) {
 	RegisterFailHandler(Fail)
@@ -50,19 +80,37 @@ func TestControllers(t *testing.T) {
 var _ = BeforeSuite(func() {
 	logf.SetLogger(zap.New(zap.WriteTo(GinkgoWriter), zap.UseDevMode(true)))
 
+	ctx, cancel = context.WithCancel(context.TODO())
+
 	By("bootstrapping test environment")
 	testEnv = &envtest.Environment{
 		CRDDirectoryPaths:     []string{filepath.Join("..", "..", "config", "crd", "bases")},
 		ErrorIfCRDPathMissing: true,
+
+		// The BinaryAssetsDirectory is only required if you want to run the tests directly
+		// without call the makefile target test. If not informed it will look for the
+		// default path defined in controller-runtime which is /usr/local/kubebuilder/.
+		// Note that you must have the required binaries setup under the bin directory to perform
+		// the tests directly. When we run make test it will be setup and used automatically.
+		BinaryAssetsDirectory: filepath.Join(
+			"..", "..", "bin", "k8s", fmt.Sprintf("%s-%s-%s", k8sVersion, runtime.GOOS, runtime.GOARCH),
+		),
+		UseExistingCluster: ptr.Ptr(false),
 	}
 
+	if os.Getenv("KUBECONFIG") != "" {
+		testEnv.UseExistingCluster = ptr.Ptr(true)
+	}
+
+	// monkey-patch binary paths
+	helm.CommandPath = filepath.Join("..", "..", "bin", fmt.Sprintf("%s-%s", runtime.GOOS, runtime.GOARCH), "helm")
+
 	var err error
-	// cfg is defined in this file globally.
 	cfg, err = testEnv.Start()
 	Expect(err).NotTo(HaveOccurred())
 	Expect(cfg).NotTo(BeNil())
 
-	err = validationv1alpha1.AddToScheme(scheme.Scheme)
+	err = v1alpha1.AddToScheme(scheme.Scheme)
 	Expect(err).NotTo(HaveOccurred())
 
 	//+kubebuilder:scaffold:scheme
@@ -71,10 +119,69 @@ var _ = BeforeSuite(func() {
 	Expect(err).NotTo(HaveOccurred())
 	Expect(k8sClient).NotTo(BeNil())
 
+	validatorNs = &corev1.Namespace{ObjectMeta: metav1.ObjectMeta{Name: validatorNamespace}}
+	err = k8sClient.Create(ctx, validatorNs)
+	Expect(err).NotTo(HaveOccurred(), "failed to create validator namespace")
+
+	k8sManager, err := ctrl.NewManager(cfg, ctrl.Options{
+		Scheme: scheme.Scheme,
+	})
+	Expect(err).ToNot(HaveOccurred(), "failed to init manager")
+
+	rawConfig, err := kube.ConvertRestConfigToRawConfig(k8sManager.GetConfig())
+	Expect(err).ToNot(HaveOccurred(), "failed to generate api.Config from rest.Config")
+
+	// start the ValidationResult controller
+	err = (&ValidationResultReconciler{
+		Client:     k8sManager.GetClient(),
+		Log:        ctrl.Log.WithName("controllers").WithName("ValidationResult"),
+		Namespace:  validatorNamespace,
+		Scheme:     k8sManager.GetScheme(),
+		SinkClient: sinks.NewClient(10 * time.Second),
+	}).SetupWithManager(k8sManager)
+	Expect(err).ToNot(HaveOccurred(), "failed to start ValidationResult controller")
+
+	// start the ValidatorConfig controller
+	err = (&ValidatorConfigReconciler{
+		Client:            k8sManager.GetClient(),
+		HelmClient:        helm.NewHelmClient(rawConfig),
+		HelmSecretsClient: helm.NewSecretsClient(k8sManager.GetClient()),
+		Log:               ctrl.Log.WithName("controllers").WithName("ValidatorConfig"),
+		Scheme:            k8sManager.GetScheme(),
+	}).SetupWithManager(k8sManager)
+	Expect(err).ToNot(HaveOccurred(), "failed to start ValidatorConfig controller")
+
+	go func() {
+		defer GinkgoRecover()
+		err = k8sManager.Start(ctx)
+		Expect(err).ToNot(HaveOccurred(), "failed to run manager")
+		gexec.KillAndWait(4 * time.Second)
+	}()
 })
 
 var _ = AfterSuite(func() {
+	By("tearing down the validator namespace")
+	err := k8sClient.Delete(ctx, validatorNs)
+	Expect(err).ToNot(HaveOccurred(), "failed to tear down the validator namespace")
+	Eventually(func() bool {
+		err := k8sClient.Get(ctx, validatorNsKey, validatorNs)
+		return apierrs.IsNotFound(err)
+	}, timeout, interval).Should(BeTrue(), "failed to tear down the validator namespace")
+
 	By("tearing down the test environment")
-	err := testEnv.Stop()
-	Expect(err).NotTo(HaveOccurred())
+	cancel()
+	err = (func() (err error) {
+		// Need to sleep if the first stop fails due to a bug:
+		// https://github.com/kubernetes-sigs/controller-runtime/issues/1571
+		sleepTime := 1 * time.Millisecond
+		for i := 0; i < 12; i++ { // Exponentially sleep up to ~4s
+			if err = testEnv.Stop(); err == nil {
+				return
+			}
+			sleepTime *= 2
+			time.Sleep(sleepTime)
+		}
+		return
+	})()
+	Expect(err).NotTo(HaveOccurred(), "failed to tear down the test environment")
 })
