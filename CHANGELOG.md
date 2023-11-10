@@ -1,5 +1,22 @@
 # Changelog
 
+## [0.0.14](https://github.com/spectrocloud-labs/validator/compare/v0.0.13...v0.0.14) (2023-11-10)
+
+
+### Bug Fixes
+
+* prevent extraneous sink emissions ([22de119](https://github.com/spectrocloud-labs/validator/commit/22de119a3ce93c8fb751473f5250d55446012d83))
+
+
+### Other
+
+* Merge branch 'main' of https://github.com/spectrocloud-labs/validator ([a2700a2](https://github.com/spectrocloud-labs/validator/commit/a2700a26661d6c7668965cc5b5a377adfd49d109))
+
+
+### Refactoring
+
+* use header block for msg titles ([a6ce7af](https://github.com/spectrocloud-labs/validator/commit/a6ce7af748dcb6cbd50c5d13e1a2c9a724e9a328))
+
 ## [0.0.13](https://github.com/spectrocloud-labs/validator/compare/v0.0.11...v0.0.13) (2023-11-10)
 
 
