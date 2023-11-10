@@ -166,7 +166,7 @@ var _ = AfterSuite(func() {
 	Eventually(func() bool {
 		err := k8sClient.Get(ctx, validatorNsKey, validatorNs)
 		return apierrs.IsNotFound(err)
-	}, timeout, interval).Should(BeTrue(), "failed to tear down the validator namespace")
+	}, 1*time.Minute, interval).Should(BeTrue(), "failed to tear down the validator namespace")
 
 	By("tearing down the test environment")
 	cancel()
