@@ -76,23 +76,13 @@ func HandleNewValidationResult(c client.Client, plugin string, expectedResults i
 
 // SafeUpdateValidationResult updates the overall validation result, ensuring
 // that the overall validation status remains failed if a single rule fails
-func SafeUpdateValidationResult(
-	c client.Client, nn ktypes.NamespacedName, res *types.ValidationResult,
-	failed *types.MonotonicBool, err error, l logr.Logger,
-) {
+func SafeUpdateValidationResult(c client.Client, nn ktypes.NamespacedName, res *types.ValidationResult, err error, l logr.Logger) {
 	if err != nil {
 		res.State = ptr.Ptr(v1alpha1.ValidationFailed)
 		res.Condition.Status = corev1.ConditionFalse
 		res.Condition.Message = "Validation failed with an unexpected error"
 		res.Condition.Failures = append(res.Condition.Failures, err.Error())
 	}
-
-	didFail := *res.State == v1alpha1.ValidationFailed
-	failed.Update(didFail)
-	if failed.Ok && !didFail {
-		res.State = ptr.Ptr(v1alpha1.ValidationFailed)
-	}
-
 	if err := updateValidationResult(c, nn, res, l); err != nil {
 		l.V(0).Error(err, "failed to update ValidationResult")
 	}
@@ -104,7 +94,15 @@ func updateValidationResult(c client.Client, nn ktypes.NamespacedName, res *type
 	if err := c.Get(context.Background(), nn, vr); err != nil {
 		return fmt.Errorf("failed to get ValidationResult %s in namespace %s: %v", nn.Name, nn.Namespace, err)
 	}
+
+	// reset to State to ValidationFailed if any conditions failed
 	vr.Status.State = *res.State
+	for _, c := range vr.Status.Conditions {
+		if c.Status == corev1.ConditionFalse {
+			vr.Status.State = v1alpha1.ValidationFailed
+			break
+		}
+	}
 
 	idx := getConditionIndexByValidationRule(vr.Status.Conditions, res.Condition.ValidationRule)
 	if idx == -1 {
