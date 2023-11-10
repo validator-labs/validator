@@ -1,5 +1,18 @@
 # Changelog
 
+## [0.0.15](https://github.com/spectrocloud-labs/validator/compare/v0.0.14...v0.0.15) (2023-11-10)
+
+
+### Bug Fixes
+
+* ensure State always remains failed if any conditions fail ([67e8462](https://github.com/spectrocloud-labs/validator/commit/67e846293ce26e8f416fbb24d4b247d38f2a15aa))
+
+
+### Other
+
+* Merge branch 'main' of https://github.com/spectrocloud-labs/validator ([42cf0ef](https://github.com/spectrocloud-labs/validator/commit/42cf0efc8ee8f8187b260ac0f4d1f8b1b9db6c16))
+* release 0.0.15 ([d574854](https://github.com/spectrocloud-labs/validator/commit/d57485496dc90f4b6e421d978bdf0451edfcc59c))
+
 ## [0.0.14](https://github.com/spectrocloud-labs/validator/compare/v0.0.13...v0.0.14) (2023-11-10)
 
 
