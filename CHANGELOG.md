@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.0.14](https://github.com/spectrocloud-labs/validator/compare/v0.0.13...v0.0.14) (2023-11-10)
+
+
+### Bug Fixes
+
+* handle VRs w/ multiple conditions ([6f664ec](https://github.com/spectrocloud-labs/validator/commit/6f664ece0c9bb1df282d69cd4900ae7c1b3b55ab))
+
 ## [0.0.13](https://github.com/spectrocloud-labs/validator/compare/v0.0.11...v0.0.13) (2023-11-09)
 
 
