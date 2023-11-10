@@ -164,6 +164,11 @@ var _ = AfterSuite(func() {
 	err := k8sClient.Delete(ctx, validatorNs)
 	Expect(err).ToNot(HaveOccurred(), "failed to tear down the validator namespace")
 	Eventually(func() bool {
+		// Skip namespace teardown if running in EnvTest
+		// https://book.kubebuilder.io/reference/envtest.html#namespace-usage-limitation
+		if os.Getenv("KUBECONFIG") == "" {
+			return true
+		}
 		err := k8sClient.Get(ctx, validatorNsKey, validatorNs)
 		return apierrs.IsNotFound(err)
 	}, 1*time.Minute, interval).Should(BeTrue(), "failed to tear down the validator namespace")
