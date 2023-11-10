@@ -102,6 +102,7 @@ func (r *ValidationResultReconciler) Reconcile(ctx context.Context, req ctrl.Req
 		// emissions will occur during the 1st reconciliation, where N is the number of rules in the validator.
 		if vc.Spec.Sink != nil && len(vr.Status.Conditions) == vr.Spec.ExpectedResults && (!ok || prevHash != currHash) {
 			sinkState = v1alpha1.SinkEmitFailed
+			vr.Status.SinkState = sinkState
 
 			sink := sinks.NewSink(vc.Spec.Sink.Type, r.Log)
 
