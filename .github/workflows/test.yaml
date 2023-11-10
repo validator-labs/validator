@@ -1,4 +1,4 @@
-name: Run tests
+name: Run Unit & Integration Tests
 
 on:
   push:
@@ -15,7 +15,7 @@ env:
     GO_VERSION: "~1.20"
 
 jobs:
-  test-unit:
+  test:
     name: Run Unit & Integration Tests
     runs-on: ubuntu-latest
     steps:
@@ -25,6 +25,9 @@ jobs:
         uses: actions/setup-go@93397bea11091df50f3d7e59dc26a7711a8bcfbe # v4
         with:
           go-version: ${{ env.GO_VERSION }}
+
+      - name: Set up Helm
+        run: make helm
 
       - name: Test
         run: make test
