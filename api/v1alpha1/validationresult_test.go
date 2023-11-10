@@ -21,7 +21,8 @@ func TestHash(t *testing.T) {
 					UID: "1",
 				},
 				Spec: ValidationResultSpec{
-					Plugin: "AWS",
+					Plugin:          "AWS",
+					ExpectedResults: 1,
 				},
 				Status: ValidationResultStatus{
 					State:     ValidationSucceeded,
@@ -39,7 +40,7 @@ func TestHash(t *testing.T) {
 					},
 				},
 			},
-			expectedHash: "Ldcfr8OZ6D/LRuLfasCrKg==",
+			expectedHash: "Jp+QKNlngLsgv2kTlKhR3w==",
 		},
 	}
 	for _, c := range cs {
