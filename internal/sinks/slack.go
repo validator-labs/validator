@@ -68,7 +68,10 @@ func (s *SlackSink) buildSlackBlocks(r v1alpha1.ValidationResult) []slack.Block 
 		state = fmt.Sprintf("*State:* %s :red_circle:", r.Status.State)
 	}
 	blocks := []slack.Block{
-		slack.NewSectionBlock(newTextBlockObject(fmt.Sprintf("*%s Validator*: %s", r.Spec.Plugin, r.Name)), nil, nil),
+		slack.NewHeaderBlock(&slack.TextBlockObject{
+			Type: slack.PlainTextType,
+			Text: fmt.Sprintf("%s Validator: %s", r.Spec.Plugin, r.Name),
+		}),
 		slack.NewSectionBlock(newTextBlockObject(state), nil, nil),
 		slack.NewDividerBlock(),
 	}
@@ -125,5 +128,5 @@ func newTextBlockObject(s string) *slack.TextBlockObject {
 	s = strings.ReplaceAll(s, "&", "&amp;")
 	s = strings.ReplaceAll(s, "<", "&lt;")
 	s = strings.ReplaceAll(s, ">", "&gt;")
-	return slack.NewTextBlockObject("mrkdwn", s, false, true)
+	return slack.NewTextBlockObject(slack.MarkdownType, s, false, true)
 }
