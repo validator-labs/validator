@@ -24,7 +24,6 @@ const (
 	networkPluginDeploymentImage = "quay.io/spectrocloud-labs/validator-plugin-network"
 	networkPluginVersionPre      = "v0.0.4"
 	networkPluginVersionPost     = "v0.0.5"
-	validatorConfigName          = "validator-config"
 )
 
 var (
@@ -34,15 +33,16 @@ var (
 )
 
 var _ = Describe("ValidatorConfig controller", Ordered, func() {
+
 	BeforeEach(func() {
-		// comment in or out to disable the ValidatorConfig controller specs
-		if true {
+		// toggle true/false to enable/disable the ValidatorConfig controller specs
+		if false {
 			Skip("skipping")
 		}
 	})
 
 	vc := &v1alpha1.ValidatorConfig{}
-	vcKey := types.NamespacedName{Name: validatorConfigName, Namespace: validatorNamespace}
+	vcKey := types.NamespacedName{Name: "validator-config-test", Namespace: validatorNamespace}
 	networkPluginDeploymentKey := types.NamespacedName{Name: networkPluginDeploymentName, Namespace: validatorNamespace}
 	networkPluginDeployment := &appsv1.Deployment{}
 

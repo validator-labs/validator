@@ -6,7 +6,7 @@ metadata:
     meta.helm.sh/release-namespace: validator
   labels:
     app.kubernetes.io/managed-by: Helm
-  name: validator-config
+  name: validator-config-test
   namespace: validator
 spec:
   plugins:

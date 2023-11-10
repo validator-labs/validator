@@ -13,6 +13,7 @@ import (
 	"k8s.io/apimachinery/pkg/types"
 
 	"github.com/spectrocloud-labs/validator/api/v1alpha1"
+	"github.com/spectrocloud-labs/validator/pkg/constants"
 	//+kubebuilder:scaffold:imports
 )
 
@@ -25,9 +26,17 @@ var (
 )
 
 var _ = Describe("ValidationResult controller", Ordered, func() {
+
+	BeforeEach(func() {
+		// toggle true/false to enable/disable the ValidationResult controller specs
+		if false {
+			Skip("skipping")
+		}
+	})
+
 	vc := &v1alpha1.ValidatorConfig{
 		ObjectMeta: metav1.ObjectMeta{
-			Name:      validatorConfigName,
+			Name:      constants.ValidatorConfig,
 			Namespace: validatorNamespace,
 		},
 		Spec: v1alpha1.ValidatorConfigSpec{

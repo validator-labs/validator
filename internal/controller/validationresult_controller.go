@@ -30,6 +30,7 @@ import (
 
 	v1alpha1 "github.com/spectrocloud-labs/validator/api/v1alpha1"
 	"github.com/spectrocloud-labs/validator/internal/sinks"
+	"github.com/spectrocloud-labs/validator/pkg/constants"
 )
 
 // ValidationResultHash is used to determine whether to re-emit updates to a validation result sink.
@@ -52,7 +53,7 @@ func (r *ValidationResultReconciler) Reconcile(ctx context.Context, req ctrl.Req
 	r.Log.V(0).Info("Reconciling ValidationResult", "name", req.Name, "namespace", req.Namespace)
 
 	vc := &v1alpha1.ValidatorConfig{}
-	vcKey := types.NamespacedName{Namespace: r.Namespace, Name: "validator-config"}
+	vcKey := types.NamespacedName{Namespace: r.Namespace, Name: constants.ValidatorConfig}
 	if err := r.Get(ctx, vcKey, vc); err != nil {
 		// ignore not-found errors, since they can't be fixed by an immediate requeue
 		if apierrs.IsNotFound(err) {
