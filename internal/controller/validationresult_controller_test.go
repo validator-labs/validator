@@ -66,9 +66,17 @@ var _ = Describe("ValidationResult controller", Ordered, func() {
 		Expect(k8sClient.Create(ctx, vc)).Should(Succeed())
 		Expect(k8sClient.Create(ctx, vr)).Should(Succeed())
 
-		Expect(k8sClient.Get(ctx, vrKey, vr)).Should(Succeed())
-		vr.Status.State = v1alpha1.ValidationInProgress
-		Expect(k8sClient.Status().Update(ctx, vr)).Should(Succeed())
+		// Mark the ValidationResult as InProgress
+		Eventually(func() bool {
+			if err := k8sClient.Get(ctx, vrKey, vr); err != nil {
+				return false
+			}
+			vr.Status.State = v1alpha1.ValidationInProgress
+			if err := k8sClient.Status().Update(ctx, vr); err != nil {
+				return false
+			}
+			return true
+		}, timeout, interval).Should(BeTrue(), "failed to update ValidationResult Status")
 
 		// Wait for the ValidationResult's Status to be updated
 		Eventually(func() bool {

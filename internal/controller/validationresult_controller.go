@@ -36,6 +36,12 @@ import (
 // ValidationResultHash is used to determine whether to re-emit updates to a validation result sink.
 const ValidationResultHash = "validator/validation-result-hash"
 
+var (
+	vr        *v1alpha1.ValidationResult
+	vrKey     types.NamespacedName
+	sinkState v1alpha1.SinkState
+)
+
 // ValidationResultReconciler reconciles a ValidationResult object
 type ValidationResultReconciler struct {
 	client.Client
@@ -63,7 +69,9 @@ func (r *ValidationResultReconciler) Reconcile(ctx context.Context, req ctrl.Req
 		return ctrl.Result{}, client.IgnoreNotFound(err)
 	}
 
-	vr := &v1alpha1.ValidationResult{}
+	vr = &v1alpha1.ValidationResult{}
+	vrKey = req.NamespacedName
+
 	if err := r.Get(ctx, req.NamespacedName, vr); err != nil {
 		// ignore not-found errors, since they can't be fixed by an immediate requeue
 		if apierrs.IsNotFound(err) {
@@ -72,20 +80,17 @@ func (r *ValidationResultReconciler) Reconcile(ctx context.Context, req ctrl.Req
 		r.Log.Error(err, "failed to fetch ValidationResult")
 		return ctrl.Result{}, client.IgnoreNotFound(err)
 	}
+
 	currHash := vr.Hash()
 	prevHash, ok := vr.ObjectMeta.Annotations[ValidationResultHash]
+	sinkState = v1alpha1.SinkEmitNone
 
 	// always update the ValidationResult's Status
 	defer func() {
-		r.updateStatus(ctx, vr)
+		r.updateStatus(ctx)
 	}()
 
 	r.Log.V(0).Info("Plugin", "name", vr.Spec.Plugin)
-
-	sinkState := vr.Status.SinkState
-	if sinkState == "" {
-		sinkState = v1alpha1.SinkEmitNone
-	}
 
 	if vr.Status.State == v1alpha1.ValidationFailed || vr.Status.State == v1alpha1.ValidationSucceeded {
 		r.Log.V(0).Info("ValidationResult complete", "name", vr.Name, "state", vr.Status.State)
@@ -102,10 +107,9 @@ func (r *ValidationResultReconciler) Reconcile(ctx context.Context, req ctrl.Req
 		// Do not emit until the number of conditions matches the expected number of results, otherwise N
 		// emissions will occur during the 1st reconciliation, where N is the number of rules in the validator.
 		if vc.Spec.Sink != nil && len(vr.Status.Conditions) == vr.Spec.ExpectedResults && (!ok || prevHash != currHash) {
-			sinkState = v1alpha1.SinkEmitFailed
-			vr.Status.SinkState = sinkState
 
 			sink := sinks.NewSink(vc.Spec.Sink.Type, r.Log)
+			sinkState = v1alpha1.SinkEmitFailed
 
 			var sinkConfig map[string][]byte
 			if vc.Spec.Sink.SecretName != "" {
@@ -122,7 +126,6 @@ func (r *ValidationResultReconciler) Reconcile(ctx context.Context, req ctrl.Req
 				r.Log.Error(err, "failed to configure sink")
 				return ctrl.Result{}, err
 			}
-
 			if err := sink.Emit(*vr); err != nil {
 				r.Log.Error(err, "failed to emit ValidationResult to sink", "sinkType", vc.Spec.Sink.Type)
 			}
@@ -142,9 +145,6 @@ func (r *ValidationResultReconciler) Reconcile(ctx context.Context, req ctrl.Req
 		}
 	}
 
-	// all status modifications must happen after r.Client.Update
-	vr.Status.SinkState = sinkState
-
 	r.Log.V(0).Info("Validation in progress. Requeuing in 30s.", "name", req.Name, "namespace", req.Namespace)
 	return ctrl.Result{RequeueAfter: time.Second * 30}, nil
 }
@@ -157,7 +157,14 @@ func (r *ValidationResultReconciler) SetupWithManager(mgr ctrl.Manager) error {
 }
 
 // updateStatus updates the ValidatorResult's status subresource
-func (r *ValidationResultReconciler) updateStatus(ctx context.Context, vr *v1alpha1.ValidationResult) {
+func (r *ValidationResultReconciler) updateStatus(ctx context.Context) {
+	if err := r.Get(ctx, vrKey, vr); err != nil {
+		r.Log.V(0).Error(err, "failed to get ValidationResult")
+	}
+
+	// all status modifications must happen after r.Client.Update
+	vr.Status.SinkState = sinkState
+
 	if err := r.Status().Update(context.Background(), vr); err != nil {
 		r.Log.V(0).Error(err, "failed to update ValidationResult status")
 	}
