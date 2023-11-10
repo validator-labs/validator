@@ -28,6 +28,9 @@ import (
 // ValidationResultSpec defines the desired state of ValidationResult
 type ValidationResultSpec struct {
 	Plugin string `json:"plugin"`
+	// The number of rules in the validator plugin spec, hence the number of expected ValidationResults.
+	// +kubebuilder:validation:Minimum=1
+	ExpectedResults int `json:"expectedResults"`
 }
 
 type ValidationState string

@@ -97,9 +97,10 @@ func (r *ValidationResultReconciler) Reconcile(ctx context.Context, req ctrl.Req
 			)
 		}
 
-		// emit ValidationResult to a sink - either on the 1st reconciliation, or if its hash changes
-
-		if vc.Spec.Sink != nil && len(vr.Status.Conditions) > 0 && (!ok || prevHash != currHash) {
+		// Emit ValidationResult to a sink - either upon the completion of the 1st reconciliation, or if its hash changes.
+		// Do not emit until the number of conditions matches the expected number of results, otherwise N
+		// emissions will occur during the 1st reconciliation, where N is the number of rules in the validator.
+		if vc.Spec.Sink != nil && len(vr.Status.Conditions) == vr.Spec.ExpectedResults && (!ok || prevHash != currHash) {
 			sinkState = v1alpha1.SinkEmitFailed
 
 			sink := sinks.NewSink(vc.Spec.Sink.Type, r.Log)

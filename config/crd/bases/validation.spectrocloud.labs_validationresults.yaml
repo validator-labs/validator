@@ -47,9 +47,15 @@ spec:
           spec:
             description: ValidationResultSpec defines the desired state of ValidationResult
             properties:
+              expectedResults:
+                description: The number of rules in the validator plugin spec, hence
+                  the number of expected ValidationResults.
+                minimum: 1
+                type: integer
               plugin:
                 type: string
             required:
+            - expectedResults
             - plugin
             type: object
           status:

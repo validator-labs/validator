@@ -47,9 +47,12 @@ spec:
           spec:
             description: ValidationResultSpec defines the desired state of ValidationResult
             properties:
+              expectedResults:
+                type: integer
               plugin:
                 type: string
             required:
+            - expectedResults
             - plugin
             type: object
           status:
