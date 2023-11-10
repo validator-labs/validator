@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.0.17](https://github.com/spectrocloud-labs/validator/compare/v0.0.16...v0.0.17) (2023-11-10)
+
+
+### Bug Fixes
+
+* ensure ValidationResult Status resets to successful if all checks pass ([10237c5](https://github.com/spectrocloud-labs/validator/commit/10237c5a17adbc61288c6c6b9b981b072ea0e46f))
+
+
+### Other
+
+* add coverage report ([#100](https://github.com/spectrocloud-labs/validator/issues/100)) ([5d24704](https://github.com/spectrocloud-labs/validator/commit/5d2470488e1a09ca0d0f623762ae926dea5ba3ef))
+
 ## [0.0.16](https://github.com/spectrocloud-labs/validator/compare/v0.0.15...v0.0.16) (2023-11-10)
 
 
