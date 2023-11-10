@@ -24,7 +24,7 @@ The following table lists the configurable parameters of the Validator chart and
 | `controllerManager.manager.containerSecurityContext.allowPrivilegeEscalation` |  | `false` |
 | `controllerManager.manager.containerSecurityContext.capabilities.drop` |  | `["ALL"]` |
 | `controllerManager.manager.image.repository` |  | `"quay.io/spectrocloud-labs/validator"` |
-| `controllerManager.manager.image.tag` | x-release-please-version | `"v0.0.16"` |
+| `controllerManager.manager.image.tag` | x-release-please-version | `"v0.0.17"` |
 | `controllerManager.manager.resources.limits.cpu` |  | `"500m"` |
 | `controllerManager.manager.resources.limits.memory` |  | `"128Mi"` |
 | `controllerManager.manager.resources.requests.cpu` |  | `"10m"` |
