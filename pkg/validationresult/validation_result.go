@@ -98,6 +98,9 @@ func updateValidationResult(c client.Client, nn ktypes.NamespacedName, res *type
 	// reset to State to ValidationFailed if any conditions failed
 	vr.Status.State = *res.State
 	for _, c := range vr.Status.Conditions {
+		if c.Status == corev1.ConditionTrue {
+			vr.Status.State = v1alpha1.ValidationSucceeded
+		}
 		if c.Status == corev1.ConditionFalse {
 			vr.Status.State = v1alpha1.ValidationFailed
 			break
