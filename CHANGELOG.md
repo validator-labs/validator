@@ -1,5 +1,20 @@
 # Changelog
 
+## [0.0.16](https://github.com/spectrocloud-labs/validator/compare/v0.0.15...v0.0.16) (2023-11-10)
+
+
+### Bug Fixes
+
+* **deps:** update golang.org/x/exp digest to 9a3e603 ([#97](https://github.com/spectrocloud-labs/validator/issues/97)) ([17c83e2](https://github.com/spectrocloud-labs/validator/commit/17c83e2f9bc4580eb8b2d9b1f9b4767a42a32d2f))
+* ensure State always remains failed if any conditions fail ([4f55823](https://github.com/spectrocloud-labs/validator/commit/4f558234af6c190186f8d82fb4a6e135d83030e8))
+* ensure State always remains failed if any conditions fail ([711485f](https://github.com/spectrocloud-labs/validator/commit/711485f130804eab34de871f86c138adcb3bf257))
+
+
+### Other
+
+* fix Helm chart lint error ([c938c89](https://github.com/spectrocloud-labs/validator/commit/c938c89947371fa3e3e3e2d43044749a413ec443))
+* release 0.0.16 ([f031904](https://github.com/spectrocloud-labs/validator/commit/f031904a18fb5854586d58145842689d12028360))
+
 ## [0.0.15](https://github.com/spectrocloud-labs/validator/compare/v0.0.14...v0.0.15) (2023-11-10)
 
 
