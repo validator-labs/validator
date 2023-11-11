@@ -33,8 +33,12 @@ import (
 	"github.com/spectrocloud-labs/validator/pkg/constants"
 )
 
-// ValidationResultHash is used to determine whether to re-emit updates to a validation result sink.
-const ValidationResultHash = "validator/validation-result-hash"
+const (
+	// ValidationResultHash is used to determine whether to re-emit updates to a validation result sink.
+	ValidationResultHash = "validator/validation-result-hash"
+
+	statusUpdateRetries = 3
+)
 
 var (
 	vr        *v1alpha1.ValidationResult
@@ -85,9 +89,15 @@ func (r *ValidationResultReconciler) Reconcile(ctx context.Context, req ctrl.Req
 	prevHash, ok := vr.ObjectMeta.Annotations[ValidationResultHash]
 	sinkState = v1alpha1.SinkEmitNone
 
-	// always update the ValidationResult's Status
 	defer func() {
-		r.updateStatus(ctx)
+		// Always update the ValidationResult's Status with a retry due to race condition with
+		// SafeUpdateValidationResult, which also updates the VR's Status and is continuously
+		// being called by the validator plugins.
+		for i := 0; i < statusUpdateRetries; i++ {
+			if err := r.updateStatus(ctx); err == nil {
+				break
+			}
+		}
 	}()
 
 	r.Log.V(0).Info("Plugin", "name", vr.Spec.Plugin)
@@ -157,9 +167,10 @@ func (r *ValidationResultReconciler) SetupWithManager(mgr ctrl.Manager) error {
 }
 
 // updateStatus updates the ValidatorResult's status subresource
-func (r *ValidationResultReconciler) updateStatus(ctx context.Context) {
+func (r *ValidationResultReconciler) updateStatus(ctx context.Context) error {
 	if err := r.Get(ctx, vrKey, vr); err != nil {
 		r.Log.V(0).Error(err, "failed to get ValidationResult")
+		return err
 	}
 
 	// all status modifications must happen after r.Client.Update
@@ -167,6 +178,9 @@ func (r *ValidationResultReconciler) updateStatus(ctx context.Context) {
 
 	if err := r.Status().Update(context.Background(), vr); err != nil {
 		r.Log.V(0).Error(err, "failed to update ValidationResult status")
+		return err
 	}
+
 	r.Log.V(0).Info("Updated ValidationResult", "conditions", vr.Status.Conditions, "time", time.Now())
+	return nil
 }
