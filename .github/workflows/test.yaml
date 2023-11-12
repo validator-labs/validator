@@ -37,16 +37,6 @@ jobs:
         with:
           file: ./cover.out
 
-      - name: Update coverage report
-        uses: ncruces/go-coverage-report@a12281c449c691078b2f4b6d39f2b3ae51a680cc # v0
-        with:
-          report: true
-          chart: true
-          amend: true
-          reuse-go: true
-        if: github.event_name == 'push'  
-        continue-on-error: true
-
   test-chart:
     name: Run Helm Chart Tests
     runs-on: ubuntu-latest
