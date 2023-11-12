@@ -2,7 +2,6 @@ package validationresult
 
 import (
 	"context"
-	"fmt"
 	"strings"
 
 	"github.com/go-logr/logr"
@@ -16,6 +15,8 @@ import (
 	"github.com/spectrocloud-labs/validator/pkg/types"
 	"github.com/spectrocloud-labs/validator/pkg/util/ptr"
 )
+
+const validationErrorMsg = "Validation failed with an unexpected error"
 
 // HandleExistingValidationResult processes a preexisting validation result for the active validator
 func HandleExistingValidationResult(nn ktypes.NamespacedName, vr *v1alpha1.ValidationResult, l logr.Logger) {
@@ -76,26 +77,51 @@ func HandleNewValidationResult(c client.Client, plugin string, expectedResults i
 
 // SafeUpdateValidationResult updates the overall validation result, ensuring
 // that the overall validation status remains failed if a single rule fails
-func SafeUpdateValidationResult(c client.Client, nn ktypes.NamespacedName, res *types.ValidationResult, err error, l logr.Logger) {
-	if err != nil {
-		res.State = ptr.Ptr(v1alpha1.ValidationFailed)
-		res.Condition.Status = corev1.ConditionFalse
-		res.Condition.Message = "Validation failed with an unexpected error"
-		res.Condition.Failures = append(res.Condition.Failures, err.Error())
+func SafeUpdateValidationResult(c client.Client, nn ktypes.NamespacedName, res *types.ValidationResult, resErr error, l logr.Logger) {
+
+	vr := &v1alpha1.ValidationResult{}
+	if err := c.Get(context.Background(), nn, vr); err != nil {
+		l.V(0).Error(err, "failed to get ValidationResult", "name", nn.Name, "namespace", nn.Namespace)
+		return
 	}
-	if err := updateValidationResult(c, nn, res, l); err != nil {
-		l.V(0).Error(err, "failed to update ValidationResult")
+
+	updateValidationResult(vr, res, resErr)
+
+	if err := c.Status().Update(context.Background(), vr); err != nil {
+		l.V(0).Error(err, "failed to update ValidationResult", "name", nn.Name, "namespace", nn.Namespace)
+		return
 	}
+
+	l.V(0).Info(
+		"Updated ValidationResult", "state", res.State, "reason", res.Condition.ValidationRule,
+		"message", res.Condition.Message, "details", res.Condition.Details,
+		"failures", res.Condition.Failures, "time", res.Condition.LastValidationTime,
+	)
 }
 
 // updateValidationResult updates the ValidationResult for the active validation rule
-func updateValidationResult(c client.Client, nn ktypes.NamespacedName, res *types.ValidationResult, l logr.Logger) error {
-	vr := &v1alpha1.ValidationResult{}
-	if err := c.Get(context.Background(), nn, vr); err != nil {
-		return fmt.Errorf("failed to get ValidationResult %s in namespace %s: %v", nn.Name, nn.Namespace, err)
+func updateValidationResult(vr *v1alpha1.ValidationResult, res *types.ValidationResult, resErr error) {
+
+	// Finalize result State and Condition in the event of an unexpected error
+	if resErr != nil {
+		res.State = ptr.Ptr(v1alpha1.ValidationFailed)
+		res.Condition.Status = corev1.ConditionFalse
+		res.Condition.Message = validationErrorMsg
+		res.Condition.Failures = append(res.Condition.Failures, resErr.Error())
 	}
 
-	// reset to State to ValidationFailed if any conditions failed
+	// Update and/or insert the ValidationResult's Conditions with the latest Condition
+	idx := getConditionIndexByValidationRule(vr.Status.Conditions, res.Condition.ValidationRule)
+	if idx == -1 {
+		vr.Status.Conditions = append(vr.Status.Conditions, *res.Condition)
+	} else {
+		vr.Status.Conditions[idx] = *res.Condition
+	}
+
+	// Set State to:
+	// - ValidationFailed if ANY condition failed
+	// - ValidationSucceeded if ALL conditions succeeded
+	// - ValidationInProgress otherwise
 	vr.Status.State = *res.State
 	for _, c := range vr.Status.Conditions {
 		if c.Status == corev1.ConditionTrue {
@@ -106,25 +132,6 @@ func updateValidationResult(c client.Client, nn ktypes.NamespacedName, res *type
 			break
 		}
 	}
-
-	idx := getConditionIndexByValidationRule(vr.Status.Conditions, res.Condition.ValidationRule)
-	if idx == -1 {
-		vr.Status.Conditions = append(vr.Status.Conditions, *res.Condition)
-	} else {
-		vr.Status.Conditions[idx] = *res.Condition
-	}
-
-	if err := c.Status().Update(context.Background(), vr); err != nil {
-		l.V(0).Error(err, "failed to update ValidationResult")
-		return err
-	}
-	l.V(0).Info(
-		"Updated ValidationResult", "state", res.State, "reason", res.Condition.ValidationRule,
-		"message", res.Condition.Message, "details", res.Condition.Details,
-		"failures", res.Condition.Failures, "time", res.Condition.LastValidationTime,
-	)
-
-	return nil
 }
 
 // getInvalidConditions filters a ValidationCondition array and returns all conditions corresponding to a failed validation
