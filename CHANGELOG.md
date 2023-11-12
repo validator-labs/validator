@@ -1,5 +1,21 @@
 # Changelog
 
+## [0.0.18](https://github.com/spectrocloud-labs/validator/compare/v0.0.17...v0.0.18) (2023-11-12)
+
+
+### Bug Fixes
+
+* **deps:** update module github.com/onsi/ginkgo/v2 to v2.13.1 ([#95](https://github.com/spectrocloud-labs/validator/issues/95)) ([496ecad](https://github.com/spectrocloud-labs/validator/commit/496ecada5655f5760e46f7d647ce381f616ad56f))
+* **deps:** update module sigs.k8s.io/yaml to v1.4.0 ([#98](https://github.com/spectrocloud-labs/validator/issues/98)) ([5f35bba](https://github.com/spectrocloud-labs/validator/commit/5f35bbac77502a944d6d5641e1e2f88f98cf7c79))
+* retry VR status updates ([21b3808](https://github.com/spectrocloud-labs/validator/commit/21b3808f36a621f89ddc22aa5362d4d7b47265b5))
+* SafeUpdateValidationResult not handling all edge cases ([#104](https://github.com/spectrocloud-labs/validator/issues/104)) ([8f34e2f](https://github.com/spectrocloud-labs/validator/commit/8f34e2f677a2b70c3c931491ce8b5cd6ac7abd0b))
+
+
+### Other
+
+* **deps:** pin codecov/codecov-action action to eaaf4be ([#105](https://github.com/spectrocloud-labs/validator/issues/105)) ([70c3a0d](https://github.com/spectrocloud-labs/validator/commit/70c3a0d834cccc0bc6400c12395b7952c3fb25bb))
+* **deps:** pin ncruces/go-coverage-report action to a12281c ([#101](https://github.com/spectrocloud-labs/validator/issues/101)) ([bb5d6ac](https://github.com/spectrocloud-labs/validator/commit/bb5d6ac4b235013eeba198e2ba4fd86c5eeb93a2))
+
 ## [0.0.17](https://github.com/spectrocloud-labs/validator/compare/v0.0.16...v0.0.17) (2023-11-10)
 
 
