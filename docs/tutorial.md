@@ -10,8 +10,8 @@ This install guide will help you install the Validator and get started using one
 
 - AWS credentials with AdministratorAccess policy attached. You can create a new user with this policy and use the credentials for the installation. See [AWS documentation](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_users_create.html) for more details.
 
-    > [!IMPORTANT]
-    > You can use a different policy, but ensure that the policy has the required permissions to check the resources required by the plugin. Refer to the AWS plugin documentation for more details.
+> [!IMPORTANT]
+> You can use a different policy, but ensure that the policy has the required permissions to check the resources required by the plugin. Refer to the AWS plugin documentation for more details.
 
 - [wget](https://www.gnu.org/software/wget/) or similar tool installed on your machine.
 
@@ -23,8 +23,8 @@ This install guide will help you install the Validator and get started using one
 
 - [kind](https://kind.sigs.k8s.io/docs/user/quick-start/) installed on your machine.
 
-    > [!NOTE]
-    > If you already have a Kubernetes cluster, you can skip the kind installation and use your existing cluster. Ensure you have access to the cluster.
+> [!NOTE]
+> If you already have a Kubernetes cluster, you can skip the kind installation and use your existing cluster. Ensure you have access to the cluster.
 
 ## Install Validator
 
