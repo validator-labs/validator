@@ -54,7 +54,7 @@ helm repo add validator https://spectrocloud-labs.github.io/validator/ && \
 helm repo update
 ```
 
-Before you install Validator, you can configure the installation by editing the `values.yaml` file. The `values.yaml` file contains the default configuration for Validator. You can override the default configuration by editing the `values.yaml` file. For example, you can change the namespace where Validator is installed by editing the `namespace` parameter in the `values.yaml` file.
+Before you install Validator, you can configure the installation by editing the `values.yaml` file. The `values.yaml` file contains the default configuration for Validator. You can override the default configuration by editing the `values.yaml` file.
 
 
 
@@ -91,7 +91,7 @@ sessionToken: ""
 # WARNING: the existing secret must match the format used in auth-secret.yaml
 createSecret: true
 ```
-You can remove all other plugins from the `plugins` section or leave them as is, but for this guide, only use the AWS plugin will be used.
+You can remove all other plugins from the `plugins` section or leave them as is, but for this guide, only the AWS plugin will be used.
 
 
 Now that you have configured the AWS plugin, you can install Validator. Use the following command to install Validator and the AWS plugin.
