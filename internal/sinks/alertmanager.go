@@ -32,13 +32,16 @@ type Alert struct {
 	Labels      map[string]string `json:"labels"`
 }
 
-var InvalidEndpoint = errors.New("invalid Alertmanager config: endpoint scheme and host are required")
+var (
+	InvalidEndpoint  = errors.New("invalid Alertmanager config: endpoint scheme and host are required")
+	EndpointRequired = errors.New("invalid Alertmanager configuration: endpoint required")
+)
 
 func (s *AlertmanagerSink) Configure(c Client, config map[string][]byte) error {
 	// endpoint
 	endpoint, ok := config["endpoint"]
 	if !ok {
-		return errors.New("invalid Alertmanager configuration: endpoint required")
+		return EndpointRequired
 	}
 	u, err := url.Parse(string(endpoint))
 	if err != nil {
@@ -141,8 +144,8 @@ func (s *AlertmanagerSink) Emit(r v1alpha1.ValidationResult) error {
 		return err
 	}
 	if resp.StatusCode != 200 {
-		s.log.Error(err, "failed to post alert", "endpoint", s.endpoint, "status", resp.Status, "code", resp.StatusCode)
-		return err
+		s.log.V(0).Info("failed to post alert", "endpoint", s.endpoint, "status", resp.Status, "code", resp.StatusCode)
+		return SinkEmissionFailed
 	}
 
 	s.log.V(0).Info("Successfully posted alert to Alertmanager", "endpoint", s.endpoint, "status", resp.Status, "code", resp.StatusCode)

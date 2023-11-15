@@ -5,9 +5,12 @@ import (
 	"time"
 
 	"github.com/go-logr/logr"
+	"github.com/pkg/errors"
 
 	"github.com/spectrocloud-labs/validator/api/v1alpha1"
 )
+
+var SinkEmissionFailed = errors.New("sink emission failed")
 
 type Sink interface {
 	Configure(c Client, config map[string][]byte) error
