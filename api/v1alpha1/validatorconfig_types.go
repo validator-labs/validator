@@ -28,7 +28,7 @@ type ValidatorConfigSpec struct {
 }
 
 type Sink struct {
-	// +kubebuilder:validation:Enum=slack
+	// +kubebuilder:validation:Enum=alertmanager;slack
 	Type string `json:"type"`
 	// Name of a K8s secret containing configuration details for the sink
 	SecretName string `json:"secretName"`

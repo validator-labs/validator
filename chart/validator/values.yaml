@@ -54,10 +54,19 @@ metricsService:
 
 # Optional sink configuration
 sink: {}
+  # type: alertmanager
+  # secretName: alertmanager-sink-secret
+  # endpoint: "http://alertmanager.alertmanager.svc.cluster.local:9093"
+  # caCert: ""    # (TLS CA certificate, optional)
+  # username: ""  # (HTTP basic auth, optional)
+  # password: ""  # (HTTP basic auth, optional)
+
+  # OR
   # type: slack
-  # secretName: "slack-secret"
+  # secretName: slack-sink-secret
   # apiToken: ""
   # channelId: ""
+
   # By default, a secret will be created. Leave the above fields blank and specify 'createSecret: false' to use an existing secret.
   # WARNING: the existing secret must match the format used in sink-secret.yaml
   # createSecret: true

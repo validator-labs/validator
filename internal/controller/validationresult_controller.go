@@ -132,7 +132,7 @@ func (r *ValidationResultReconciler) Reconcile(ctx context.Context, req ctrl.Req
 				sinkConfig = sinkSecret.Data
 			}
 
-			if err := sink.Configure(*r.SinkClient, *vc, sinkConfig); err != nil {
+			if err := sink.Configure(*r.SinkClient, sinkConfig); err != nil {
 				r.Log.Error(err, "failed to configure sink")
 				return ctrl.Result{}, err
 			}
@@ -177,7 +177,7 @@ func (r *ValidationResultReconciler) updateStatus(ctx context.Context) error {
 	vr.Status.SinkState = sinkState
 
 	if err := r.Status().Update(context.Background(), vr); err != nil {
-		r.Log.V(0).Error(err, "failed to update ValidationResult status")
+		r.Log.V(1).Info("warning: failed to update ValidationResult status", "error", err.Error())
 		return err
 	}
 
