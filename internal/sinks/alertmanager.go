@@ -2,6 +2,8 @@ package sinks
 
 import (
 	"bytes"
+	"crypto/tls"
+	"crypto/x509"
 	"encoding/base64"
 	"encoding/json"
 	"fmt"
@@ -20,7 +22,6 @@ type AlertmanagerSink struct {
 	client Client
 	log    logr.Logger
 
-	// TODO: add auth [ Basic | mTLS ]
 	endpoint string
 	username string
 	password string
@@ -32,24 +33,48 @@ type Alert struct {
 }
 
 func (s *AlertmanagerSink) Configure(c Client, vc v1alpha1.ValidatorConfig, config map[string][]byte) error {
+	// endpoint
 	endpoint, ok := config["endpoint"]
 	if !ok {
 		return errors.New("invalid Alertmanager configuration: endpoint required")
 	}
 	u, err := url.Parse(string(endpoint))
 	if err != nil {
-		return errors.Wrap(err, "invalid Alertmanager endpoint")
+		return errors.Wrap(err, "invalid Alertmanager config: failed to parse endpoint")
 	}
 	s.endpoint = fmt.Sprintf("%s/api/v2/alerts", u.String())
 
+	// basic auth
 	s.username = string(config["username"])
 	s.password = string(config["password"])
 
-	// c.hclient.Transport = &http.Transport{
-	// 	TLSClientConfig: &tls.Config{
-	// 		InsecureSkipVerify: true,
-	// 	},
-	// }
+	// tls
+	var caCertPool *x509.CertPool
+	var insecureSkipVerify bool
+
+	insecure, ok := config["insecureSkipVerify"]
+	if ok {
+		insecureSkipVerify, err = strconv.ParseBool(string(insecure))
+		if err != nil {
+			return errors.Wrap(err, "invalid Alertmanager config: failed to parse insecureSkipVerify")
+		}
+	}
+	caCert, ok := config["caCert"]
+	if ok {
+		caCertPool, err = x509.SystemCertPool()
+		if err != nil {
+			return errors.Wrap(err, "invalid Alertmanager config: failed to get system cert pool")
+		}
+		caCertPool.AppendCertsFromPEM(caCert)
+	}
+
+	c.hclient.Transport = &http.Transport{
+		TLSClientConfig: &tls.Config{
+			InsecureSkipVerify: insecureSkipVerify,
+			MinVersion:         tls.VersionTLS12,
+			RootCAs:            caCertPool,
+		},
+	}
 	s.client = c
 
 	return nil

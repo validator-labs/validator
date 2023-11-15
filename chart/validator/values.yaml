@@ -57,9 +57,10 @@ sink: {}
   # type: alertmanager
   # secretName: alertmanager-sink-secret
   # endpoint: "http://alertmanager.alertmanager.svc.cluster.local:9093"
-  # username: ""  # (optional, for HTTP basic auth)
-  # password: ""  # (optional, for HTTP basic auth)
-  
+  # caCert: ""    # (custom TLS CA certificate, optional)
+  # username: ""  # (HTTP basic auth, optional)
+  # password: ""  # (HTTP basic auth, optional)
+
   # OR
   # type: slack
   # secretName: slack-sink-secret
