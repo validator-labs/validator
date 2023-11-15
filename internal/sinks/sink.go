@@ -16,6 +16,8 @@ type Sink interface {
 
 func NewSink(sinkType string, log logr.Logger) Sink {
 	switch sinkType {
+	case "alertmanager":
+		return &AlertmanagerSink{log: log}
 	case "slack":
 		return &SlackSink{log: log}
 	default:

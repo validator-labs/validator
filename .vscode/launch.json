@@ -31,6 +31,6 @@
               // "KUBECONFIG": "",
               "KUBEBUILDER_ASSETS": "/Users/tylergillson/spectrocloud/repos/oss/spectrocloud-labs/validation/validator/bin/k8s/1.27.1-darwin-arm64"
           }
-      },
+        },
     ]
 }
