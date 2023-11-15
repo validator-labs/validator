@@ -8,7 +8,7 @@ This install guide will help you install the Validator and get started using one
 
 - An AWS account.
 
-- AWS credentials with AdministratorAccess policy attached. You can create a new user with this policy and use the credentials for the installation. See [AWS documentation](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_users_create.html) for more details.
+- AWS credentials with [AdministratorAccess](https://docs.aws.amazon.com/aws-managed-policy/latest/reference/AdministratorAccess.html) policy attached. You can create a new user with this policy and use the credentials with the AWS plguin. Refer to the [AWS IAM User](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_users_create.html) documentation for more details.
 
 > [!IMPORTANT]
 > You can use a different policy, but ensure that the policy has the required permissions to check the resources required by the plugin. Refer to the AWS plugin documentation for more details.
@@ -116,7 +116,7 @@ validator-controller-manager-589664b9c4-7zt7w              2/2     Running   0  
 validator-plugin-aws-controller-manager-64bf9c5b56-l2j8w   2/2     Running   0          61s
 ```
 
-Now that you have Validator installed, you can create a validation. A validation is a custom resource that contains the configuration for the validation. Validator will use the configuration to validate the cluster. Validator will create a `ValidationResult` custom resource that contains the result of the validation.
+Now that you have Validator installed, you can create a validation. A validation is a custom resource that contains the configuration for the validation. Validator will create a `ValidationResult` custom resource that contains the result of the validation.
 
 ## Create a Validation
 
@@ -125,3 +125,139 @@ The next step is to create a validation configuration. Each plugin contains a se
 > [!NOTE]
 > Check ou the AWS [config samples](https://github.com/spectrocloud-labs/validator-plugin-aws/tree/main/config/samples) directory for more examples.
 
+
+Create a file named `validation.yaml` and copy the contents of the [`awsvalidator-spectro-cloud-base`](https://github.com/spectrocloud-labs/validator-plugin-aws/blob/main/config/samples/awsvalidator-iam-role-spectro-cloud-base.yaml) Use the following command to download the file and save it as `validation.yaml`.
+
+```shell
+wget https://raw.githubusercontent.com/spectrocloud-labs/validator-plugin-aws/main/config/samples/awsvalidator-iam-role-spectro-cloud-base.yaml --output-document validation.yaml
+```
+
+Review the contents of the `validation.yaml` file. The file contains the configuration for the validation. The `spec` section contains the configuration for the validation.  Change the `spec` section to match your requirements. For example, you can change the `defaultRegion` to match your prefered AWS region. 
+
+
+```yaml
+apiVersion: validation.spectrocloud.labs/v1alpha1
+kind: AwsValidator
+metadata:
+  name: awsvalidator-spectro-cloud-base
+spec:
+  auth: {}
+  defaultRegion: us-west-1
+  iamRoleRules:
+  - iamPolicies:
+    - name: Controllers Policy
+      statements:
+      - actions:
+      # Remainder of the file omitted for brevity
+```
+
+
+Now that you have the validation configuration, you can create the validation. Use the following command to create the validation.
+
+```shell
+kubectl apply --values validation.yaml
+```
+
+You can verify the Custom Resource (CR) for the AWS plugin was created by using the following command. 
+
+```shell
+kubectl get crd
+```
+
+```shell
+NAME                                             CREATED AT
+awsvalidators.validation.spectrocloud.labs       2023-11-14T23:47:03Z
+validationresults.validation.spectrocloud.labs   2023-11-14T23:46:54Z
+validatorconfigs.validation.spectrocloud.labs    2023-11-14T23:46:54Z
+```
+
+Review the result of the validation by using the following command.
+
+```shell
+kubectl describe validationresults
+```
+
+```shell
+Name:         validator-plugin-aws-awsvalidator-spectro-cloud-base
+Namespace:    default
+Labels:       <none>
+Annotations:  validator/validation-result-hash: 2IjYPs4C+8fu6MnuBq09lg==
+API Version:  validation.spectrocloud.labs/v1alpha1
+Kind:         ValidationResult
+Metadata:
+  Creation Timestamp:  2023-11-15T17:22:33Z
+  Generation:          1
+  Resource Version:    141250
+  UID:                 18d37dd9-9e4a-4397-b857-03116cf62975
+Spec:
+  Expected Results:  1
+  Plugin:            AWS
+Status:
+  Conditions:
+    Failures:
+      v1alpha1.IamRoleRule SpectroCloudRole missing action(s): [s3:PutObject s3:DeleteObject s3:PutBucketOwnershipControls s3:PutBucketPolicy s3:PutBucketPublicAccessBlock s3:PutObjectAcl] for resource arn:*:s3:::* from policy Controllers Policy
+    Last Validation Time:  2023-11-15T17:26:37Z
+    Message:               One or more required IAM permissions was not found, or a condition was not met
+    Status:                False
+    Validation Rule:       validation-SpectroCloudRole
+    Validation Type:       aws-iam-role-policy
+  Sink State:              N/A
+  State:                   Failed
+Events:                    <none>
+```
+
+If the validation fails, you can review the `Failures` section of the `Conditions` section to determine the cause of the failure. In this example, the IAM role is missing the required permissions. You can update the IAM role to add the missing permissions and rerun the validation.
+
+
+The Validator will continouslly re-issue a validation cand update the `ValidationResult` CR with the result of the validation. You can use the following command to get the status of the validation. Once you addressed the cause of the failure, the validation will pass.
+
+
+If you encountered an error and fixed the error, after about 30 seconds check the validation results again. In this example, the IAM policy was updated to add the missing permissions. 
+
+
+```shell
+kubectl describe validationresults
+```
+
+```shell
+Name:         validator-plugin-aws-awsvalidator-spectro-cloud-base
+Namespace:    default
+Labels:       <none>
+Annotations:  validator/validation-result-hash: 2A5jQj0W4SBN8IKGC0zRbQ==
+API Version:  validation.spectrocloud.labs/v1alpha1
+Kind:         ValidationResult
+Metadata:
+  Creation Timestamp:  2023-11-15T17:43:11Z
+  Generation:          1
+  Resource Version:    1937
+  UID:                 876b29bd-8d96-47f4-8d0c-c4d6eeae039c
+Spec:
+  Expected Results:  1
+  Plugin:            AWS
+Status:
+  Conditions:
+    Last Validation Time:  2023-11-15T17:53:21Z
+    Message:               All required aws-iam-role-policy permissions were found
+    Status:                True
+    Validation Rule:       validation-SpectroCloudRole
+    Validation Type:       aws-iam-role-policy
+  Sink State:              N/A
+  State:                   Succeeded
+Events:                    <none>
+```
+
+
+The validation results are hashed and result events are only updated if the result has changed. In this example, the validation check was successful and the `ValidationResult` CR was updated with the result of the validation.
+
+
+
+## Cleanup
+
+To delete the Validator installation, use the following command. This command will delete the Validator and all deployed resources including the `ValidationResult` CRs.
+
+```shell
+helm uninstall validator --namespace validator
+```
+
+
+## Next Steps
