@@ -10,7 +10,7 @@ import (
 )
 
 type Sink interface {
-	Configure(c Client, vc v1alpha1.ValidatorConfig, config map[string][]byte) error
+	Configure(c Client, config map[string][]byte) error
 	Emit(result v1alpha1.ValidationResult) error
 }
 

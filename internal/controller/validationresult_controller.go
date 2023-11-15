@@ -132,7 +132,7 @@ func (r *ValidationResultReconciler) Reconcile(ctx context.Context, req ctrl.Req
 				sinkConfig = sinkSecret.Data
 			}
 
-			if err := sink.Configure(*r.SinkClient, *vc, sinkConfig); err != nil {
+			if err := sink.Configure(*r.SinkClient, sinkConfig); err != nil {
 				r.Log.Error(err, "failed to configure sink")
 				return ctrl.Result{}, err
 			}

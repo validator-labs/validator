@@ -32,7 +32,9 @@ type Alert struct {
 	Labels      map[string]string `json:"labels"`
 }
 
-func (s *AlertmanagerSink) Configure(c Client, vc v1alpha1.ValidatorConfig, config map[string][]byte) error {
+var InvalidEndpoint = errors.New("invalid Alertmanager config: endpoint scheme and host are required")
+
+func (s *AlertmanagerSink) Configure(c Client, config map[string][]byte) error {
 	// endpoint
 	endpoint, ok := config["endpoint"]
 	if !ok {
@@ -41,6 +43,12 @@ func (s *AlertmanagerSink) Configure(c Client, vc v1alpha1.ValidatorConfig, conf
 	u, err := url.Parse(string(endpoint))
 	if err != nil {
 		return errors.Wrap(err, "invalid Alertmanager config: failed to parse endpoint")
+	}
+	if u.Scheme == "" || u.Host == "" {
+		return InvalidEndpoint
+	}
+	if u.Path != "" {
+		u.Path = ""
 	}
 	s.endpoint = fmt.Sprintf("%s/api/v2/alerts", u.String())
 
