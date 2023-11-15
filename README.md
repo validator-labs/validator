@@ -54,7 +54,8 @@ Integrate with the Alertmanager API to emit alerts to all [supported Alertmanage
    - message
    - status
    - detail
-   - failure
+      - pipe-delimited array of detail messages, see sample config for parsing example
+   - failure (also pipe-delimited)
    - last_validation_time
 
    Example Alertmanager ConfigMap used to produce the sample output above:
