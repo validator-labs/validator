@@ -3,7 +3,6 @@
 This install guide will help you install the Validator and get started using one the plugins. Validator supports multiple plugins and each plugin may require a set of configuration parameters. This guide will use the AWS plugin and show you how to configure it. Use this guide as a starting point for installing Validator and its plugins.
 
 
-
 ## Prerequisites
 
 - An AWS account.
@@ -25,6 +24,13 @@ This install guide will help you install the Validator and get started using one
 
 > [!NOTE]
 > If you already have a Kubernetes cluster, you can skip the kind installation and use your existing cluster. Ensure you have access to the cluster.
+
+## Overview
+
+The following diagram displays at a high-level the steps you will complete. You will install Validator in a Kubernetes cluster, configure a plugin, deploy a validation plugin's custom resource, and review the results.
+
+![An illustration of sequence of steps](./img/install_use_flow_diagram.png)
+
 
 ## Install Validator
 
@@ -259,5 +265,26 @@ To delete the Validator installation, use the following command. This command wi
 helm uninstall validator --namespace validator
 ```
 
+If you deployed a kind cluster, use the following command to delete the cluster.
+
+```shell
+kind delete clusters validator
+```
+
 
 ## Next Steps
+
+In this guide you learned how to install Validator and configure one of the plugins. You also learned how to create a validation and review the results. Use the knowledge you gained in this guide to configure the other plugins and create your own validations.
+
+We encourage you to explore the other plugins and create your own validations as you gain more experience with Validator.
+
+## Additional Resources
+
+
+Below are links to the documentation for the other plugins.
+
+- [AWS](https://github.com/spectrocloud-labs/validator-plugin-aws)
+- [Azure](https://github.com/spectrocloud-labs/validator-plugin-azure)
+- [Network](https://github.com/spectrocloud-labs/validator-plugin-network)
+- [OCI](https://github.com/spectrocloud-labs/validator-plugin-oci)
+- [vSphere](https://github.com/spectrocloud-labs/validator-plugin-vsphere)
