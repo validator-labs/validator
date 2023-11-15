@@ -51,6 +51,7 @@ func (s *AlertmanagerSink) Configure(c Client, config map[string][]byte) error {
 		return InvalidEndpoint
 	}
 	if u.Path != "" {
+		s.log.V(1).Info("stripping path from Alertmanager endpoint", "path", u.Path)
 		u.Path = ""
 	}
 	s.endpoint = fmt.Sprintf("%s/api/v2/alerts", u.String())
