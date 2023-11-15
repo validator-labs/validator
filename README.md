@@ -23,7 +23,7 @@ Plugins:
 
 ## Installation
 ```bash
-helm repo add validator https://spectrocloud-labs.github.io/validator/
+helm repo add validator https://spectrocloud-labs.github.io/validator
 helm repo update
 helm install validator validator/validator -n validator --create-namespace
 ```
@@ -32,7 +32,7 @@ helm install validator validator/validator -n validator --create-namespace
 Validator can be configured to emit updates to various event sinks whenever a `ValidationResult` is created or updated. See configuration details below for each supported sink.
 
 ### Alertmanager
-Integrate with the Alertmanager API to emit alerts to all [supported Alertmanager receivers](https://prometheus.io/docs/alerting/latest/configuration/#receiver-integration-settings), including generic webhooks.
+Integrate with the Alertmanager API to emit alerts to all [supported Alertmanager receivers](https://prometheus.io/docs/alerting/latest/configuration/#receiver-integration-settings), including generic webhooks. The only required configuration is an Alertmanager endpoint. HTTP basic authentication and TLS are also supported. See [values.yaml](https://github.com/spectrocloud-labs/validator/blob/main/chart/validator/values.yaml) for configuration details.
 
 #### Sample Output
 ![Screen Shot 2023-11-15 at 10 42 20 AM](https://github.com/spectrocloud-labs/validator/assets/1795270/ce958b8e-96d7-4f5e-8efc-80e2fc2b0b4d)
@@ -125,8 +125,8 @@ Integrate with the Alertmanager API to emit alerts to all [supported Alertmanage
 
 4. Install validator and/or upgrade your validator Helm release, configuring `values.sink` accordingly.
 
-## Getting Started
-You’ll need a Kubernetes cluster to run against. You can use [KIND](https://sigs.k8s.io/kind) to get a local cluster for testing, or run against a remote cluster.
+## Development
+You’ll need a Kubernetes cluster to run against. You can use [kind](https://sigs.k8s.io/kind) to get a local cluster for testing, or run against a remote cluster.
 **Note:** Your controller will automatically use the current context in your kubeconfig file (i.e. whatever cluster `kubectl cluster-info` shows).
 
 ### Running on the cluster
