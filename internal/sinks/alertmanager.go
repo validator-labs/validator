@@ -49,27 +49,27 @@ func (s *AlertmanagerSink) Configure(c Client, vc v1alpha1.ValidatorConfig, conf
 }
 
 func (s *AlertmanagerSink) Emit(r v1alpha1.ValidationResult) error {
-	alerts := []Alert{
-		{
-			Labels: map[string]string{
-				"alertname":       r.Name,
-				"plugin":          r.Spec.Plugin,
-				"expectedresults": strconv.Itoa(r.Spec.ExpectedResults),
-			},
-			Annotations: map[string]string{
-				"state": string(r.Status.State),
-			},
-		},
-	}
+	alerts := make([]Alert, 0, len(r.Status.Conditions))
 
 	for i, c := range r.Status.Conditions {
-		alerts[0].Annotations[fmt.Sprintf("validationRule%d", i)] = c.ValidationRule
-		alerts[0].Annotations[fmt.Sprintf("validationType%d", i)] = c.ValidationType
-		alerts[0].Annotations[fmt.Sprintf("message%d", i)] = c.Message
-		alerts[0].Annotations[fmt.Sprintf("status%d", i)] = string(c.Status)
-		alerts[0].Annotations[fmt.Sprintf("detail%d", i)] = strings.Join(c.Details, "|")
-		alerts[0].Annotations[fmt.Sprintf("failure%d", i)] = strings.Join(c.Failures, "|")
-		alerts[0].Annotations[fmt.Sprintf("lastValidationTime%d", i)] = c.LastValidationTime.String()
+		alerts = append(alerts, Alert{
+			Labels: map[string]string{
+				"alertname":         r.Name,
+				"plugin":            r.Spec.Plugin,
+				"validation_result": strconv.Itoa(i + 1),
+				"expected_results":  strconv.Itoa(r.Spec.ExpectedResults),
+			},
+			Annotations: map[string]string{
+				"state":                string(r.Status.State),
+				"validation_rule":      c.ValidationRule,
+				"validation_type":      c.ValidationType,
+				"message":              c.Message,
+				"status":               string(c.Status),
+				"detail":               strings.Join(c.Details, "|"),
+				"failure":              strings.Join(c.Failures, "|"),
+				"last_validation_time": c.LastValidationTime.String(),
+			},
+		})
 	}
 
 	body, err := json.Marshal(alerts)
@@ -93,7 +93,7 @@ func (s *AlertmanagerSink) Emit(r v1alpha1.ValidationResult) error {
 		s.log.Error(err, "failed to post alert", "endpoint", s.endpoint, "status", resp.Status, "code", resp.StatusCode)
 		return err
 	}
-	s.log.V(0).Info("Successfully posted alert to Alertmanager", "endpoint", s.endpoint, "status", resp.Status, "code", resp.StatusCode)
 
+	s.log.V(0).Info("Successfully posted alert to Alertmanager", "endpoint", s.endpoint, "status", resp.Status, "code", resp.StatusCode)
 	return nil
 }
