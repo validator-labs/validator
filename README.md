@@ -35,6 +35,7 @@ Validator can be configured to emit updates to various event sinks whenever a `V
 Integrate with the Alertmanager API to emit alerts to all [supported Alertmanager receivers](https://prometheus.io/docs/alerting/latest/configuration/#receiver-integration-settings), including generic webhooks.
 
 #### Sample Output
+![Screen Shot 2023-11-15 at 10 42 20 AM](https://github.com/spectrocloud-labs/validator/assets/1795270/ce958b8e-96d7-4f5e-8efc-80e2fc2b0b4d)
 
 #### Setup
 1. Install Alertmanager in your cluster (if it isn't installed already)
