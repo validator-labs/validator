@@ -2,8 +2,10 @@ package sinks
 
 import (
 	"bytes"
+	"encoding/base64"
 	"encoding/json"
 	"fmt"
+	"net/http"
 	"net/url"
 	"strconv"
 	"strings"
@@ -20,6 +22,8 @@ type AlertmanagerSink struct {
 
 	// TODO: add auth [ Basic | mTLS ]
 	endpoint string
+	username string
+	password string
 }
 
 type Alert struct {
@@ -37,6 +41,9 @@ func (s *AlertmanagerSink) Configure(c Client, vc v1alpha1.ValidatorConfig, conf
 		return errors.Wrap(err, "invalid Alertmanager endpoint")
 	}
 	s.endpoint = fmt.Sprintf("%s/api/v2/alerts", u.String())
+
+	s.username = string(config["username"])
+	s.password = string(config["password"])
 
 	// c.hclient.Transport = &http.Transport{
 	// 	TLSClientConfig: &tls.Config{
@@ -79,7 +86,18 @@ func (s *AlertmanagerSink) Emit(r v1alpha1.ValidationResult) error {
 	}
 	s.log.V(1).Info("Alertmanager message", "payload", body)
 
-	resp, err := s.client.hclient.Post(s.endpoint, "application/json", bytes.NewReader(body))
+	req, err := http.NewRequest(http.MethodPost, s.endpoint, bytes.NewReader(body))
+	if err != nil {
+		s.log.Error(err, "failed to create HTTP POST request", "endpoint", s.endpoint)
+		return err
+	}
+	req.Header.Add("Content-Type", "application/json")
+
+	if s.username != "" && s.password != "" {
+		req.Header.Add(basicAuthHeader(s.username, s.password))
+	}
+
+	resp, err := s.client.hclient.Do(req)
 	defer func() {
 		if resp != nil {
 			_ = resp.Body.Close()
@@ -96,4 +114,11 @@ func (s *AlertmanagerSink) Emit(r v1alpha1.ValidationResult) error {
 
 	s.log.V(0).Info("Successfully posted alert to Alertmanager", "endpoint", s.endpoint, "status", resp.Status, "code", resp.StatusCode)
 	return nil
+}
+
+func basicAuthHeader(username, password string) (string, string) {
+	auth := base64.StdEncoding.EncodeToString(
+		bytes.Join([][]byte{[]byte(username), []byte(password)}, []byte(":")),
+	)
+	return "Authorization", fmt.Sprintf("Basic %s", auth)
 }
