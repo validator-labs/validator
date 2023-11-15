@@ -9,32 +9,32 @@ assignees: ''
 
 ## Description 
 
-_Fill in a description of the bug here. Provide as much detail as possible._
-
+<!-- Fill in a description of the bug here. Provide as much detail as possible. -->
+<!-- This is a required field. -->
 
 ## Expected Behavior
 
-_What is the expected behavior? What do you think should happen?_
-
+<!-- What is the expected behavior? What do you think should happen? -->
+<!-- This is a required field. -->
 
 ## Steps to Reproduce
 
-_Help us to reproduce the issue. What steps did you take?_ 
-
+<!-- Help us to reproduce the issue. What steps did you take? -->
+<!-- This is a required field. -->
 
 ## System Information
 
-_Please provide the following information:_
+<!-- Please provide the following information: -->
+<!-- This is a required field. -->
 
-Kubernetes Distribution:
-Kubernetes Version: 
-Operating System:
-Helm Version:
-Infrastructure Provider: 
-Validator Version:  
+- Kubernetes Distribution:
+- Kubernetes Version: 
+- Operating System:
+- Helm Version:
+- Infrastructure Provider: 
+- Validator Version:  
 
 ## Additional Information
 
-_Add any other context about the problem here._
-
-
+<!-- Add any other context about the problem here. -->
+<!-- This field is optional. -->
