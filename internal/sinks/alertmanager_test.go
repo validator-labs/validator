@@ -9,6 +9,8 @@ import (
 	"testing"
 	"time"
 
+	corev1 "k8s.io/api/core/v1"
+
 	"github.com/spectrocloud-labs/validator/api/v1alpha1"
 )
 
@@ -74,7 +76,15 @@ func TestAlertManagerEmit(t *testing.T) {
 		{
 			name: "Pass",
 			sink: AlertmanagerSink{},
-			res:  v1alpha1.ValidationResult{},
+			res: v1alpha1.ValidationResult{
+				Status: v1alpha1.ValidationResultStatus{
+					Conditions: []v1alpha1.ValidationCondition{
+						{
+							Status: corev1.ConditionTrue,
+						},
+					},
+				},
+			},
 			server: httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 				fmt.Fprintf(w, "ok")
 			})),
