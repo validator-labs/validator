@@ -34,7 +34,7 @@ type Alert struct {
 
 var (
 	InvalidEndpoint  = errors.New("invalid Alertmanager config: endpoint scheme and host are required")
-	EndpointRequired = errors.New("invalid Alertmanager configuration: endpoint required")
+	EndpointRequired = errors.New("invalid Alertmanager config: endpoint required")
 )
 
 func (s *AlertmanagerSink) Configure(c Client, config map[string][]byte) error {
