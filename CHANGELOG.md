@@ -1,5 +1,35 @@
 # Changelog
 
+## [0.0.20](https://github.com/spectrocloud-labs/validator/compare/v0.0.19...v0.0.20) (2023-11-16)
+
+
+### Bug Fixes
+
+* retry all status updates due to controller contention ([#114](https://github.com/spectrocloud-labs/validator/issues/114)) ([35f03a4](https://github.com/spectrocloud-labs/validator/commit/35f03a407a3d0bbcfd76c749908e4b1c9581afac))
+
+## [0.0.19](https://github.com/spectrocloud-labs/validator/compare/v0.0.18...v0.0.19) (2023-11-16)
+
+
+### Features
+
+* add alertmanager sink ([#107](https://github.com/spectrocloud-labs/validator/issues/107)) ([855e70e](https://github.com/spectrocloud-labs/validator/commit/855e70e69c67cd338f83add9b0b18026e3395184))
+
+
+### Bug Fixes
+
+* **deps:** update kubernetes packages to v0.28.4 ([#112](https://github.com/spectrocloud-labs/validator/issues/112)) ([fc10444](https://github.com/spectrocloud-labs/validator/commit/fc104445fab89a663ff0e3fee8ea500b1d0a0904))
+* ensure plugin removal during Helm uninstall ([#111](https://github.com/spectrocloud-labs/validator/issues/111)) ([0917418](https://github.com/spectrocloud-labs/validator/commit/0917418b6ae3f2940bf8048c0cb09ca4056f21da))
+
+
+### Docs
+
+* issue template addition ([#109](https://github.com/spectrocloud-labs/validator/issues/109)) ([36ce4a1](https://github.com/spectrocloud-labs/validator/commit/36ce4a1d5630c22b39d481bc45641c5c06e6db04))
+
+
+### Refactoring
+
+* accept VR in HandleNewValidationResult for flexibility in plugins ([#113](https://github.com/spectrocloud-labs/validator/issues/113)) ([1ead151](https://github.com/spectrocloud-labs/validator/commit/1ead15146156ac278aedb2a77cab0604488fda4f))
+
 ## [0.0.18](https://github.com/spectrocloud-labs/validator/compare/v0.0.17...v0.0.18) (2023-11-12)
 
 

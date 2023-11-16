@@ -26,7 +26,7 @@ Plugins:
 Install Validator by pulling the latest Helm chart and installing it in your cluster. Use the following commands to install the latest version of the chart.
 
 ```bash
-helm repo add validator https://spectrocloud-labs.github.io/validator/
+helm repo add validator https://spectrocloud-labs.github.io/validator
 helm repo update
 helm install validator validator/validator -n validator --create-namespace
 ```
@@ -36,6 +36,79 @@ Check out the [Install Guide](./docs/tutorial.md) for a step-by-step guide to in
 ## Sinks
 Validator can be configured to emit updates to various event sinks whenever a `ValidationResult` is created or updated. See configuration details below for each supported sink.
 
+### Alertmanager
+Integrate with the Alertmanager API to emit alerts to all [supported Alertmanager receivers](https://prometheus.io/docs/alerting/latest/configuration/#receiver-integration-settings), including generic webhooks. The only required configuration is an Alertmanager endpoint. HTTP basic authentication and TLS are also supported. See [values.yaml](https://github.com/spectrocloud-labs/validator/blob/main/chart/validator/values.yaml) for configuration details.
+
+#### Sample Output
+![Screen Shot 2023-11-15 at 10 42 20 AM](https://github.com/spectrocloud-labs/validator/assets/1795270/ce958b8e-96d7-4f5e-8efc-80e2fc2b0b4d)
+
+#### Setup
+1. Install Alertmanager in your cluster (if it isn't installed already)
+2. Configure Alertmanager alert content. Alerts can be formatted/customized via the following labels and annotations:
+
+   Labels
+   - alertname
+   - plugin
+   - validation_result
+   - expected_results
+
+   Annotations
+   - state
+   - validation_rule
+   - validation_type
+   - message
+   - status
+   - detail
+      - pipe-delimited array of detail messages, see sample config for parsing example
+   - failure (also pipe-delimited)
+   - last_validation_time
+
+   Example Alertmanager ConfigMap used to produce the sample output above:
+   ```yaml
+   apiVersion: v1
+   data:
+   alertmanager.yml: |
+      global:
+         slack_api_url: https://slack.com/api/chat.postMessage
+      receivers:
+      - name: default-receiver
+         slack_configs:
+         - channel: <channel-id>
+         text: |-
+            {{ range .Alerts.Firing -}}
+            *Validation Result: {{ .Labels.validation_result }}/{{ .Labels.expected_results }}*
+
+            {{ range $k, $v := .Annotations }}
+            {{- if $v }}*{{ $k | title }}*:
+            {{- if match "\\|" $v }}
+            - {{ reReplaceAll "\\|" "\n- " $v -}}
+            {{- else }}
+            {{- printf " %s" $v -}}
+            {{- end }}
+            {{- end }}
+            {{ end }}
+
+            {{ end }}
+         title: "{{ (index .Alerts 0).Labels.plugin }}: {{ (index .Alerts 0).Labels.alertname }}\n"
+         http_config:
+            authorization:
+               credentials: xoxb--<bot>-<token>
+         send_resolved: false
+      route:
+         group_interval: 10s
+         group_wait: 10s
+         receiver: default-receiver
+         repeat_interval: 1h
+      templates:
+      - /etc/alertmanager/*.tmpl
+   kind: ConfigMap
+   metadata:
+   name: alertmanager
+   namespace: alertmanager
+   ```
+
+2. Install validator and/or upgrade your validator Helm release, configuring `values.sink` accordingly.
+
 ### Slack
 
 #### Sample Output
@@ -43,7 +116,6 @@ Validator can be configured to emit updates to various event sinks whenever a `V
 <img width="700" alt="Screen Shot 2023-11-10 at 4 18 22 PM" src="https://github.com/spectrocloud-labs/validator/assets/1795270/9f2c4ab7-34d6-496a-9f60-68655a7ee3d6">
 
 #### Setup
-
 1. Go to https://api.slack.com/apps and click **Create New App**, then select **From scratch**. Pick an App Name and Slack Workspace, then click **Create App**.
 
    <img src="https://github.com/spectrocloud-labs/validator/assets/1795270/58cbb5a0-12a4-4a83-a0dd-20ae87a8105d" width="500">
@@ -58,8 +130,8 @@ Validator can be configured to emit updates to various event sinks whenever a `V
 
 4. Install validator and/or upgrade your validator Helm release, configuring `values.sink` accordingly.
 
-## Getting Started
-You’ll need a Kubernetes cluster to run against. You can use [KIND](https://sigs.k8s.io/kind) to get a local cluster for testing, or run against a remote cluster.
+## Development
+You’ll need a Kubernetes cluster to run against. You can use [kind](https://sigs.k8s.io/kind) to get a local cluster for testing, or run against a remote cluster.
 **Note:** Your controller will automatically use the current context in your kubeconfig file (i.e. whatever cluster `kubectl cluster-info` shows).
 
 ### Running on the cluster

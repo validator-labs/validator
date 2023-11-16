@@ -64,11 +64,7 @@ func (r *ValidatorConfigReconciler) Reconcile(ctx context.Context, req ctrl.Requ
 
 	vc := &v1alpha1.ValidatorConfig{}
 	if err := r.Get(ctx, req.NamespacedName, vc); err != nil {
-		// ignore not-found errors, since they can't be fixed by an immediate requeue
-		if apierrs.IsNotFound(err) {
-			return ctrl.Result{}, nil
-		}
-		r.Log.Error(err, "failed to fetch ValidatorConfig")
+		r.Log.Error(err, "failed to fetch ValidatorConfig", "key", req)
 		return ctrl.Result{}, client.IgnoreNotFound(err)
 	}
 

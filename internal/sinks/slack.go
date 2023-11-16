@@ -19,7 +19,7 @@ type SlackSink struct {
 	log       logr.Logger
 }
 
-func (s *SlackSink) Configure(c Client, vc v1alpha1.ValidatorConfig, config map[string][]byte) error {
+func (s *SlackSink) Configure(c Client, config map[string][]byte) error {
 	apiToken, ok := config["apiToken"]
 	if !ok {
 		return errors.New("invalid Slack configuration: apiToken required")
