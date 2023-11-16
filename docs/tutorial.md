@@ -63,7 +63,7 @@ helm repo add validator https://spectrocloud-labs.github.io/validator/ && \
 helm repo update
 ```
 
-Before you install Validator, you can configure the installation by editing the `values.yaml` file. The `values.yaml` file contains the default configuration for Validator. You can override the default configuration by editing the `values.yaml` file.
+The `values.yaml` file contains the default configuration for Validator. Before you install Validator, you can configure the installation by editing the `values.yaml` file and overwriting the default values. 
 
 
 
