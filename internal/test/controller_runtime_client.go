@@ -33,12 +33,23 @@ func (m SubResourceMock) Patch(ctx context.Context, obj client.Object, patch cli
 
 type ClientMock struct {
 	CreateErrors []error
+	GetErrors    []error
 	UpdateErrors []error
 	SubResourceMock
 }
 
 func (m ClientMock) Get(ctx context.Context, key client.ObjectKey, obj client.Object, opts ...client.GetOption) error {
-	return nil
+	var err error
+	var errs []error
+	if m.GetErrors != nil {
+		err, errs = m.GetErrors[0], m.GetErrors[1:]
+	}
+	m = ClientMock{
+		CreateErrors: m.CreateErrors,
+		GetErrors:    errs,
+		UpdateErrors: m.UpdateErrors,
+	}
+	return err
 }
 func (m ClientMock) List(ctx context.Context, list client.ObjectList, opts ...client.ListOption) error {
 	return nil
@@ -51,6 +62,7 @@ func (m ClientMock) Create(ctx context.Context, obj client.Object, opts ...clien
 	}
 	m = ClientMock{
 		CreateErrors: errs,
+		GetErrors:    m.GetErrors,
 		UpdateErrors: m.UpdateErrors,
 	}
 	return err
@@ -66,6 +78,7 @@ func (m ClientMock) Update(ctx context.Context, obj client.Object, opts ...clien
 	}
 	m = ClientMock{
 		CreateErrors: m.CreateErrors,
+		GetErrors:    m.GetErrors,
 		UpdateErrors: errs,
 	}
 	return err

@@ -32,12 +32,8 @@ import (
 	"github.com/spectrocloud-labs/validator/pkg/constants"
 )
 
-const (
-	// ValidationResultHash is used to determine whether to re-emit updates to a validation result sink.
-	ValidationResultHash = "validator/validation-result-hash"
-
-	statusUpdateRetries = 3
-)
+// ValidationResultHash is used to determine whether to re-emit updates to a validation result sink.
+const ValidationResultHash = "validator/validation-result-hash"
 
 var (
 	vr        *v1alpha1.ValidationResult
@@ -84,7 +80,7 @@ func (r *ValidationResultReconciler) Reconcile(ctx context.Context, req ctrl.Req
 		// Always update the ValidationResult's Status with a retry due to race condition with
 		// SafeUpdateValidationResult, which also updates the VR's Status and is continuously
 		// being called by the validator plugins.
-		for i := 0; i < statusUpdateRetries; i++ {
+		for i := 0; i < constants.StatusUpdateRetries; i++ {
 			if err := r.updateStatus(ctx); err == nil {
 				break
 			}

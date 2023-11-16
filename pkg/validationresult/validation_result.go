@@ -52,40 +52,54 @@ func HandleNewValidationResult(c client.Client, vr *v1alpha1.ValidationResult, l
 		return err
 	}
 
-	// Update the ValidationResult's status
-	vr.Status = v1alpha1.ValidationResultStatus{
-		State: v1alpha1.ValidationInProgress,
-	}
-	if err := c.Status().Update(context.Background(), vr); err != nil {
-		l.V(0).Error(err, "failed to update ValidationResult status", "name", vr.Name, "namespace", vr.Namespace)
-		return err
-	}
+	var err error
+	nn := ktypes.NamespacedName{Name: vr.Name, Namespace: vr.Namespace}
 
-	return nil
+	// Update the ValidationResult's status
+	for i := 0; i < constants.StatusUpdateRetries; i++ {
+		if err := c.Get(context.Background(), nn, vr); err != nil {
+			l.V(0).Error(err, "failed to get ValidationResult", "name", nn.Name, "namespace", nn.Namespace)
+			return err
+		}
+		vr.Status = v1alpha1.ValidationResultStatus{State: v1alpha1.ValidationInProgress}
+		err = c.Status().Update(context.Background(), vr)
+		if err == nil {
+			return nil
+		}
+		l.V(1).Info("warning: failed to update ValidationResult status", "name", vr.Name, "namespace", vr.Namespace, "error", err.Error())
+	}
+	return err
 }
 
 // SafeUpdateValidationResult updates the overall validation result, ensuring
 // that the overall validation status remains failed if a single rule fails
 func SafeUpdateValidationResult(c client.Client, nn ktypes.NamespacedName, res *types.ValidationResult, resErr error, l logr.Logger) {
-
+	var err error
 	vr := &v1alpha1.ValidationResult{}
-	if err := c.Get(context.Background(), nn, vr); err != nil {
-		l.V(0).Error(err, "failed to get ValidationResult", "name", nn.Name, "namespace", nn.Namespace)
+
+	for i := 0; i < constants.StatusUpdateRetries; i++ {
+		if err := c.Get(context.Background(), nn, vr); err != nil {
+			l.V(0).Error(err, "failed to get ValidationResult", "name", nn.Name, "namespace", nn.Namespace)
+			return
+		}
+
+		updateValidationResult(vr, res, resErr)
+
+		err = c.Status().Update(context.Background(), vr)
+		if err != nil {
+			l.V(1).Info("warning: failed to update ValidationResult", "name", nn.Name, "namespace", nn.Namespace, "error", err.Error())
+			continue
+		}
+
+		l.V(0).Info(
+			"Updated ValidationResult", "state", res.State, "reason", res.Condition.ValidationRule,
+			"message", res.Condition.Message, "details", res.Condition.Details,
+			"failures", res.Condition.Failures, "time", res.Condition.LastValidationTime,
+		)
 		return
 	}
 
-	updateValidationResult(vr, res, resErr)
-
-	if err := c.Status().Update(context.Background(), vr); err != nil {
-		l.V(0).Error(err, "failed to update ValidationResult", "name", nn.Name, "namespace", nn.Namespace)
-		return
-	}
-
-	l.V(0).Info(
-		"Updated ValidationResult", "state", res.State, "reason", res.Condition.ValidationRule,
-		"message", res.Condition.Message, "details", res.Condition.Details,
-		"failures", res.Condition.Failures, "time", res.Condition.LastValidationTime,
-	)
+	l.V(0).Error(err, "failed to update ValidationResult", "name", nn.Name, "namespace", nn.Namespace)
 }
 
 // updateValidationResult updates the ValidationResult for the active validation rule
