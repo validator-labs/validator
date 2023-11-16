@@ -6,7 +6,6 @@ import (
 
 	"github.com/go-logr/logr"
 	corev1 "k8s.io/api/core/v1"
-	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	ktypes "k8s.io/apimachinery/pkg/types"
 	"sigs.k8s.io/controller-runtime/pkg/client"
 
@@ -45,21 +44,11 @@ func HandleExistingValidationResult(nn ktypes.NamespacedName, vr *v1alpha1.Valid
 }
 
 // HandleNewValidationResult creates a new validation result for the active validator
-func HandleNewValidationResult(c client.Client, plugin string, expectedResults int, nn ktypes.NamespacedName, l logr.Logger) error {
+func HandleNewValidationResult(c client.Client, vr *v1alpha1.ValidationResult, l logr.Logger) error {
 
 	// Create the ValidationResult
-	vr := &v1alpha1.ValidationResult{
-		ObjectMeta: metav1.ObjectMeta{
-			Name:      nn.Name,
-			Namespace: nn.Namespace,
-		},
-		Spec: v1alpha1.ValidationResultSpec{
-			Plugin:          plugin,
-			ExpectedResults: expectedResults,
-		},
-	}
 	if err := c.Create(context.Background(), vr, &client.CreateOptions{}); err != nil {
-		l.V(0).Error(err, "failed to create ValidationResult", "name", nn.Name, "namespace", nn.Namespace)
+		l.V(0).Error(err, "failed to create ValidationResult", "name", vr.Name, "namespace", vr.Namespace)
 		return err
 	}
 
@@ -68,7 +57,7 @@ func HandleNewValidationResult(c client.Client, plugin string, expectedResults i
 		State: v1alpha1.ValidationInProgress,
 	}
 	if err := c.Status().Update(context.Background(), vr); err != nil {
-		l.V(0).Error(err, "failed to update ValidationResult status", "name", nn.Name, "namespace", nn.Namespace)
+		l.V(0).Error(err, "failed to update ValidationResult status", "name", vr.Name, "namespace", vr.Namespace)
 		return err
 	}
 
