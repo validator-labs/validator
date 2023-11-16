@@ -31,7 +31,7 @@ helm repo update
 helm install validator validator/validator -n validator --create-namespace
 ```
 
-Check out the [Install Guide](./docs/tutorial.md) for a step-by-step guide to installing and using Validator.
+Check out the [Install Guide](./docs/install.md) for a step-by-step guide for installing and using Validator.
 
 ## Sinks
 Validator can be configured to emit updates to various event sinks whenever a `ValidationResult` is created or updated. See configuration details below for each supported sink.
