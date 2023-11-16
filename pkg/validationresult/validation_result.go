@@ -6,7 +6,6 @@ import (
 
 	"github.com/go-logr/logr"
 	corev1 "k8s.io/api/core/v1"
-	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	ktypes "k8s.io/apimachinery/pkg/types"
 	"sigs.k8s.io/controller-runtime/pkg/client"
 
@@ -45,58 +44,62 @@ func HandleExistingValidationResult(nn ktypes.NamespacedName, vr *v1alpha1.Valid
 }
 
 // HandleNewValidationResult creates a new validation result for the active validator
-func HandleNewValidationResult(c client.Client, plugin string, expectedResults int, nn ktypes.NamespacedName, l logr.Logger) error {
+func HandleNewValidationResult(c client.Client, vr *v1alpha1.ValidationResult, l logr.Logger) error {
 
 	// Create the ValidationResult
-	vr := &v1alpha1.ValidationResult{
-		ObjectMeta: metav1.ObjectMeta{
-			Name:      nn.Name,
-			Namespace: nn.Namespace,
-		},
-		Spec: v1alpha1.ValidationResultSpec{
-			Plugin:          plugin,
-			ExpectedResults: expectedResults,
-		},
-	}
 	if err := c.Create(context.Background(), vr, &client.CreateOptions{}); err != nil {
-		l.V(0).Error(err, "failed to create ValidationResult", "name", nn.Name, "namespace", nn.Namespace)
+		l.V(0).Error(err, "failed to create ValidationResult", "name", vr.Name, "namespace", vr.Namespace)
 		return err
 	}
+
+	var err error
+	nn := ktypes.NamespacedName{Name: vr.Name, Namespace: vr.Namespace}
 
 	// Update the ValidationResult's status
-	vr.Status = v1alpha1.ValidationResultStatus{
-		State: v1alpha1.ValidationInProgress,
+	for i := 0; i < constants.StatusUpdateRetries; i++ {
+		if err := c.Get(context.Background(), nn, vr); err != nil {
+			l.V(0).Error(err, "failed to get ValidationResult", "name", nn.Name, "namespace", nn.Namespace)
+			return err
+		}
+		vr.Status = v1alpha1.ValidationResultStatus{State: v1alpha1.ValidationInProgress}
+		err = c.Status().Update(context.Background(), vr)
+		if err == nil {
+			return nil
+		}
+		l.V(1).Info("warning: failed to update ValidationResult status", "name", vr.Name, "namespace", vr.Namespace, "error", err.Error())
 	}
-	if err := c.Status().Update(context.Background(), vr); err != nil {
-		l.V(0).Error(err, "failed to update ValidationResult status", "name", nn.Name, "namespace", nn.Namespace)
-		return err
-	}
-
-	return nil
+	return err
 }
 
 // SafeUpdateValidationResult updates the overall validation result, ensuring
 // that the overall validation status remains failed if a single rule fails
 func SafeUpdateValidationResult(c client.Client, nn ktypes.NamespacedName, res *types.ValidationResult, resErr error, l logr.Logger) {
-
+	var err error
 	vr := &v1alpha1.ValidationResult{}
-	if err := c.Get(context.Background(), nn, vr); err != nil {
-		l.V(0).Error(err, "failed to get ValidationResult", "name", nn.Name, "namespace", nn.Namespace)
+
+	for i := 0; i < constants.StatusUpdateRetries; i++ {
+		if err := c.Get(context.Background(), nn, vr); err != nil {
+			l.V(0).Error(err, "failed to get ValidationResult", "name", nn.Name, "namespace", nn.Namespace)
+			return
+		}
+
+		updateValidationResult(vr, res, resErr)
+
+		err = c.Status().Update(context.Background(), vr)
+		if err != nil {
+			l.V(1).Info("warning: failed to update ValidationResult", "name", nn.Name, "namespace", nn.Namespace, "error", err.Error())
+			continue
+		}
+
+		l.V(0).Info(
+			"Updated ValidationResult", "state", res.State, "reason", res.Condition.ValidationRule,
+			"message", res.Condition.Message, "details", res.Condition.Details,
+			"failures", res.Condition.Failures, "time", res.Condition.LastValidationTime,
+		)
 		return
 	}
 
-	updateValidationResult(vr, res, resErr)
-
-	if err := c.Status().Update(context.Background(), vr); err != nil {
-		l.V(0).Error(err, "failed to update ValidationResult", "name", nn.Name, "namespace", nn.Namespace)
-		return
-	}
-
-	l.V(0).Info(
-		"Updated ValidationResult", "state", res.State, "reason", res.Condition.ValidationRule,
-		"message", res.Condition.Message, "details", res.Condition.Details,
-		"failures", res.Condition.Failures, "time", res.Condition.LastValidationTime,
-	)
+	l.V(0).Error(err, "failed to update ValidationResult", "name", nn.Name, "namespace", nn.Namespace)
 }
 
 // updateValidationResult updates the ValidationResult for the active validation rule

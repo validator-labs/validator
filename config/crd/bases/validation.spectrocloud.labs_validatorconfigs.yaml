@@ -65,6 +65,7 @@ spec:
                     type: string
                   type:
                     enum:
+                    - alertmanager
                     - slack
                     type: string
                 required:

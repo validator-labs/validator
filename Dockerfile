@@ -6,6 +6,11 @@ ARG TARGETARCH
 RUN apk add --no-cache curl
 
 WORKDIR /workspace
+
+# Get Helm
+RUN curl -s https://get.helm.sh/helm-v3.10.1-linux-amd64.tar.gz | tar -xzf - && \
+    mv linux-amd64/helm . && rm -rf linux-amd64
+
 # Copy the Go Modules manifests
 COPY go.mod go.mod
 COPY go.sum go.sum
@@ -18,10 +23,6 @@ COPY cmd/main.go cmd/main.go
 COPY api/ api/
 COPY internal/ internal/
 COPY pkg/ pkg/
-
-# Get Helm
-RUN curl -s https://get.helm.sh/helm-v3.10.1-linux-amd64.tar.gz | tar -xzf - && \
-    mv linux-amd64/helm . && rm -rf linux-amd64
 
 # Build
 # the GOARCH has not a default value to allow the binary be built according to the host where the command

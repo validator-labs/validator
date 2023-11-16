@@ -22,7 +22,6 @@ import (
 
 	"github.com/go-logr/logr"
 	corev1 "k8s.io/api/core/v1"
-	apierrs "k8s.io/apimachinery/pkg/api/errors"
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apimachinery/pkg/types"
 	ctrl "sigs.k8s.io/controller-runtime"
@@ -33,12 +32,8 @@ import (
 	"github.com/spectrocloud-labs/validator/pkg/constants"
 )
 
-const (
-	// ValidationResultHash is used to determine whether to re-emit updates to a validation result sink.
-	ValidationResultHash = "validator/validation-result-hash"
-
-	statusUpdateRetries = 3
-)
+// ValidationResultHash is used to determine whether to re-emit updates to a validation result sink.
+const ValidationResultHash = "validator/validation-result-hash"
 
 var (
 	vr        *v1alpha1.ValidationResult
@@ -65,11 +60,7 @@ func (r *ValidationResultReconciler) Reconcile(ctx context.Context, req ctrl.Req
 	vc := &v1alpha1.ValidatorConfig{}
 	vcKey := types.NamespacedName{Namespace: r.Namespace, Name: constants.ValidatorConfig}
 	if err := r.Get(ctx, vcKey, vc); err != nil {
-		// ignore not-found errors, since they can't be fixed by an immediate requeue
-		if apierrs.IsNotFound(err) {
-			return ctrl.Result{}, nil
-		}
-		r.Log.Error(err, "failed to fetch ValidatorConfig")
+		r.Log.Error(err, "failed to fetch ValidatorConfig", "key", vcKey)
 		return ctrl.Result{}, client.IgnoreNotFound(err)
 	}
 
@@ -77,11 +68,7 @@ func (r *ValidationResultReconciler) Reconcile(ctx context.Context, req ctrl.Req
 	vrKey = req.NamespacedName
 
 	if err := r.Get(ctx, req.NamespacedName, vr); err != nil {
-		// ignore not-found errors, since they can't be fixed by an immediate requeue
-		if apierrs.IsNotFound(err) {
-			return ctrl.Result{}, nil
-		}
-		r.Log.Error(err, "failed to fetch ValidationResult")
+		r.Log.Error(err, "failed to fetch ValidationResult", "key", req)
 		return ctrl.Result{}, client.IgnoreNotFound(err)
 	}
 
@@ -93,7 +80,7 @@ func (r *ValidationResultReconciler) Reconcile(ctx context.Context, req ctrl.Req
 		// Always update the ValidationResult's Status with a retry due to race condition with
 		// SafeUpdateValidationResult, which also updates the VR's Status and is continuously
 		// being called by the validator plugins.
-		for i := 0; i < statusUpdateRetries; i++ {
+		for i := 0; i < constants.StatusUpdateRetries; i++ {
 			if err := r.updateStatus(ctx); err == nil {
 				break
 			}
@@ -132,7 +119,7 @@ func (r *ValidationResultReconciler) Reconcile(ctx context.Context, req ctrl.Req
 				sinkConfig = sinkSecret.Data
 			}
 
-			if err := sink.Configure(*r.SinkClient, *vc, sinkConfig); err != nil {
+			if err := sink.Configure(*r.SinkClient, sinkConfig); err != nil {
 				r.Log.Error(err, "failed to configure sink")
 				return ctrl.Result{}, err
 			}
@@ -177,7 +164,7 @@ func (r *ValidationResultReconciler) updateStatus(ctx context.Context) error {
 	vr.Status.SinkState = sinkState
 
 	if err := r.Status().Update(context.Background(), vr); err != nil {
-		r.Log.V(0).Error(err, "failed to update ValidationResult status")
+		r.Log.V(1).Info("warning: failed to update ValidationResult status", "error", err.Error())
 		return err
 	}
 

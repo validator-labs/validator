@@ -73,14 +73,19 @@ var _ = Describe("ValidatorConfig controller", Ordered, func() {
 		By("Updating the ValidatorConfig")
 		ctx := context.Background()
 
-		Expect(k8sClient.Get(ctx, vcKey, vc)).Should(Succeed())
-
-		vc.Spec.Plugins[0].Chart.Version = networkPluginVersionPost
-		vc.Spec.Plugins[0].Values = strings.ReplaceAll(
-			vc.Spec.Plugins[0].Values, networkPluginVersionPre, networkPluginVersionPost,
-		)
-
-		Expect(k8sClient.Update(ctx, vc)).Should(Succeed())
+		Eventually(func() bool {
+			if err := k8sClient.Get(ctx, vcKey, vc); err != nil {
+				return false
+			}
+			vc.Spec.Plugins[0].Chart.Version = networkPluginVersionPost
+			vc.Spec.Plugins[0].Values = strings.ReplaceAll(
+				vc.Spec.Plugins[0].Values, networkPluginVersionPre, networkPluginVersionPost,
+			)
+			if err := k8sClient.Update(ctx, vc); err != nil {
+				return false
+			}
+			return true
+		}, timeout, interval).Should(BeTrue(), "failed to update validator-plugin-network")
 
 		// Wait for the validator-plugin-network Deployment to be upgraded
 		Eventually(func() bool {

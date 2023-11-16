@@ -1,6 +1,6 @@
 # Install Validator
 
-This install guide will help you install the Validator and get started using one the plugins. Validator supports multiple plugins and each plugin may require a set of configuration parameters. This guide will use the AWS plugin and show you how to configure it. Use this guide as a starting point for installing Validator and its plugins.
+This install guide will help you install the Validator and get started using one the plugins. Validator supports multiple plugins and each plugin may require a set of configuration parameters. This guide uses the AWS plugin and shows you how to configure it. Use this guide as a starting point for installing Validator and its plugins.
 
 
 ## Prerequisites
@@ -12,7 +12,7 @@ This install guide will help you install the Validator and get started using one
 > [!IMPORTANT]
 > You can use a different policy, but ensure that the policy has the permissions required to check the resources needed by the plugin. Refer to the AWS plugin documentation for more details.
 
-- [wget](https://www.gnu.org/software/wget/) or similar tool installed on your machine.
+- [wget](https://www.gnu.org/software/wget/) or a similar tool installed on your machine.
 
 - A text editor.
 
@@ -62,7 +62,6 @@ Add the Validator Helm repository and update the local Helm cache.
 helm repo add validator https://spectrocloud-labs.github.io/validator/ && \
 helm repo update
 ```
-
 
 Create a **values.yaml** containing the Validator configuration. Use the command below to download the default **values.yaml** file.
 
@@ -262,7 +261,7 @@ The validation results are hashed and result events are only emitted if the resu
 
 ## Cleanup
 
-To delete the Validator installation, use the following command. This command will delete the Validator and all deployed resources including the `ValidationResult` CRs.
+To delete the Validator installation, use the following command. This command deletes the Validator and all deployed resources including the `ValidationResult` CRs.
 
 ```shell
 helm uninstall validator --namespace validator
