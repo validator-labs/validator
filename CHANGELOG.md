@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.0.20](https://github.com/spectrocloud-labs/validator/compare/v0.0.19...v0.0.20) (2023-11-16)
+
+
+### Bug Fixes
+
+* retry all status updates due to controller contention ([#114](https://github.com/spectrocloud-labs/validator/issues/114)) ([35f03a4](https://github.com/spectrocloud-labs/validator/commit/35f03a407a3d0bbcfd76c749908e4b1c9581afac))
+
 ## [0.0.19](https://github.com/spectrocloud-labs/validator/compare/v0.0.18...v0.0.19) (2023-11-16)
 
 
