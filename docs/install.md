@@ -267,6 +267,14 @@ To delete the Validator installation, use the following command. This command de
 helm uninstall validator --namespace validator
 ```
 
+Next, delete the namespace.
+
+```shell
+
+kubectl delete namespace validator
+```
+
+
 If you deployed a kind cluster, use the following command to delete the cluster.
 
 ```shell
