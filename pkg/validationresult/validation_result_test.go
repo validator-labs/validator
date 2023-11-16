@@ -11,6 +11,7 @@ import (
 
 	"github.com/spectrocloud-labs/validator/api/v1alpha1"
 	"github.com/spectrocloud-labs/validator/internal/test"
+	"github.com/spectrocloud-labs/validator/pkg/constants"
 	"github.com/spectrocloud-labs/validator/pkg/types"
 	"github.com/spectrocloud-labs/validator/pkg/util/ptr"
 )
@@ -20,7 +21,8 @@ var err = errors.New("error")
 func res(s corev1.ConditionStatus, state v1alpha1.ValidationState) *types.ValidationResult {
 	return &types.ValidationResult{
 		Condition: &v1alpha1.ValidationCondition{
-			Status: s,
+			Status:         s,
+			ValidationRule: constants.ValidationRulePrefix,
 		},
 		State: ptr.Ptr(state),
 	}
@@ -35,7 +37,8 @@ func vr(cs []corev1.ConditionStatus, state v1alpha1.ValidationState, err error) 
 	}
 	for _, c := range cs {
 		condition := v1alpha1.ValidationCondition{
-			Status: c,
+			Status:         c,
+			ValidationRule: constants.ValidationRulePrefix,
 		}
 		if err != nil {
 			condition.Message = validationErrorMsg
@@ -101,8 +104,9 @@ func TestHandleNewValidationResult(t *testing.T) {
 		{
 			name: "Fail (status update)",
 			client: test.ClientMock{
-				UpdateErrors:    []error{errors.New("update failed")},
-				SubResourceMock: test.SubResourceMock{},
+				SubResourceMock: test.SubResourceMock{
+					UpdateErrors: []error{errors.New("update failed")},
+				},
 			},
 			res:      vr(nil, v1alpha1.ValidationSucceeded, nil),
 			expected: errors.New("update failed"),
