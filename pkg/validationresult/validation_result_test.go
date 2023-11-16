@@ -102,14 +102,23 @@ func TestHandleNewValidationResult(t *testing.T) {
 			expected: errors.New("creation failed"),
 		},
 		{
+			name: "Fail (get)",
+			client: test.ClientMock{
+				GetErrors:       []error{errors.New("get failed")},
+				SubResourceMock: test.SubResourceMock{},
+			},
+			res:      vr([]corev1.ConditionStatus{corev1.ConditionFalse}, v1alpha1.ValidationFailed, nil),
+			expected: errors.New("get failed"),
+		},
+		{
 			name: "Fail (status update)",
 			client: test.ClientMock{
 				SubResourceMock: test.SubResourceMock{
-					UpdateErrors: []error{errors.New("update failed")},
+					UpdateErrors: []error{errors.New("status update failed")},
 				},
 			},
 			res:      vr(nil, v1alpha1.ValidationSucceeded, nil),
-			expected: errors.New("update failed"),
+			expected: errors.New("status update failed"),
 		},
 	}
 	for _, c := range cs {
@@ -118,6 +127,48 @@ func TestHandleNewValidationResult(t *testing.T) {
 		if err != nil && !reflect.DeepEqual(c.expected.Error(), err.Error()) {
 			t.Errorf("expected (%v), got (%v)", c.expected, err)
 		}
+	}
+}
+
+func TestSafeUpdateValidationResult(t *testing.T) {
+	cs := []struct {
+		name   string
+		client test.ClientMock
+		nn     ktypes.NamespacedName
+		res    *types.ValidationResult
+		resErr error
+	}{
+		{
+			name:   "Pass",
+			client: test.ClientMock{},
+			nn:     ktypes.NamespacedName{Name: "", Namespace: ""},
+			res:    res(corev1.ConditionTrue, v1alpha1.ValidationSucceeded),
+			resErr: nil,
+		},
+		{
+			name: "Fail (get)",
+			client: test.ClientMock{
+				GetErrors: []error{errors.New("get failed")},
+			},
+			nn:     ktypes.NamespacedName{Name: "", Namespace: ""},
+			res:    res(corev1.ConditionTrue, v1alpha1.ValidationSucceeded),
+			resErr: errors.New("get failed"),
+		},
+		{
+			name: "Fail (update)",
+			client: test.ClientMock{
+				SubResourceMock: test.SubResourceMock{
+					UpdateErrors: []error{errors.New("status update failed")},
+				},
+			},
+			nn:     ktypes.NamespacedName{Name: "", Namespace: ""},
+			res:    res(corev1.ConditionTrue, v1alpha1.ValidationSucceeded),
+			resErr: errors.New("status update failed"),
+		},
+	}
+	for _, c := range cs {
+		t.Log(c.name)
+		SafeUpdateValidationResult(c.client, c.nn, c.res, c.resErr, logr.Logger{})
 	}
 }
 
