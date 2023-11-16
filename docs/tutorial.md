@@ -12,7 +12,7 @@ This install guide will help you install the Validator and get started using one
 > [!IMPORTANT]
 > You can use a different policy, but ensure that the policy has the required permissions to check the resources required by the plugin. Refer to the AWS plugin documentation for more details.
 
-- [wget](https://www.gnu.org/software/wget/) or similar tool installed on your machine.
+- [wget](https://www.gnu.org/software/wget/) or a similar tool installed on your machine.
 
 - A text editor.
 
