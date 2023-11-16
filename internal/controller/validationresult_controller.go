@@ -22,6 +22,7 @@ import (
 
 	"github.com/go-logr/logr"
 	corev1 "k8s.io/api/core/v1"
+	apierrs "k8s.io/apimachinery/pkg/api/errors"
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apimachinery/pkg/types"
 	ctrl "sigs.k8s.io/controller-runtime"
@@ -60,7 +61,9 @@ func (r *ValidationResultReconciler) Reconcile(ctx context.Context, req ctrl.Req
 	vc := &v1alpha1.ValidatorConfig{}
 	vcKey := types.NamespacedName{Namespace: r.Namespace, Name: constants.ValidatorConfig}
 	if err := r.Get(ctx, vcKey, vc); err != nil {
-		r.Log.Error(err, "failed to fetch ValidatorConfig", "key", vcKey)
+		if !apierrs.IsNotFound(err) {
+			r.Log.Error(err, "failed to fetch ValidatorConfig", "key", req)
+		}
 		return ctrl.Result{}, client.IgnoreNotFound(err)
 	}
 
@@ -68,7 +71,9 @@ func (r *ValidationResultReconciler) Reconcile(ctx context.Context, req ctrl.Req
 	vrKey = req.NamespacedName
 
 	if err := r.Get(ctx, req.NamespacedName, vr); err != nil {
-		r.Log.Error(err, "failed to fetch ValidationResult", "key", req)
+		if !apierrs.IsNotFound(err) {
+			r.Log.Error(err, "failed to fetch ValidationResult", "key", req)
+		}
 		return ctrl.Result{}, client.IgnoreNotFound(err)
 	}
 
