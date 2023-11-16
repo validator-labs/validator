@@ -1,6 +1,6 @@
 # Install Guide
 
-This install guide will help you install the Validator and get started using one the plugins. Validator supports multiple plugins and each plugin may require a set of configuration parameters. This guide will use the AWS plugin and show you how to configure it. Use this guide as a starting point for installing Validator and its plugins.
+This install guide will help you install the Validator and get started using one the plugins. Validator supports multiple plugins and each plugin may require a set of configuration parameters. This guide uses the AWS plugin and shows you how to configure it. Use this guide as a starting point for installing Validator and its plugins.
 
 
 ## Prerequisites
