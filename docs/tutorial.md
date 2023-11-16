@@ -259,7 +259,7 @@ The validation results are hashed and result events are only updated if the resu
 
 ## Cleanup
 
-To delete the Validator installation, use the following command. This command will delete the Validator and all deployed resources including the `ValidationResult` CRs.
+To delete the Validator installation, use the following command. This command deletes the Validator and all deployed resources including the `ValidationResult` CRs.
 
 ```shell
 helm uninstall validator --namespace validator
