@@ -8,6 +8,7 @@ import (
 	"github.com/pkg/errors"
 
 	"github.com/spectrocloud-labs/validator/api/v1alpha1"
+	"github.com/spectrocloud-labs/validator/pkg/types"
 )
 
 var SinkEmissionFailed = errors.New("sink emission failed")
@@ -17,11 +18,11 @@ type Sink interface {
 	Emit(result v1alpha1.ValidationResult) error
 }
 
-func NewSink(sinkType string, log logr.Logger) Sink {
+func NewSink(sinkType types.SinkType, log logr.Logger) Sink {
 	switch sinkType {
-	case "alertmanager":
+	case types.SinkTypeAlertmanager:
 		return &AlertmanagerSink{log: log}
-	case "slack":
+	case types.SinkTypeSlack:
 		return &SlackSink{log: log}
 	default:
 		return &SlackSink{log: log}

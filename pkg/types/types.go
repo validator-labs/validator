@@ -7,3 +7,10 @@ type ValidationResult struct {
 	Condition *v1alpha1.ValidationCondition
 	State     *v1alpha1.ValidationState
 }
+
+type SinkType string
+
+const (
+	SinkTypeAlertmanager SinkType = "alertmanager"
+	SinkTypeSlack        SinkType = "slack"
+)

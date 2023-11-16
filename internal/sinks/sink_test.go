@@ -5,22 +5,24 @@ import (
 	"testing"
 
 	"github.com/go-logr/logr"
+
+	"github.com/spectrocloud-labs/validator/pkg/types"
 )
 
 func TestNewSink(t *testing.T) {
 	cs := []struct {
 		name     string
-		sinkType string
+		sinkType types.SinkType
 		expected Sink
 	}{
 		{
 			name:     "Pass (slack)",
-			sinkType: "slack",
+			sinkType: types.SinkTypeSlack,
 			expected: &SlackSink{},
 		},
 		{
 			name:     "Pass (alertmanager)",
-			sinkType: "alertmanager",
+			sinkType: types.SinkTypeAlertmanager,
 			expected: &AlertmanagerSink{},
 		},
 		{
