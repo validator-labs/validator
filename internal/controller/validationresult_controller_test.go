@@ -17,13 +17,9 @@ import (
 	//+kubebuilder:scaffold:imports
 )
 
-const (
-	validationResultName = "validator-plugin-aws-service-quota"
-)
+const validationResultName = "validator-plugin-aws-service-quota"
 
-var (
-	vrServiceQuota = filepath.Join("testdata", "vr-aws-service-quota.yaml")
-)
+var vrServiceQuota = filepath.Join("testdata", "vr-aws-service-quota.yaml")
 
 var _ = Describe("ValidationResult controller", Ordered, func() {
 
@@ -58,6 +54,15 @@ var _ = Describe("ValidationResult controller", Ordered, func() {
 		},
 	}
 	vrKey := types.NamespacedName{Name: validationResultName, Namespace: validatorNamespace}
+
+	It("Should create a ValidationResult before the ValidatorConfig is created and fail initially", func() {
+		By("By creating a ValidationResult before creating the ValidatorConfig")
+		ctx := context.Background()
+
+		vrPre := vr.DeepCopy()
+		vrPre.Name = "vr-copy"
+		Expect(k8sClient.Create(ctx, vrPre)).Should(Succeed())
+	})
 
 	It("Should hash the ValidationResult and update its Status once a ValidationResult is created", func() {
 		By("By creating a new ValidationResult")

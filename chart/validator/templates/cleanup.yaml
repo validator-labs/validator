@@ -1,0 +1,115 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: spectro-cleanup-role
+rules:
+- apiGroups:
+  - ""
+  resources:
+  - configmaps
+  - serviceaccounts
+  verbs:
+  - '*'
+- apiGroups:
+  - batch
+  resources:
+  - jobs
+  verbs:
+  - '*'
+- apiGroups:
+  - rbac.authorization.k8s.io
+  resources:
+  - rolebindings
+  - roles
+  verbs:
+  - '*'
+- apiGroups:
+  - validation.spectrocloud.labs
+  resources:
+  - '*'
+  verbs:
+  - '*'
+---
+kind: RoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: spectro-cleanup-rolebinding
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: spectro-cleanup-role
+subjects:
+  - kind: ServiceAccount
+    name: spectro-cleanup
+    namespace: {{ .Release.Namespace }}
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: spectro-cleanup
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: validator-cleanup-config
+data:
+  resource-config.json: |-
+    [
+      {
+        "group": "validation.spectrocloud.labs",
+        "version": "v1alpha1",
+        "resource": "validatorconfigs",
+        "name": "validator-config",
+        "namespace": "{{ .Release.Namespace }}"
+      },
+      {
+        "group": "",
+        "version": "v1",
+        "resource": "configmaps",
+        "name": "validator-cleanup-config",
+        "namespace": "{{ .Release.Namespace }}"
+      },
+      {
+        "group": "batch",
+        "version": "v1",
+        "resource": "jobs",
+        "name": "validator-cleanup",
+        "namespace": "{{ .Release.Namespace }}"
+      }
+    ]
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: validator-cleanup
+  annotations:
+    "helm.sh/hook": pre-delete
+spec:
+  template:
+    spec:
+      restartPolicy: Never
+      serviceAccountName: spectro-cleanup
+      containers:
+      - name: validator-cleanup
+        image: gcr.io/spectro-images-public/release/spectro-cleanup:1.1.0
+        command: ["/cleanup"]
+        env:
+        - name: CLEANUP_DELAY_SECONDS
+          value: "10"
+        resources:
+          requests:
+            cpu: "10m"
+            memory: "25Mi"
+          limits:
+            cpu: "100m"
+            memory: "50Mi"
+        volumeMounts:
+        - name: validator-cleanup-config
+          mountPath: /tmp/spectro-cleanup
+      volumes:
+        - name: validator-cleanup-config
+          configMap:
+            name: validator-cleanup-config
+            items:
+            - key: resource-config.json
+              path: resource-config.json
