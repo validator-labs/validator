@@ -52,26 +52,23 @@ func HandleNewValidationResult(c client.Client, vr *v1alpha1.ValidationResult, l
 		return err
 	}
 
+	var err error
 	nn := ktypes.NamespacedName{Name: vr.Name, Namespace: vr.Namespace}
 
+	// Update the ValidationResult's status
 	for i := 0; i < constants.StatusUpdateRetries; i++ {
 		if err := c.Get(context.Background(), nn, vr); err != nil {
 			l.V(0).Error(err, "failed to get ValidationResult", "name", nn.Name, "namespace", nn.Namespace)
 			return err
 		}
-
-		// Update the ValidationResult's status
-		vr.Status = v1alpha1.ValidationResultStatus{
-			State: v1alpha1.ValidationInProgress,
+		vr.Status = v1alpha1.ValidationResultStatus{State: v1alpha1.ValidationInProgress}
+		err = c.Status().Update(context.Background(), vr)
+		if err == nil {
+			return nil
 		}
-		if err := c.Status().Update(context.Background(), vr); err != nil {
-			l.V(1).Info(
-				"warning: failed to update ValidationResult status", "name", vr.Name, "namespace", vr.Namespace, "error", err.Error(),
-			)
-		}
+		l.V(1).Info("warning: failed to update ValidationResult status", "name", vr.Name, "namespace", vr.Namespace, "error", err.Error())
 	}
-
-	return nil
+	return err
 }
 
 // SafeUpdateValidationResult updates the overall validation result, ensuring
