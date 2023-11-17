@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.0.22](https://github.com/spectrocloud-labs/validator/compare/v0.0.21...v0.0.22) (2023-11-17)
+
+
+### Bug Fixes
+
+* format alertmanager cert properly ([#120](https://github.com/spectrocloud-labs/validator/issues/120)) ([c94b468](https://github.com/spectrocloud-labs/validator/commit/c94b468550570ec9644867b6c62760b07f1b194a))
+
 ## [0.0.21](https://github.com/spectrocloud-labs/validator/compare/v0.0.20...v0.0.21) (2023-11-17)
 
 
