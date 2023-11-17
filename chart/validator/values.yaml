@@ -265,7 +265,7 @@ pluginSecrets:
   # If installing the AWS plugin, the below config is required unless one of the following applies:
   # - the target cluster already has a secret with the correct format and you've specified its name above
   # - you're deploying to a K8s cluster in AWS and relying on an node instance IAM role
-  # - you're deploying to an K8s cluster in AWS and relying on IMDSv2, plus you've specified auth.serviceAccountName
+  # - you're deploying to a K8s cluster in AWS and relying on IMDSv2, plus you've specified auth.serviceAccountName
   aws: {}
     # secretName: aws-creds  # ensure this matches the AWS plugin values above
     # accessKeyId: ""
