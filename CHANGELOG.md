@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.0.25](https://github.com/spectrocloud-labs/validator/compare/v0.0.24...v0.0.25) (2023-11-17)
+
+
+### Bug Fixes
+
+* remove redundant b64 in vsphere secret ([74af01f](https://github.com/spectrocloud-labs/validator/commit/74af01fa7d3e116b9df7d3547c243c9a2d511519))
+
 ## [0.0.24](https://github.com/spectrocloud-labs/validator/compare/v0.0.23...v0.0.24) (2023-11-17)
 
 
