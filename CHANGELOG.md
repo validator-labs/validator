@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.0.24](https://github.com/spectrocloud-labs/validator/compare/v0.0.23...v0.0.24) (2023-11-17)
+
+
+### Bug Fixes
+
+* omit secret data from ValidatorConfig ([#125](https://github.com/spectrocloud-labs/validator/issues/125)) ([e96d4fe](https://github.com/spectrocloud-labs/validator/commit/e96d4fe3cee5bb8791ea95dcdae471f111255798))
+
 ## [0.0.23](https://github.com/spectrocloud-labs/validator/compare/v0.0.22...v0.0.23) (2023-11-17)
 
 
