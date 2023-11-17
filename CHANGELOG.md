@@ -1,5 +1,18 @@
 # Changelog
 
+## [0.0.21](https://github.com/spectrocloud-labs/validator/compare/v0.0.20...v0.0.21) (2023-11-17)
+
+
+### Features
+
+* expose insecureSkipVerify for Alertmanager sink ([#118](https://github.com/spectrocloud-labs/validator/issues/118)) ([8dc7548](https://github.com/spectrocloud-labs/validator/commit/8dc7548ed9511abbd382ec2881b473f0b42fd607))
+
+
+### Refactoring
+
+* expose sink types ([#117](https://github.com/spectrocloud-labs/validator/issues/117)) ([f28d8af](https://github.com/spectrocloud-labs/validator/commit/f28d8afc5092998189da4112e8a41febdadf1c96))
+* standardize get CR in Reconcile ([9fbfff0](https://github.com/spectrocloud-labs/validator/commit/9fbfff0c059debab0c9c6044c360af07c8cd4382))
+
 ## [0.0.20](https://github.com/spectrocloud-labs/validator/compare/v0.0.19...v0.0.20) (2023-11-16)
 
 
