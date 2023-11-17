@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.0.23](https://github.com/spectrocloud-labs/validator/compare/v0.0.22...v0.0.23) (2023-11-17)
+
+
+### Bug Fixes
+
+* quote all optional fields in sink secret ([e0a1365](https://github.com/spectrocloud-labs/validator/commit/e0a1365d577f329c8dc4d0bca8f6d3eb25e0c9c5))
+
+
+### Other
+
+* **deps:** update docker/build-push-action digest to 4a13e50 ([#119](https://github.com/spectrocloud-labs/validator/issues/119)) ([24b3bfc](https://github.com/spectrocloud-labs/validator/commit/24b3bfc927dc5d04fa77b58157bda2f2f18fcb12))
+
 ## [0.0.22](https://github.com/spectrocloud-labs/validator/compare/v0.0.21...v0.0.22) (2023-11-17)
 
 
