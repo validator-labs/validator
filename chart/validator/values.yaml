@@ -57,6 +57,7 @@ sink: {}
   # type: alertmanager
   # secretName: alertmanager-sink-secret
   # endpoint: "http://alertmanager.alertmanager.svc.cluster.local:9093"
+  # insecureSkipVerify: "false"
   # caCert: ""    # (TLS CA certificate, optional)
   # username: ""  # (HTTP basic auth, optional)
   # password: ""  # (HTTP basic auth, optional)
