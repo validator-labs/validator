@@ -134,9 +134,8 @@ plugins:
     auth:
       # Leave secret undefined for implicit auth (node instance role, IMDSv2, etc.)
       secret: {}
-        # If creating a secret via pluginSecrets (see below), uncomment the following two lines.
+        # If creating a secret via pluginSecrets (see below), uncomment the following line (and delete the curly braces on the line above).
         # secretName: aws-creds
-        # createSecret: false  # leave this false (the validator-plugin-aws chart doesn't need to create the secret)
       # Override the service account used by AWS validator (optional, could be used for IMDSv2 on EKS)
       # WARNING: the chosen service account must have the same RBAC privileges as seen in manager-rbac.yaml
       serviceAccountName: ""
@@ -199,9 +198,8 @@ plugins:
       type: ClusterIP
     auth:
       # If creating a secret via pluginSecrets (see below), the secret names must match. Alternatively,
-      # leave the pluginSecrets section undefined and specify the name of a preexisting secret in your target cluster.
+      # leave pluginSecrets.vSphere undefined and specify the name of a preexisting secret in your target cluster.
       secretName: vsphere-creds
-      createSecret: false  # leave this false (the validator-plugin-vsphere chart doesn't need to create the secret)
 - chart:
     name: validator-plugin-network
     repository: "https://spectrocloud-labs.github.io/validator-plugin-network"
