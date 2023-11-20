@@ -22,14 +22,16 @@ import (
 
 	"github.com/go-logr/logr"
 	corev1 "k8s.io/api/core/v1"
+	apierrs "k8s.io/apimachinery/pkg/api/errors"
 	"k8s.io/apimachinery/pkg/runtime"
-	"k8s.io/apimachinery/pkg/types"
+	ktypes "k8s.io/apimachinery/pkg/types"
 	ctrl "sigs.k8s.io/controller-runtime"
 	"sigs.k8s.io/controller-runtime/pkg/client"
 
 	v1alpha1 "github.com/spectrocloud-labs/validator/api/v1alpha1"
 	"github.com/spectrocloud-labs/validator/internal/sinks"
 	"github.com/spectrocloud-labs/validator/pkg/constants"
+	"github.com/spectrocloud-labs/validator/pkg/types"
 )
 
 // ValidationResultHash is used to determine whether to re-emit updates to a validation result sink.
@@ -37,7 +39,7 @@ const ValidationResultHash = "validator/validation-result-hash"
 
 var (
 	vr        *v1alpha1.ValidationResult
-	vrKey     types.NamespacedName
+	vrKey     ktypes.NamespacedName
 	sinkState v1alpha1.SinkState
 )
 
@@ -58,9 +60,11 @@ func (r *ValidationResultReconciler) Reconcile(ctx context.Context, req ctrl.Req
 	r.Log.V(0).Info("Reconciling ValidationResult", "name", req.Name, "namespace", req.Namespace)
 
 	vc := &v1alpha1.ValidatorConfig{}
-	vcKey := types.NamespacedName{Namespace: r.Namespace, Name: constants.ValidatorConfig}
+	vcKey := ktypes.NamespacedName{Namespace: r.Namespace, Name: constants.ValidatorConfig}
 	if err := r.Get(ctx, vcKey, vc); err != nil {
-		r.Log.Error(err, "failed to fetch ValidatorConfig", "key", vcKey)
+		if !apierrs.IsNotFound(err) {
+			r.Log.Error(err, "failed to fetch ValidatorConfig", "key", req)
+		}
 		return ctrl.Result{}, client.IgnoreNotFound(err)
 	}
 
@@ -68,7 +72,9 @@ func (r *ValidationResultReconciler) Reconcile(ctx context.Context, req ctrl.Req
 	vrKey = req.NamespacedName
 
 	if err := r.Get(ctx, req.NamespacedName, vr); err != nil {
-		r.Log.Error(err, "failed to fetch ValidationResult", "key", req)
+		if !apierrs.IsNotFound(err) {
+			r.Log.Error(err, "failed to fetch ValidationResult", "key", req)
+		}
 		return ctrl.Result{}, client.IgnoreNotFound(err)
 	}
 
@@ -105,13 +111,13 @@ func (r *ValidationResultReconciler) Reconcile(ctx context.Context, req ctrl.Req
 		// emissions will occur during the 1st reconciliation, where N is the number of rules in the validator.
 		if vc.Spec.Sink != nil && len(vr.Status.Conditions) == vr.Spec.ExpectedResults && (!ok || prevHash != currHash) {
 
-			sink := sinks.NewSink(vc.Spec.Sink.Type, r.Log)
+			sink := sinks.NewSink(types.SinkType(vc.Spec.Sink.Type), r.Log)
 			sinkState = v1alpha1.SinkEmitFailed
 
 			var sinkConfig map[string][]byte
 			if vc.Spec.Sink.SecretName != "" {
 				sinkSecret := &corev1.Secret{}
-				sinkConfigKey := types.NamespacedName{Namespace: r.Namespace, Name: vc.Spec.Sink.SecretName}
+				sinkConfigKey := ktypes.NamespacedName{Namespace: r.Namespace, Name: vc.Spec.Sink.SecretName}
 				if err := r.Client.Get(ctx, sinkConfigKey, sinkSecret); err != nil {
 					r.Log.Error(err, "failed to fetch sink configuration secret")
 					return ctrl.Result{}, err

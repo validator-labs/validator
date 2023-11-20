@@ -31,7 +31,7 @@ controllerManager:
         - ALL
     image:
       repository: quay.io/spectrocloud-labs/validator
-      tag: v0.0.20  # x-release-please-version
+      tag: v0.0.25  # x-release-please-version
     resources:
       limits:
         cpu: 500m
@@ -56,7 +56,8 @@ metricsService:
 sink: {}
   # type: alertmanager
   # secretName: alertmanager-sink-secret
-  # endpoint: "http://alertmanager.alertmanager.svc.cluster.local:9093"
+  # endpoint: "https://alertmanager.alertmanager.svc.cluster.local:9093"
+  # insecureSkipVerify: "false"
   # caCert: ""    # (TLS CA certificate, optional)
   # username: ""  # (HTTP basic auth, optional)
   # password: ""  # (HTTP basic auth, optional)
@@ -76,7 +77,7 @@ plugins:
 - chart:
     name: validator-plugin-aws
     repository: "https://spectrocloud-labs.github.io/validator-plugin-aws"
-    version: "v0.0.10"
+    version: "v0.0.16"
   values: |-
     controllerManager:
       kubeRbacProxy:
@@ -111,7 +112,7 @@ plugins:
             - ALL
         image:
           repository: quay.io/spectrocloud-labs/validator-plugin-aws
-          tag: v0.0.8
+          tag: v0.0.16
         resources:
           limits:
             cpu: 500m
@@ -133,21 +134,17 @@ plugins:
     auth:
       # Leave secret undefined for implicit auth (node instance role, IMDSv2, etc.)
       secret: {}
+        # If creating a secret via pluginSecrets (see below), uncomment secretName and delete the curly braces on the line above;
+        # ensuring that secretName and pluginSecrets.aws.secretName match. Alternatively, leave pluginSecrets.aws undefined and
+        # specify the name of a preexisting secret in your target cluster.
         # secretName: aws-creds
-        # accessKeyId: ""
-        # secretAccessKey: ""
-        # sessionToken: ""
-        # By default, a secret will be created. Leave the above fields blank and specify 'createSecret: false' to use an existing secret.
-        # WARNING: the existing secret must match the format used in auth-secret.yaml
-        # createSecret: true
-
       # Override the service account used by AWS validator (optional, could be used for IMDSv2 on EKS)
       # WARNING: the chosen service account must have the same RBAC privileges as seen in manager-rbac.yaml
       serviceAccountName: ""
 - chart:
     name: validator-plugin-vsphere
     repository: "https://spectrocloud-labs.github.io/validator-plugin-vsphere"
-    version: "v0.0.12"
+    version: "v0.0.13"
   values: |-
     controllerManager:
       kubeRbacProxy:
@@ -182,7 +179,7 @@ plugins:
             - ALL
         image:
           repository: quay.io/spectrocloud-labs/validator-plugin-vsphere
-          tag: v0.0.11
+          tag: v0.0.13
         resources:
           limits:
             cpu: 500m
@@ -202,15 +199,13 @@ plugins:
         targetPort: https
       type: ClusterIP
     auth:
+      # If creating a secret via pluginSecrets (see below), secretName and pluginSecrets.vSphere.secretName must match.
+      # Alternatively, leave pluginSecrets.vSphere undefined and specify the name of a preexisting secret in your target cluster.
       secretName: vsphere-creds
-      username: ""
-      password: ""
-      vcenterServer: ""
-      insecureSkipVerify: ""
 - chart:
     name: validator-plugin-network
     repository: "https://spectrocloud-labs.github.io/validator-plugin-network"
-    version: "v0.0.4"
+    version: "v0.0.7"
   values: |-
     controllerManager:
       kubeRbacProxy:
@@ -247,7 +242,7 @@ plugins:
             - ALL
         image:
           repository: quay.io/spectrocloud-labs/validator-plugin-network
-          tag: v0.0.4
+          tag: v0.0.7
         resources:
           limits:
             cpu: 500m
@@ -266,3 +261,22 @@ plugins:
         protocol: TCP
         targetPort: https
       type: ClusterIP
+pluginSecrets:
+  # If installing the AWS plugin, the below config is required unless one of the following applies:
+  # - the target cluster already has a secret with the correct format and you've specified its name above
+  # - you're deploying to a K8s cluster in AWS and relying on an node instance IAM role
+  # - you're deploying to a K8s cluster in AWS and relying on IMDSv2, plus you've specified auth.serviceAccountName
+  aws: {}
+    # secretName: aws-creds  # ensure this matches the AWS plugin values above
+    # accessKeyId: ""
+    # secretAccessKey: ""
+    # sessionToken: ""
+
+  # If installing the vSphere plugin, the below config is required unless the following applies:
+  # - the target cluster already has a secret with the correct format and you've specified its name above
+  vSphere: {}
+    # secretName: vsphere-creds  # ensure this matches the vSphere plugin values above
+    # username: ""
+    # password: ""
+    # vcenterServer: ""
+    # insecureSkipVerify: ""
