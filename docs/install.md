@@ -71,35 +71,55 @@ wget https://raw.githubusercontent.com/spectrocloud-labs/validator/main/chart/va
 
 Before you install Validator, you can configure the installation by editing the `values.yaml` file. The `values.yaml` file contains the default configuration for Validator. You can override the default configuration by editing the `values.yaml` file.
 
-Use a text editor to edit the **values.yaml** file and navigate down to the `plugins` section and locate the `AWS` plugin. 
 
-```yaml
-plugins:
-- chart:
-name: validator-plugin-aws
-repository: "https://spectrocloud-labs.github.io/validator-plugin-aws"
-version: "v0.0.13"
-values: |-
-# Remainder of the file omitted for brevity
-```
+Each plugin has a set of configuration parameters, and each plugin may require a set of credentials. Use a text editor to edit the **values.yaml** file and navigate down to the `plugins.chart` section and locate the `validator-plugin-aws` configuration values. 
 
-The AWS plugin requires credentials to access your AWS account. Uncomment the `auth` section and add your AWS credentials. By default the auth section contains a an empty `{}` block. Replace the empty block with the following configuration. Replace the `accessKeyId` and `secretAccessKey` with your AWS credentials. 
+Remove the `{}` from the `secret`parameter and uncomment the `secretName` parameter. Use the default value of `aws-creds` for the `secretName` parameter. The auth section should look like the following. 
+
+> [!WARNING]
+> If you are not using a kind cluster, review the options in the comments and select the option that matches your environment.
+
 
 ```yaml
 auth:
-# Leave secret undefined for implicit auth (node instance role, IMDSv2, etc.)
-secret:
-  secretName: aws-creds
-  accessKeyId: "**********"
-  secretAccessKey: "**********"
-  sessionToken: ""
-  # By default, a secret will be created. Leave the above fields blank and specify 'createSecret: false' to use an existing secret.
-
-  # WARNING: the existing secret must match the format used in auth-secret.yaml
-  createSecret: true
+    # Option 1: Leave secret undefined for implicit auth (node instance role, IMDSv2, etc.)
+    # Option 2: Create a secret via pluginSecrets (see below). Note: secretName and pluginSecrets.aws.secretName match.
+    # Option 3: Specify the name of a preexisting secret in your target cluster and leave pluginSecrets.aws undefined.
+    #
+  secret: 
+    secretName: aws-creds
 ```
-You can remove all other plugins from the `plugins` section or leave them as is, but for this guide, only the AWS plugin will be used.
 
+> [!NOTE]
+> The `secretName` parameter specifies the name of the secret that contains the AWS credentials. The AWS plugin requires credentials to access your AWS account. Depending on where your cluster is hosted, you may have to provide credentials. In this example, because Validator is installed in a kind cluster, you must provide credentials. If you are deploying Validator to a Kubernetes cluster in AWS, you can use the node instance role or IMDSv2. Refer to the AWS plugin documentation for more details.
+
+Next navigate down to the `pluginSecrets` section and locate the `aws` authentication section. 
+The AWS plugin requires credentials to access your AWS account. Uncomment the `aws` section and add your AWS credentials. By default the `aws` section contains a an empty `{}` block. Replace the empty block with the following configuration. Replace the `accessKeyId` and `secretAccessKey` with your AWS credentials. 
+
+```yaml
+pluginSecrets:
+  # If installing the AWS plugin, the below config is required unless one of the following applies:
+  # - The target cluster already contains a secret with the correct format and you've specified its name above.
+  #   If specifying your own secret, refer to chart/validator/templates/plugin-secret-aws.yaml for
+  #   an example of the expected format and ensure that it exists in the same namespace as the Helm release.
+  # - You're deploying to a K8s cluster in AWS and relying on an node instance IAM role
+  # - You're deploying to a K8s cluster in AWS and relying on IMDSv2, plus you've specified auth.serviceAccountName
+  #
+  aws: 
+    secretName: aws-creds  # ensure this matches the AWS plugin values above
+    accessKeyId: "***************"
+    secretAccessKey: "*****************"
+    sessionToken: ""
+
+  # If installing the vSphere plugin, the below config is required unless the following applies:
+  # - the target cluster already has a secret with the correct format and you've specified its name above
+  vSphere: {}
+    # secretName: vsphere-creds  # ensure this matches the vSphere plugin values above
+    # username: ""
+    # password: ""
+    # vcenterServer: ""
+    # insecureSkipVerify: ""
+```
 
 Now that you have configured the AWS plugin, you can install Validator. Use the following command to install Validator and the AWS plugin.
 
@@ -115,9 +135,11 @@ kubectl get pods --namespace validator
 
 
 ```shell
-NAME                                                       READY   STATUS    RESTARTS   AGE
-validator-controller-manager-589664b9c4-7zt7w              2/2     Running   0          73s
-validator-plugin-aws-controller-manager-64bf9c5b56-l2j8w   2/2     Running   0          61s
+NAME                                                           READY   STATUS    RESTARTS   AGE
+validator-controller-manager-65f4fc8698-cd7kw                  2/2     Running   0          51s
+validator-plugin-aws-controller-manager-d679f59df-9pfsh        2/2     Running   0          39s
+validator-plugin-network-controller-manager-5bf4f45968-8tp7h   2/2     Running   0          32s
+validator-plugin-vsphere-controller-manager-5fbff8488d-6v2nb   2/2     Running   0          36s
 ```
 
 Now that you have Validator installed, you can create a validation. A validation is a custom resource that contains the configuration for the validation. Validator will create a `ValidationResult` custom resource that contains the result of the validation.
@@ -159,7 +181,7 @@ spec:
 Now that you have the validation configuration, you can create the validation. Use the following command to create the validation.
 
 ```shell
-kubectl apply --values validation.yaml
+kubectl apply --filename validation.yaml
 ```
 
 You can verify the Custom Resource (CR) for the AWS plugin was created by using the following command. 
@@ -170,9 +192,11 @@ kubectl get crd
 
 ```shell
 NAME                                             CREATED AT
-awsvalidators.validation.spectrocloud.labs       2023-11-14T23:47:03Z
-validationresults.validation.spectrocloud.labs   2023-11-14T23:46:54Z
-validatorconfigs.validation.spectrocloud.labs    2023-11-14T23:46:54Z
+awsvalidators.validation.spectrocloud.labs       2023-11-21T00:54:00Z
+networkvalidators.validation.spectrocloud.labs   2023-11-21T00:54:08Z
+validationresults.validation.spectrocloud.labs   2023-11-21T00:53:51Z
+validatorconfigs.validation.spectrocloud.labs    2023-11-21T00:53:51Z
+vspherevalidators.validation.spectrocloud.labs   2023-11-21T00:54:04Z
 ```
 
 Review the result of the validation by using the following command.
