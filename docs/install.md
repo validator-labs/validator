@@ -91,7 +91,7 @@ auth:
 ```
 
 > [!NOTE]
-> The `secretName` parameter specifies the name of the secret that contains the AWS credentials. The AWS plugin requires credentials to access your AWS account. Depending on where your cluster is hosted, you may have to provide credentials. In this example, because Validator is installed in a kind cluster, you must provide credentials. If you are deploying Validator to a Kubernetes cluster in AWS, you can use the node instance role or IMDSv2. Refer to the AWS plugin documentation for more details.
+> The `secretName` parameter specifies the name of the secret that contains the AWS credentials. The AWS plugin requires credentials to access your AWS account. Depending on where your cluster is hosted, you may have to provide credentials. In this example, because Validator is installed in a kind cluster, you must provide credentials. If you are deploying Validator to a Kubernetes cluster in AWS, you can use the node instance role or IMDSv2. Refer to the AWS plugin auth parameters for more details.
 
 Next navigate down to the `pluginSecrets` section and locate the `aws` authentication section. 
 The AWS plugin requires credentials to access your AWS account. Uncomment the `aws` section and add your AWS credentials. By default the `aws` section contains a an empty `{}` block. Replace the empty block with the following configuration. Replace the `accessKeyId` and `secretAccessKey` with your AWS credentials. 
