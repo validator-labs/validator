@@ -4,7 +4,7 @@ metadata:
   name: validator-config
 spec:
   plugins:
-{{ toYaml .Values.plugins | indent 2 }} 
+{{ toYaml .Values.plugins | indent 2 }}
 {{- if .Values.sink }}
   sink:
     type: {{ required ".Values.sink.type is required!" .Values.sink.type }}

@@ -1,5 +1,51 @@
 # Changelog
 
+## [0.0.25](https://github.com/spectrocloud-labs/validator/compare/v0.0.24...v0.0.25) (2023-11-17)
+
+
+### Bug Fixes
+
+* remove redundant b64 in vsphere secret ([f7f0555](https://github.com/spectrocloud-labs/validator/commit/f7f0555f9ad87a6726406c0b39c172e545ad9067))
+
+## [0.0.24](https://github.com/spectrocloud-labs/validator/compare/v0.0.23...v0.0.24) (2023-11-17)
+
+
+### Bug Fixes
+
+* omit secret data from ValidatorConfig ([#125](https://github.com/spectrocloud-labs/validator/issues/125)) ([e96d4fe](https://github.com/spectrocloud-labs/validator/commit/e96d4fe3cee5bb8791ea95dcdae471f111255798))
+
+## [0.0.23](https://github.com/spectrocloud-labs/validator/compare/v0.0.22...v0.0.23) (2023-11-17)
+
+
+### Bug Fixes
+
+* quote all optional fields in sink secret ([e0a1365](https://github.com/spectrocloud-labs/validator/commit/e0a1365d577f329c8dc4d0bca8f6d3eb25e0c9c5))
+
+
+### Other
+
+* **deps:** update docker/build-push-action digest to 4a13e50 ([#119](https://github.com/spectrocloud-labs/validator/issues/119)) ([24b3bfc](https://github.com/spectrocloud-labs/validator/commit/24b3bfc927dc5d04fa77b58157bda2f2f18fcb12))
+
+## [0.0.22](https://github.com/spectrocloud-labs/validator/compare/v0.0.21...v0.0.22) (2023-11-17)
+
+
+### Bug Fixes
+
+* format alertmanager cert properly ([#120](https://github.com/spectrocloud-labs/validator/issues/120)) ([f38635f](https://github.com/spectrocloud-labs/validator/commit/f38635f4de63a66f645bca3c9d6a239695a1ab2a))
+
+## [0.0.21](https://github.com/spectrocloud-labs/validator/compare/v0.0.20...v0.0.21) (2023-11-17)
+
+
+### Features
+
+* expose insecureSkipVerify for Alertmanager sink ([#118](https://github.com/spectrocloud-labs/validator/issues/118)) ([8dc7548](https://github.com/spectrocloud-labs/validator/commit/8dc7548ed9511abbd382ec2881b473f0b42fd607))
+
+
+### Refactoring
+
+* expose sink types ([#117](https://github.com/spectrocloud-labs/validator/issues/117)) ([f28d8af](https://github.com/spectrocloud-labs/validator/commit/f28d8afc5092998189da4112e8a41febdadf1c96))
+* standardize get CR in Reconcile ([9fbfff0](https://github.com/spectrocloud-labs/validator/commit/9fbfff0c059debab0c9c6044c360af07c8cd4382))
+
 ## [0.0.20](https://github.com/spectrocloud-labs/validator/compare/v0.0.19...v0.0.20) (2023-11-16)
 
 
