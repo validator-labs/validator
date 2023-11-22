@@ -42,9 +42,9 @@ type HelmRelease struct {
 type HelmChart struct {
 	Name                  string `json:"name"`
 	Repository            string `json:"repository"`
-	InsecureSkipTlsVerify bool   `json:"insecureSkipVerify"`
-	AuthSecretName        string `json:"authSecretName"`
 	Version               string `json:"version"`
+	InsecureSkipTlsVerify bool   `json:"insecureSkipVerify"`
+	AuthSecretName        string `json:"authSecretName,omitempty"`
 }
 
 // ValidatorConfigStatus defines the observed state of ValidatorConfig

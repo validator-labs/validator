@@ -39,6 +39,10 @@ spec:
                   properties:
                     chart:
                       properties:
+                        authSecretName:
+                          type: string
+                        insecureSkipVerify:
+                          type: boolean
                         name:
                           type: string
                         repository:
@@ -46,6 +50,7 @@ spec:
                         version:
                           type: string
                       required:
+                      - insecureSkipVerify
                       - name
                       - repository
                       - version
