@@ -2,8 +2,11 @@ package controller
 
 import (
 	"context"
+	"errors"
 	"os"
 	"path/filepath"
+	"reflect"
+	"testing"
 
 	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
@@ -13,6 +16,7 @@ import (
 	"k8s.io/apimachinery/pkg/types"
 
 	"github.com/spectrocloud-labs/validator/api/v1alpha1"
+	"github.com/spectrocloud-labs/validator/internal/test"
 	"github.com/spectrocloud-labs/validator/pkg/constants"
 	//+kubebuilder:scaffold:imports
 )
@@ -121,3 +125,35 @@ var _ = Describe("ValidationResult controller", Ordered, func() {
 		}, timeout, interval).Should(BeTrue(), "failed to update ValidationResult Status")
 	})
 })
+
+func TestUpdateStatus(t *testing.T) {
+	cs := []struct {
+		name       string
+		reconciler ValidationResultReconciler
+		vr         *v1alpha1.ValidationResult
+		expected   error
+	}{
+		{
+			name: "Fail (update_status)",
+			reconciler: ValidationResultReconciler{
+				Client: test.ClientMock{
+					SubResourceMock: test.SubResourceMock{
+						UpdateErrors: []error{errors.New("update failed")},
+					},
+				},
+			},
+			vr: &v1alpha1.ValidationResult{
+				Status: v1alpha1.ValidationResultStatus{},
+			},
+			expected: errors.New("update failed"),
+		},
+	}
+	for _, c := range cs {
+		t.Log(c.name)
+		vr = c.vr
+		err := c.reconciler.updateStatus(context.Background())
+		if err != nil && !reflect.DeepEqual(c.expected.Error(), err.Error()) {
+			t.Errorf("expected (%v), got (%v)", c.expected, err)
+		}
+	}
+}
