@@ -81,18 +81,6 @@ func (r *ValidatorConfigReconciler) Reconcile(ctx context.Context, req ctrl.Requ
 	}
 	annotations = vc.Annotations
 
-	// TODO: implement a proper patcher to avoid this hacky approach with retries & global vars
-	defer func() {
-		// Always update the ValidationConfig with a retry due to race condition with removeFinalizer.
-		for i := 0; i < constants.StatusUpdateRetries; i++ {
-			annotationErr := r.updateVc(ctx)
-			statusErr := r.updateVcStatus(ctx)
-			if annotationErr == nil && statusErr == nil {
-				break
-			}
-		}
-	}()
-
 	// handle ValidatorConfig deletion
 	if vc.DeletionTimestamp != nil {
 		// if namespace is deleting, remove finalizer & the rest will follow
@@ -110,6 +98,18 @@ func (r *ValidatorConfigReconciler) Reconcile(ctx context.Context, req ctrl.Requ
 		}
 		return ctrl.Result{}, removeFinalizer(ctx, r.Client, vc, CleanupFinalizer)
 	}
+
+	// TODO: implement a proper patcher to avoid this hacky approach with retries & global vars
+	defer func() {
+		// Always update the ValidationConfig with a retry due to race condition with removeFinalizer.
+		for i := 0; i < constants.StatusUpdateRetries; i++ {
+			annotationErr := r.updateVc(ctx)
+			statusErr := r.updateVcStatus(ctx)
+			if annotationErr == nil && statusErr == nil {
+				break
+			}
+		}
+	}()
 
 	// deploy/redeploy plugins as required
 	if err := r.redeployIfNeeded(ctx, vc); err != nil {
