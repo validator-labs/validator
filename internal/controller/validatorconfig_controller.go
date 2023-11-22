@@ -132,7 +132,7 @@ func (r *ValidatorConfigReconciler) updateVc(ctx context.Context) {
 	}
 
 	// ensure cleanup finalizer
-	ensureFinalizer(ctx, r.Client, vc, CleanupFinalizer)
+	ensureFinalizer(vc, CleanupFinalizer)
 	r.Log.V(0).Info("Ensured ValidatorConfig finalizer")
 
 	vc.Annotations = annotations
@@ -315,7 +315,7 @@ func (r *ValidatorConfigReconciler) buildHelmChartCondition(chartName string, er
 }
 
 // ensureFinalizer ensures that an object's finalizers include a certain finalizer
-func ensureFinalizer(ctx context.Context, client client.Client, obj client.Object, finalizer string) {
+func ensureFinalizer(obj client.Object, finalizer string) {
 	currentFinalizers := obj.GetFinalizers()
 	if !slices.Contains(currentFinalizers, finalizer) {
 		newFinalizers := []string{}
