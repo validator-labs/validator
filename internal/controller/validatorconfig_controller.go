@@ -35,7 +35,6 @@ import (
 	"sigs.k8s.io/controller-runtime/pkg/client"
 
 	v1alpha1 "github.com/spectrocloud-labs/validator/api/v1alpha1"
-	"github.com/spectrocloud-labs/validator/pkg/constants"
 	"github.com/spectrocloud-labs/validator/pkg/helm"
 )
 
@@ -103,16 +102,10 @@ func (r *ValidatorConfigReconciler) Reconcile(ctx context.Context, req ctrl.Requ
 		return ctrl.Result{}, removeFinalizer(ctx, r.Client, vc, CleanupFinalizer)
 	}
 
-	// TODO: implement a proper patcher to avoid this hacky approach with retries & global vars
+	// TODO: implement a proper patcher to avoid this hacky approach with global vars
 	defer func() {
-		// Always update the ValidationConfig with a retry due to race condition with removeFinalizer.
-		for i := 0; i < constants.StatusUpdateRetries; i++ {
-			annotationErr := r.updateVc(ctx)
-			statusErr := r.updateVcStatus(ctx)
-			if annotationErr == nil && statusErr == nil {
-				break
-			}
-		}
+		r.updateVc(ctx)
+		r.updateVcStatus(ctx)
 	}()
 
 	// deploy/redeploy plugins as required

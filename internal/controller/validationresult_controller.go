@@ -82,6 +82,7 @@ func (r *ValidationResultReconciler) Reconcile(ctx context.Context, req ctrl.Req
 	prevHash, ok := vr.ObjectMeta.Annotations[ValidationResultHash]
 	sinkState = v1alpha1.SinkEmitNone
 
+	// TODO: implement a proper patcher to avoid this hacky approach with retries & global vars
 	defer func() {
 		// Always update the ValidationResult's Status with a retry due to race condition with
 		// SafeUpdateValidationResult, which also updates the VR's Status and is continuously
