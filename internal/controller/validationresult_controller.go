@@ -71,7 +71,7 @@ func (r *ValidationResultReconciler) Reconcile(ctx context.Context, req ctrl.Req
 	vr = &v1alpha1.ValidationResult{}
 	vrKey = req.NamespacedName
 
-	if err := r.Get(ctx, req.NamespacedName, vr); err != nil {
+	if err := r.Get(ctx, vrKey, vr); err != nil {
 		if !apierrs.IsNotFound(err) {
 			r.Log.Error(err, "failed to fetch ValidationResult", "key", req)
 		}
@@ -170,7 +170,7 @@ func (r *ValidationResultReconciler) updateStatus(ctx context.Context) error {
 	vr.Status.SinkState = sinkState
 
 	if err := r.Status().Update(context.Background(), vr); err != nil {
-		r.Log.V(1).Info("warning: failed to update ValidationResult status", "error", err.Error())
+		r.Log.V(1).Info("warning: failed to update ValidationResult status", "error", err)
 		return err
 	}
 
