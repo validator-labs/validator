@@ -50,7 +50,6 @@ spec:
                         version:
                           type: string
                       required:
-                      - insecureSkipVerify
                       - name
                       - repository
                       - version
