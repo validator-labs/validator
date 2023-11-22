@@ -48,9 +48,10 @@ const (
 )
 
 var (
-	vc         *v1alpha1.ValidatorConfig
-	vcKey      types.NamespacedName
-	conditions []v1alpha1.ValidatorPluginCondition
+	vc          *v1alpha1.ValidatorConfig
+	vcKey       types.NamespacedName
+	conditions  []v1alpha1.ValidatorPluginCondition
+	annotations map[string]string
 )
 
 // ValidatorConfigReconciler reconciles a ValidatorConfig object
@@ -78,13 +79,15 @@ func (r *ValidatorConfigReconciler) Reconcile(ctx context.Context, req ctrl.Requ
 		}
 		return ctrl.Result{}, client.IgnoreNotFound(err)
 	}
+	annotations = vc.Annotations
 
-	// TODO: implement a proper status patcher to avoid this hacky approach with retries & global vars
+	// TODO: implement a proper patcher to avoid this hacky approach with retries & global vars
 	defer func() {
-		// Always update the ValidationConfig's Status with a retry due to race condition with
-		// removeFinalizer and ensureFinalizer.
+		// Always update the ValidationConfig with a retry due to race condition with removeFinalizer.
 		for i := 0; i < constants.StatusUpdateRetries; i++ {
-			if err := r.updateStatus(ctx); err == nil {
+			annotationErr := r.updateVc(ctx)
+			statusErr := r.updateVcStatus(ctx)
+			if annotationErr == nil && statusErr == nil {
 				break
 			}
 		}
@@ -108,13 +111,6 @@ func (r *ValidatorConfigReconciler) Reconcile(ctx context.Context, req ctrl.Requ
 		return ctrl.Result{}, removeFinalizer(ctx, r.Client, vc, CleanupFinalizer)
 	}
 
-	// ensure cleanup finalizer
-	if err := ensureFinalizer(ctx, r.Client, vc, CleanupFinalizer); err != nil {
-		r.Log.Error(err, "Error ensuring finalizer")
-		return ctrl.Result{}, err
-	}
-	r.Log.V(0).Info("Ensured ValidatorConfig finalizer")
-
 	// deploy/redeploy plugins as required
 	if err := r.redeployIfNeeded(ctx, vc); err != nil {
 		r.Log.V(0).Error(err, "ValidatorConfig plugin deployment failed", "namespace", vc.Namespace, "name", vc.Name)
@@ -131,8 +127,29 @@ func (r *ValidatorConfigReconciler) SetupWithManager(mgr ctrl.Manager) error {
 		Complete(r)
 }
 
-// updateStatus updates the ValidatorConfig's status subresource
-func (r *ValidatorConfigReconciler) updateStatus(ctx context.Context) error {
+// updateVc updates the ValidatorConfig object
+func (r *ValidatorConfigReconciler) updateVc(ctx context.Context) error {
+	if err := r.Get(ctx, vcKey, vc); err != nil {
+		r.Log.V(0).Error(err, "failed to get ValidatorConfig")
+		return err
+	}
+
+	// ensure cleanup finalizer
+	ensureFinalizer(ctx, r.Client, vc, CleanupFinalizer)
+	r.Log.V(0).Info("Ensured ValidatorConfig finalizer")
+
+	vc.Annotations = annotations
+
+	if err := r.Client.Update(ctx, vc); err != nil {
+		r.Log.V(1).Info("warning: failed to update ValidatorConfig annotations", "error", err)
+	}
+
+	r.Log.V(0).Info("Updated ValidatorConfig", "annotations", vc.Annotations, "time", time.Now())
+	return nil
+}
+
+// updateVcStatus updates the ValidatorConfig's status subresource
+func (r *ValidatorConfigReconciler) updateVcStatus(ctx context.Context) error {
 	if err := r.Get(ctx, vcKey, vc); err != nil {
 		r.Log.V(0).Error(err, "failed to get ValidatorConfig")
 		return err
@@ -141,11 +158,11 @@ func (r *ValidatorConfigReconciler) updateStatus(ctx context.Context) error {
 	// all status modifications must happen after r.Client.Update
 	vc.Status.Conditions = conditions
 
-	if err := r.Status().Update(context.Background(), vc); err != nil {
+	if err := r.Status().Update(ctx, vc); err != nil {
 		r.Log.V(1).Info("warning: failed to update ValidatorConfig status", "error", err)
 	}
 
-	r.Log.V(0).Info("Updated ValidatorConfig", "conditions", vc.Status.Conditions, "time", time.Now())
+	r.Log.V(0).Info("Updated ValidatorConfig status", "conditions", vc.Status.Conditions, "time", time.Now())
 	return nil
 }
 
@@ -180,7 +197,7 @@ func (r *ValidatorConfigReconciler) redeployIfNeeded(ctx context.Context, vc *v1
 			nn := types.NamespacedName{Name: p.Chart.AuthSecretName, Namespace: vc.Namespace}
 			if err := r.configureHelmBasicAuth(nn, upgradeOpts); err != nil {
 				r.Log.V(0).Error(err, "failed to configure basic auth for Helm upgrade")
-				conditions[i] = buildHelmChartCondition(p.Chart.Name, err)
+				conditions[i] = r.buildHelmChartCondition(p.Chart.Name, err)
 				continue
 			}
 		}
@@ -196,7 +213,7 @@ func (r *ValidatorConfigReconciler) redeployIfNeeded(ctx context.Context, vc *v1
 				}
 			}
 		}
-		conditions[i] = buildHelmChartCondition(p.Chart.Name, err)
+		conditions[i] = r.buildHelmChartCondition(p.Chart.Name, err)
 	}
 
 	// delete any plugins that have been removed
@@ -205,13 +222,8 @@ func (r *ValidatorConfigReconciler) redeployIfNeeded(ctx context.Context, vc *v1
 		if !ok && c.Type == v1alpha1.HelmChartDeployedCondition && c.Status == corev1.ConditionTrue {
 			r.Log.V(0).Info("Deleting plugin Helm chart", "namespace", vc.Namespace, "name", c.PluginName)
 			r.deletePlugin(vc, c.PluginName)
-			delete(vc.Annotations, getPluginHashKey(c.PluginName))
+			delete(annotations, getPluginHashKey(c.PluginName))
 		}
-	}
-
-	// update ValidatorConfig annotations
-	if err := r.Client.Update(ctx, vc); err != nil {
-		return err
 	}
 
 	return nil
@@ -250,14 +262,11 @@ func (r *ValidatorConfigReconciler) updatePluginHash(vc *v1alpha1.ValidatorConfi
 	pluginValuesHashLatestB64 := base64.StdEncoding.EncodeToString(pluginValuesHashLatest[:])
 	key := getPluginHashKey(p.Chart.Name)
 
-	if vc.Annotations == nil {
-		vc.Annotations = make(map[string]string)
-	}
-	pluginValuesHash, ok := vc.Annotations[key]
+	pluginValuesHash, ok := annotations[key]
 	if ok {
 		valuesUnchanged = pluginValuesHash == pluginValuesHashLatestB64
 	}
-	vc.Annotations[key] = pluginValuesHashLatestB64
+	annotations[key] = pluginValuesHashLatestB64
 
 	return valuesUnchanged
 }
@@ -293,17 +302,32 @@ func (r *ValidatorConfigReconciler) deletePlugin(vc *v1alpha1.ValidatorConfig, n
 	r.Log.V(0).Info("Deleted Helm release for validator plugin", "namespace", vc.Namespace, "name", name)
 }
 
+// buildHelmChartCondition builds a ValidatorPluginCondition for a plugin
+func (r *ValidatorConfigReconciler) buildHelmChartCondition(chartName string, err error) v1alpha1.ValidatorPluginCondition {
+	c := v1alpha1.ValidatorPluginCondition{
+		Type:               v1alpha1.HelmChartDeployedCondition,
+		PluginName:         chartName,
+		Status:             corev1.ConditionTrue,
+		Message:            fmt.Sprintf("Plugin %s is installed", chartName),
+		LastTransitionTime: metav1.Time{Time: time.Now()},
+	}
+	if err != nil {
+		c.Status = corev1.ConditionFalse
+		c.Message = err.Error()
+	}
+	r.Log.V(0).Info("Latest ValidatorConfig plugin condition", "name", c.PluginName, "type", c.Type, "status", c.Status, "message", c.Message)
+	return c
+}
+
 // ensureFinalizer ensures that an object's finalizers include a certain finalizer
-func ensureFinalizer(ctx context.Context, client client.Client, obj client.Object, finalizer string) error {
+func ensureFinalizer(ctx context.Context, client client.Client, obj client.Object, finalizer string) {
 	currentFinalizers := obj.GetFinalizers()
 	if !slices.Contains(currentFinalizers, finalizer) {
 		newFinalizers := []string{}
 		newFinalizers = append(newFinalizers, currentFinalizers...)
 		newFinalizers = append(newFinalizers, finalizer)
 		obj.SetFinalizers(newFinalizers)
-		return client.Update(ctx, obj)
 	}
-	return nil
 }
 
 // removeFinalizer removes a finalizer from an object's finalizer's (if found)
@@ -344,20 +368,4 @@ func isConditionTrue(vc *v1alpha1.ValidatorConfig, chartName string, conditionTy
 		return v1alpha1.ValidatorPluginCondition{}, false
 	}
 	return vc.Status.Conditions[idx], vc.Status.Conditions[idx].Status == corev1.ConditionTrue
-}
-
-// buildHelmChartCondition builds a ValidatorPluginCondition for a plugin
-func buildHelmChartCondition(chartName string, err error) v1alpha1.ValidatorPluginCondition {
-	condition := v1alpha1.ValidatorPluginCondition{
-		Type:               v1alpha1.HelmChartDeployedCondition,
-		PluginName:         chartName,
-		Status:             corev1.ConditionTrue,
-		Message:            fmt.Sprintf("Plugin %s is installed", chartName),
-		LastTransitionTime: metav1.Time{Time: time.Now()},
-	}
-	if err != nil {
-		condition.Status = corev1.ConditionFalse
-		condition.Message = err.Error()
-	}
-	return condition
 }
