@@ -133,13 +133,89 @@ plugins:
       type: ClusterIP
     auth:
       # Option 1: Leave secret undefined for implicit auth (node instance role, IMDSv2, etc.)
-      # Option 2: Create a secret via pluginSecrets (see below). Note: secretName and pluginSecrets.aws.secretName match.
+      # Option 2: Create a secret via pluginSecrets (see below). Note: secretName and pluginSecrets.aws.secretName must match.
       # Option 3: Specify the name of a preexisting secret in your target cluster and leave pluginSecrets.aws undefined.
       #
       secret: {}  # Delete these curly braces if you're specifying secretName!
         # secretName: aws-creds
       # Override the service account used by AWS validator (optional, could be used for IMDSv2 on EKS)
-      # WARNING: the chosen service account must have the same RBAC privileges as seen in manager-rbac.yaml
+      # WARNING: the chosen service account must include all RBAC privileges found in the AWS plugin template:
+      #          https://github.com/spectrocloud-labs/validator-plugin-aws/blob/main/chart/validator-plugin-aws/templates/manager-rbac.yaml
+      serviceAccountName: ""
+- chart:
+    name: validator-plugin-azure
+    repository: "https://spectrocloud-labs.github.io/validator-plugin-azure"
+    version: "v0.0.1"
+  values: |-
+    controllerManager:
+      kubeRbacProxy:
+        args:
+        - --secure-listen-address=0.0.0.0:8443
+        - --upstream=http://127.0.0.1:8080/
+        - --logtostderr=true
+        - --v=0
+        containerSecurityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+            - ALL
+        image:
+          repository: gcr.io/kubebuilder/kube-rbac-proxy
+          tag: v0.15.0
+        resources:
+          limits:
+            cpu: 500m
+            memory: 128Mi
+          requests:
+            cpu: 5m
+            memory: 64Mi
+      manager:
+        args:
+        - --health-probe-bind-address=:8081
+        - --leader-elect
+        containerSecurityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+            - ALL
+        image:
+          repository: quay.io/spectrocloud-labs/validator-plugin-azure
+          tag: v0.0.1
+        resources:
+          limits:
+            cpu: 500m
+            memory: 128Mi
+          requests:
+            cpu: 10m
+            memory: 64Mi
+        # Optionally specify a volumeMount to mount a volume containing a private key
+        # to leverage Azure Service principal with certificate authentication.
+        volumeMounts: []
+      replicas: 1
+      serviceAccount:
+        annotations: {}
+      # Optionally specify a volume containing a private key to leverage Azure Service
+      # principal with certificate authentication.
+      volumes: []
+    kubernetesClusterDomain: cluster.local
+    metricsService:
+      ports:
+      - name: https
+        port: 8443
+        protocol: TCP
+        targetPort: https
+      type: ClusterIP
+    auth:
+      # Option 1: Leave secret undefined for WorkloadIdentityCredential authentication.
+      # Option 2: Create a secret via pluginSecrets (see below). Note: secretName and pluginSecrets.azure.secretName must match.
+      # Option 3: Specify the name of a preexisting secret in your target cluster and leave pluginSecrets.azure undefined.
+      #
+      secret: {}  # Delete these curly braces if you're specifying secretName!
+        # secretName: azure-creds
+
+      # Override the service account used by Azure validator (optional, could be used for WorkloadIdentityCredentials on AKS)
+      # WARNING: the chosen service account must include all RBAC privileges found in the Azure plugin template:
+      #          https://github.com/spectrocloud-labs/validator-plugin-aws/blob/main/chart/validator-plugin-azure/templates/manager-rbac.yaml
       serviceAccountName: ""
 - chart:
     name: validator-plugin-vsphere
@@ -274,6 +350,26 @@ pluginSecrets:
     # accessKeyId: ""
     # secretAccessKey: ""
     # sessionToken: ""
+
+  # If installing the Azure plugin, the below config is required unless one of the following applies:
+  # - The target cluster already contains a secret with the correct format and you've specified its name above.
+  #   If specifying your own secret, refer to chart/validator/templates/plugin-secret-azure.yaml for
+  #   an example of the expected format and ensure that it exists in the same namespace as the Helm release.
+  # - You're deploying to a K8s cluster in AKS and relying on WorkloadIdentityCredentials, plus you've specified auth.serviceAccountName
+  #
+  azure: {}  # Don't forget to delete these curly braces if you're specifying credentials here!
+    # secretName: azure-creds  # ensure this matches the Azure plugin values above
+    #
+    # Any valid combination of Azure credential environment variables, per the options defined in:
+    # https://pkg.go.dev/github.com/Azure/azure-sdk-for-go/sdk/azidentity#readme-environment-variables.
+    # env:
+    #   AZURE_CLIENT_ID: ""
+    #   AZURE_TENANT_ID: ""
+    #   AZURE_CLIENT_SECRET: ""
+    #   AZURE_CLIENT_CERTIFICATE_PATH: ""
+    #   AZURE_CLIENT_CERTIFICATE_PASSWORD: ""
+    #   AZURE_USERNAME: ""
+    #   AZURE_PASSWORD: ""
 
   # If installing the vSphere plugin, the below config is required unless the following applies:
   # - The target cluster already contains a secret with the correct format and you've specified its name above.
