@@ -145,7 +145,7 @@ plugins:
 - chart:
     name: validator-plugin-azure
     repository: "https://spectrocloud-labs.github.io/validator-plugin-azure"
-    version: "v0.0.1"
+    version: "v0.0.2"
   values: |-
     controllerManager:
       kubeRbacProxy:
@@ -180,7 +180,7 @@ plugins:
             - ALL
         image:
           repository: quay.io/spectrocloud-labs/validator-plugin-azure
-          tag: v0.0.1
+          tag: v0.0.2
         resources:
           limits:
             cpu: 500m
