@@ -143,13 +143,36 @@ func (r *ValidatorConfigReconciler) redeployIfNeeded(ctx context.Context, vc *v1
 			continue
 		}
 
+		var username, password []byte
+		if p.Chart.AuthSecretName != "" {
+			secret := &corev1.Secret{}
+			nn := types.NamespacedName{Name: p.Chart.AuthSecretName, Namespace: vc.Namespace}
+			if err := r.Get(ctx, nn, secret); err != nil {
+				return fmt.Errorf(
+					"failed to get auth secret %s in namespace %s for chart %s in repo %s: %v",
+					p.Chart.AuthSecretName, vc.Namespace, p.Chart.Name, p.Chart.Repository, err,
+				)
+			}
+			username, ok = secret.Data["username"]
+			if !ok {
+				return fmt.Errorf("auth secret for chart %s in repo %s missing required key: 'username'", p.Chart.Name, p.Chart.Repository)
+			}
+			password, ok = secret.Data["password"]
+			if !ok {
+				return fmt.Errorf("auth secret for chart %s in repo %s missing required key: 'password'", p.Chart.Name, p.Chart.Repository)
+			}
+		}
+
 		r.Log.V(0).Info("Installing/upgrading plugin Helm chart", "namespace", vc.Namespace, "name", p.Chart.Name)
 
 		err := r.HelmClient.Upgrade(p.Chart.Name, vc.Namespace, helm.UpgradeOptions{
-			Chart:   p.Chart.Name,
-			Repo:    p.Chart.Repository,
-			Version: p.Chart.Version,
-			Values:  p.Values,
+			Chart:                 p.Chart.Name,
+			Repo:                  p.Chart.Repository,
+			Version:               p.Chart.Version,
+			Values:                p.Values,
+			InsecureSkipTlsVerify: p.Chart.InsecureSkipTlsVerify,
+			Username:              string(username),
+			Password:              string(password),
 		})
 		if err != nil {
 			// if Helm install/upgrade failed, delete the release so installation is reattempted each iteration
