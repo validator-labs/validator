@@ -46,6 +46,13 @@ const (
 	PluginValuesHash = "validator/plugin-values"
 )
 
+var (
+	vc          *v1alpha1.ValidatorConfig
+	vcKey       types.NamespacedName
+	conditions  []v1alpha1.ValidatorPluginCondition
+	annotations map[string]string
+)
+
 // ValidatorConfigReconciler reconciles a ValidatorConfig object
 type ValidatorConfigReconciler struct {
 	client.Client
@@ -62,18 +69,20 @@ type ValidatorConfigReconciler struct {
 func (r *ValidatorConfigReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.Result, error) {
 	r.Log.V(0).Info("Reconciling ValidatorConfig", "name", req.Name, "namespace", req.Namespace)
 
-	vc := &v1alpha1.ValidatorConfig{}
-	if err := r.Get(ctx, req.NamespacedName, vc); err != nil {
+	vc = &v1alpha1.ValidatorConfig{}
+	vcKey = req.NamespacedName
+
+	if err := r.Get(ctx, vcKey, vc); err != nil {
 		if !apierrs.IsNotFound(err) {
 			r.Log.Error(err, "failed to fetch ValidatorConfig", "key", req)
 		}
 		return ctrl.Result{}, client.IgnoreNotFound(err)
 	}
-
-	// Always update the ValidatorConfig's Status
-	defer func() {
-		r.updateStatus(ctx, vc)
-	}()
+	if vc.Annotations != nil {
+		annotations = vc.Annotations
+	} else {
+		annotations = make(map[string]string)
+	}
 
 	// handle ValidatorConfig deletion
 	if vc.DeletionTimestamp != nil {
@@ -93,12 +102,11 @@ func (r *ValidatorConfigReconciler) Reconcile(ctx context.Context, req ctrl.Requ
 		return ctrl.Result{}, removeFinalizer(ctx, r.Client, vc, CleanupFinalizer)
 	}
 
-	// ensure cleanup finalizer
-	if err := ensureFinalizer(ctx, r.Client, vc, CleanupFinalizer); err != nil {
-		r.Log.Error(err, "Error ensuring finalizer")
-		return ctrl.Result{}, err
-	}
-	r.Log.V(0).Info("Ensured ValidatorConfig finalizer")
+	// TODO: implement a proper patcher to avoid this hacky approach with global vars
+	defer func() {
+		r.updateVc(ctx)
+		r.updateVcStatus(ctx)
+	}()
 
 	// deploy/redeploy plugins as required
 	if err := r.redeployIfNeeded(ctx, vc); err != nil {
@@ -116,18 +124,47 @@ func (r *ValidatorConfigReconciler) SetupWithManager(mgr ctrl.Manager) error {
 		Complete(r)
 }
 
-// updateStatus updates the ValidatorConfig's status subresource
-func (r *ValidatorConfigReconciler) updateStatus(ctx context.Context, vc *v1alpha1.ValidatorConfig) {
-	if err := r.Status().Update(context.Background(), vc); err != nil {
-		r.Log.V(0).Error(err, "failed to update ValidatorConfig status")
+// updateVc updates the ValidatorConfig object
+func (r *ValidatorConfigReconciler) updateVc(ctx context.Context) {
+	if err := r.Get(ctx, vcKey, vc); err != nil {
+		r.Log.V(0).Error(err, "failed to get ValidatorConfig")
+		return
 	}
-	r.Log.V(0).Info("Updated ValidatorConfig", "conditions", vc.Status.Conditions, "time", time.Now())
+
+	// ensure cleanup finalizer
+	ensureFinalizer(vc, CleanupFinalizer)
+	r.Log.V(0).Info("Ensured ValidatorConfig finalizer")
+
+	vc.Annotations = annotations
+
+	if err := r.Client.Update(ctx, vc); err != nil {
+		r.Log.Error(err, "failed to update ValidatorConfig")
+	} else {
+		r.Log.V(0).Info("Updated ValidatorConfig", "annotations", vc.Annotations, "time", time.Now())
+	}
+}
+
+// updateVcStatus updates the ValidatorConfig's status subresource
+func (r *ValidatorConfigReconciler) updateVcStatus(ctx context.Context) {
+	if err := r.Get(ctx, vcKey, vc); err != nil {
+		r.Log.V(0).Error(err, "failed to get ValidatorConfig")
+		return
+	}
+
+	// all status modifications must happen after r.Client.Update
+	vc.Status.Conditions = conditions
+
+	if err := r.Status().Update(ctx, vc); err != nil {
+		r.Log.Error(err, "failed to update ValidatorConfig status")
+	} else {
+		r.Log.V(0).Info("Updated ValidatorConfig status", "conditions", vc.Status.Conditions, "time", time.Now())
+	}
 }
 
 // redeployIfNeeded deploys/redeploys each validator plugin in a ValidatorConfig and deletes plugins that have been removed
 func (r *ValidatorConfigReconciler) redeployIfNeeded(ctx context.Context, vc *v1alpha1.ValidatorConfig) error {
 	specPlugins := make(map[string]bool)
-	conditions := make([]v1alpha1.ValidatorPluginCondition, len(vc.Spec.Plugins))
+	conditions = make([]v1alpha1.ValidatorPluginCondition, len(vc.Spec.Plugins))
 
 	for i, p := range vc.Spec.Plugins {
 		specPlugins[p.Chart.Name] = true
@@ -143,14 +180,26 @@ func (r *ValidatorConfigReconciler) redeployIfNeeded(ctx context.Context, vc *v1
 			continue
 		}
 
+		upgradeOpts := &helm.UpgradeOptions{
+			Chart:                 p.Chart.Name,
+			Repo:                  p.Chart.Repository,
+			Version:               p.Chart.Version,
+			Values:                p.Values,
+			InsecureSkipTlsVerify: p.Chart.InsecureSkipTlsVerify,
+		}
+
+		if p.Chart.AuthSecretName != "" {
+			nn := types.NamespacedName{Name: p.Chart.AuthSecretName, Namespace: vc.Namespace}
+			if err := r.configureHelmBasicAuth(nn, upgradeOpts); err != nil {
+				r.Log.V(0).Error(err, "failed to configure basic auth for Helm upgrade")
+				conditions[i] = r.buildHelmChartCondition(p.Chart.Name, err)
+				continue
+			}
+		}
+
 		r.Log.V(0).Info("Installing/upgrading plugin Helm chart", "namespace", vc.Namespace, "name", p.Chart.Name)
 
-		err := r.HelmClient.Upgrade(p.Chart.Name, vc.Namespace, helm.UpgradeOptions{
-			Chart:   p.Chart.Name,
-			Repo:    p.Chart.Repository,
-			Version: p.Chart.Version,
-			Values:  p.Values,
-		})
+		err := r.HelmClient.Upgrade(p.Chart.Name, vc.Namespace, *upgradeOpts)
 		if err != nil {
 			// if Helm install/upgrade failed, delete the release so installation is reattempted each iteration
 			if strings.Contains(err.Error(), "has no deployed releases") {
@@ -158,9 +207,8 @@ func (r *ValidatorConfigReconciler) redeployIfNeeded(ctx context.Context, vc *v1
 					r.Log.V(0).Error(err, "failed to delete Helm release")
 				}
 			}
-			return fmt.Errorf("error installing / upgrading ValidatorConfig: %v", err)
 		}
-		conditions[i] = getHelmChartCondition(p.Chart.Name, true)
+		conditions[i] = r.buildHelmChartCondition(p.Chart.Name, err)
 	}
 
 	// delete any plugins that have been removed
@@ -169,17 +217,33 @@ func (r *ValidatorConfigReconciler) redeployIfNeeded(ctx context.Context, vc *v1
 		if !ok && c.Type == v1alpha1.HelmChartDeployedCondition && c.Status == corev1.ConditionTrue {
 			r.Log.V(0).Info("Deleting plugin Helm chart", "namespace", vc.Namespace, "name", c.PluginName)
 			r.deletePlugin(vc, c.PluginName)
-			delete(vc.Annotations, getPluginHashKey(c.PluginName))
+			delete(annotations, getPluginHashKey(c.PluginName))
 		}
 	}
 
-	// update ValidatorConfig annotations
-	if err := r.Client.Update(ctx, vc); err != nil {
-		return err
+	return nil
+}
+
+func (r *ValidatorConfigReconciler) configureHelmBasicAuth(nn types.NamespacedName, opts *helm.UpgradeOptions) error {
+	secret := &corev1.Secret{}
+	if err := r.Get(context.TODO(), nn, secret); err != nil {
+		return fmt.Errorf(
+			"failed to get auth secret %s in namespace %s for chart %s in repo %s: %v",
+			nn.Name, nn.Namespace, opts.Chart, opts.Repo, err,
+		)
 	}
 
-	// all status modifications must happen after r.Client.Update
-	vc.Status.Conditions = conditions
+	username, ok := secret.Data["username"]
+	if !ok {
+		return fmt.Errorf("auth secret for chart %s in repo %s missing required key: 'username'", opts.Chart, opts.Repo)
+	}
+	opts.Username = string(username)
+
+	password, ok := secret.Data["password"]
+	if !ok {
+		return fmt.Errorf("auth secret for chart %s in repo %s missing required key: 'password'", opts.Chart, opts.Repo)
+	}
+	opts.Password = string(password)
 
 	return nil
 }
@@ -193,14 +257,11 @@ func (r *ValidatorConfigReconciler) updatePluginHash(vc *v1alpha1.ValidatorConfi
 	pluginValuesHashLatestB64 := base64.StdEncoding.EncodeToString(pluginValuesHashLatest[:])
 	key := getPluginHashKey(p.Chart.Name)
 
-	if vc.Annotations == nil {
-		vc.Annotations = make(map[string]string)
-	}
-	pluginValuesHash, ok := vc.Annotations[key]
+	pluginValuesHash, ok := annotations[key]
 	if ok {
 		valuesUnchanged = pluginValuesHash == pluginValuesHashLatestB64
 	}
-	vc.Annotations[key] = pluginValuesHashLatestB64
+	annotations[key] = pluginValuesHashLatestB64
 
 	return valuesUnchanged
 }
@@ -236,17 +297,32 @@ func (r *ValidatorConfigReconciler) deletePlugin(vc *v1alpha1.ValidatorConfig, n
 	r.Log.V(0).Info("Deleted Helm release for validator plugin", "namespace", vc.Namespace, "name", name)
 }
 
+// buildHelmChartCondition builds a ValidatorPluginCondition for a plugin
+func (r *ValidatorConfigReconciler) buildHelmChartCondition(chartName string, err error) v1alpha1.ValidatorPluginCondition {
+	c := v1alpha1.ValidatorPluginCondition{
+		Type:               v1alpha1.HelmChartDeployedCondition,
+		PluginName:         chartName,
+		Status:             corev1.ConditionTrue,
+		Message:            fmt.Sprintf("Plugin %s is installed", chartName),
+		LastTransitionTime: metav1.Time{Time: time.Now()},
+	}
+	if err != nil {
+		c.Status = corev1.ConditionFalse
+		c.Message = err.Error()
+	}
+	r.Log.V(0).Info("Latest ValidatorConfig plugin condition", "name", c.PluginName, "type", c.Type, "status", c.Status, "message", c.Message)
+	return c
+}
+
 // ensureFinalizer ensures that an object's finalizers include a certain finalizer
-func ensureFinalizer(ctx context.Context, client client.Client, obj client.Object, finalizer string) error {
+func ensureFinalizer(obj client.Object, finalizer string) {
 	currentFinalizers := obj.GetFinalizers()
 	if !slices.Contains(currentFinalizers, finalizer) {
 		newFinalizers := []string{}
 		newFinalizers = append(newFinalizers, currentFinalizers...)
 		newFinalizers = append(newFinalizers, finalizer)
 		obj.SetFinalizers(newFinalizers)
-		return client.Update(ctx, obj)
 	}
-	return nil
 }
 
 // removeFinalizer removes a finalizer from an object's finalizer's (if found)
@@ -287,20 +363,4 @@ func isConditionTrue(vc *v1alpha1.ValidatorConfig, chartName string, conditionTy
 		return v1alpha1.ValidatorPluginCondition{}, false
 	}
 	return vc.Status.Conditions[idx], vc.Status.Conditions[idx].Status == corev1.ConditionTrue
-}
-
-// getHelmChartCondition builds a ValidatorPluginCondition for a plugin
-func getHelmChartCondition(chartName string, installed bool) v1alpha1.ValidatorPluginCondition {
-	condition := v1alpha1.ValidatorPluginCondition{
-		Type:               v1alpha1.HelmChartDeployedCondition,
-		PluginName:         chartName,
-		Status:             corev1.ConditionTrue,
-		Message:            fmt.Sprintf("Plugin %s is installed", chartName),
-		LastTransitionTime: metav1.Time{Time: time.Now()},
-	}
-	if !installed {
-		condition.Status = corev1.ConditionFalse
-		condition.Message = fmt.Sprintf("Plugin %s was uninstalled", chartName)
-	}
-	return condition
 }

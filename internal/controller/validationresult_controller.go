@@ -71,7 +71,7 @@ func (r *ValidationResultReconciler) Reconcile(ctx context.Context, req ctrl.Req
 	vr = &v1alpha1.ValidationResult{}
 	vrKey = req.NamespacedName
 
-	if err := r.Get(ctx, req.NamespacedName, vr); err != nil {
+	if err := r.Get(ctx, vrKey, vr); err != nil {
 		if !apierrs.IsNotFound(err) {
 			r.Log.Error(err, "failed to fetch ValidationResult", "key", req)
 		}
@@ -82,6 +82,7 @@ func (r *ValidationResultReconciler) Reconcile(ctx context.Context, req ctrl.Req
 	prevHash, ok := vr.ObjectMeta.Annotations[ValidationResultHash]
 	sinkState = v1alpha1.SinkEmitNone
 
+	// TODO: implement a proper patcher to avoid this hacky approach with retries & global vars
 	defer func() {
 		// Always update the ValidationResult's Status with a retry due to race condition with
 		// SafeUpdateValidationResult, which also updates the VR's Status and is continuously
@@ -170,7 +171,7 @@ func (r *ValidationResultReconciler) updateStatus(ctx context.Context) error {
 	vr.Status.SinkState = sinkState
 
 	if err := r.Status().Update(context.Background(), vr); err != nil {
-		r.Log.V(1).Info("warning: failed to update ValidationResult status", "error", err.Error())
+		r.Log.V(1).Info("warning: failed to update ValidationResult status", "error", err)
 		return err
 	}
 

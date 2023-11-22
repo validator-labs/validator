@@ -2,20 +2,27 @@ package controller
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"os"
 	"path/filepath"
+	"reflect"
 	"strings"
+	"testing"
 
 	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
 
 	appsv1 "k8s.io/api/apps/v1"
+	corev1 "k8s.io/api/core/v1"
 	apierrs "k8s.io/apimachinery/pkg/api/errors"
+	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/types"
 	kyaml "sigs.k8s.io/yaml"
 
 	"github.com/spectrocloud-labs/validator/api/v1alpha1"
+	"github.com/spectrocloud-labs/validator/internal/test"
+	"github.com/spectrocloud-labs/validator/pkg/helm"
 	//+kubebuilder:scaffold:imports
 )
 
@@ -41,6 +48,23 @@ var _ = Describe("ValidatorConfig controller", Ordered, func() {
 		}
 	})
 
+	secret := &corev1.Secret{
+		ObjectMeta: metav1.ObjectMeta{
+			Name:      "validator-plugin-network-invalid-auth",
+			Namespace: validatorNamespace,
+		},
+		Data: map[string][]byte{
+			"username": []byte("foo"),
+		},
+	}
+
+	validSecret := secret.DeepCopy()
+	validSecret.Name = "validator-plugin-network-chart-secret"
+	validSecret.Data = map[string][]byte{
+		"username": []byte("foo"),
+		"password": []byte("bar"),
+	}
+
 	vc := &v1alpha1.ValidatorConfig{}
 	vcKey := types.NamespacedName{Name: "validator-config-test", Namespace: validatorNamespace}
 	networkPluginDeploymentKey := types.NamespacedName{Name: networkPluginDeploymentName, Namespace: validatorNamespace}
@@ -56,6 +80,8 @@ var _ = Describe("ValidatorConfig controller", Ordered, func() {
 		err = kyaml.Unmarshal(vcBytes, vc)
 		Expect(err).NotTo(HaveOccurred())
 
+		Expect(k8sClient.Create(ctx, secret)).Should(Succeed())
+		Expect(k8sClient.Create(ctx, validSecret)).Should(Succeed())
 		Expect(k8sClient.Create(ctx, vc)).Should(Succeed())
 
 		// Wait for the validator-plugin-network Deployment to be deployed
@@ -110,4 +136,77 @@ var _ = Describe("ValidatorConfig controller", Ordered, func() {
 			return apierrs.IsNotFound(err)
 		}, timeout, interval).Should(BeTrue(), "failed to uninstall validator-plugin-network")
 	})
+
+	It("Should fail to deploy validator-plugin-network-invalid-auth once a ValidatorConfig is created", func() {
+		By("By creating a new ValidatorConfig")
+		ctx := context.Background()
+
+		vc := &v1alpha1.ValidatorConfig{
+			ObjectMeta: metav1.ObjectMeta{
+				Name:      "validator-plugin-network-invalid-auth",
+				Namespace: validatorNamespace,
+			},
+			Spec: v1alpha1.ValidatorConfigSpec{
+				Plugins: []v1alpha1.HelmRelease{
+					{
+						Chart: v1alpha1.HelmChart{
+							Name:           "foo",
+							Repository:     "bar",
+							AuthSecretName: "chart-secret",
+						},
+					},
+				},
+			},
+		}
+		vcKey := types.NamespacedName{Name: "validator-plugin-network-invalid-auth", Namespace: validatorNamespace}
+
+		Expect(k8sClient.Create(ctx, vc)).Should(Succeed())
+
+		// Wait for the validator-plugin-network-invalid-auth deployment to fail
+		Eventually(func() bool {
+			if err := k8sClient.Get(ctx, vcKey, vc); err != nil {
+				return false
+			}
+			condition, ok := isConditionTrue(vc, "foo", v1alpha1.HelmChartDeployedCondition)
+			return condition.Status == corev1.ConditionFalse && !ok
+		}, timeout, interval).Should(BeTrue(), "failed to deploy validator-plugin-network")
+	})
 })
+
+func TestConfigureHelmBasicAuth(t *testing.T) {
+	cs := []struct {
+		name       string
+		reconciler ValidatorConfigReconciler
+		nn         types.NamespacedName
+		opts       *helm.UpgradeOptions
+		expected   error
+	}{
+		{
+			name: "Fail (get_secret)",
+			nn:   types.NamespacedName{Name: "chart-secret", Namespace: validatorNamespace},
+			reconciler: ValidatorConfigReconciler{
+				Client: test.ClientMock{
+					GetErrors: []error{errors.New("get failed")},
+				},
+			},
+			opts:     &helm.UpgradeOptions{Chart: "foo", Repo: "bar"},
+			expected: errors.New("failed to get auth secret chart-secret in namespace validator for chart foo in repo bar: get failed"),
+		},
+		{
+			name: "Fail (get_username)",
+			nn:   types.NamespacedName{Name: "chart-secret", Namespace: validatorNamespace},
+			reconciler: ValidatorConfigReconciler{
+				Client: test.ClientMock{},
+			},
+			opts:     &helm.UpgradeOptions{Chart: "foo", Repo: "bar"},
+			expected: errors.New("auth secret for chart foo in repo bar missing required key: 'username'"),
+		},
+	}
+	for _, c := range cs {
+		t.Log(c.name)
+		err := c.reconciler.configureHelmBasicAuth(c.nn, c.opts)
+		if err != nil && !reflect.DeepEqual(err.Error(), c.expected.Error()) {
+			t.Errorf("expected (%v), got (%v)", c.expected, err)
+		}
+	}
+}

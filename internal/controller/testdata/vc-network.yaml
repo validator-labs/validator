@@ -13,6 +13,7 @@ spec:
   - chart:
       name: validator-plugin-network
       repository: https://spectrocloud-labs.github.io/validator-plugin-network
+      authSecretName: validator-plugin-network-chart-secret
       version: v0.0.4
     values: |-
       controllerManager:
