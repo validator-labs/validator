@@ -79,7 +79,11 @@ func (r *ValidatorConfigReconciler) Reconcile(ctx context.Context, req ctrl.Requ
 		}
 		return ctrl.Result{}, client.IgnoreNotFound(err)
 	}
-	annotations = vc.Annotations
+	if vc.Annotations != nil {
+		annotations = vc.Annotations
+	} else {
+		annotations = make(map[string]string)
+	}
 
 	// handle ValidatorConfig deletion
 	if vc.DeletionTimestamp != nil {
