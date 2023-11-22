@@ -125,10 +125,10 @@ func (r *ValidatorConfigReconciler) SetupWithManager(mgr ctrl.Manager) error {
 }
 
 // updateVc updates the ValidatorConfig object
-func (r *ValidatorConfigReconciler) updateVc(ctx context.Context) error {
+func (r *ValidatorConfigReconciler) updateVc(ctx context.Context) {
 	if err := r.Get(ctx, vcKey, vc); err != nil {
 		r.Log.V(0).Error(err, "failed to get ValidatorConfig")
-		return err
+		return
 	}
 
 	// ensure cleanup finalizer
@@ -138,29 +138,27 @@ func (r *ValidatorConfigReconciler) updateVc(ctx context.Context) error {
 	vc.Annotations = annotations
 
 	if err := r.Client.Update(ctx, vc); err != nil {
-		r.Log.V(1).Info("warning: failed to update ValidatorConfig annotations", "error", err)
+		r.Log.Error(err, "failed to update ValidatorConfig")
+	} else {
+		r.Log.V(0).Info("Updated ValidatorConfig", "annotations", vc.Annotations, "time", time.Now())
 	}
-
-	r.Log.V(0).Info("Updated ValidatorConfig", "annotations", vc.Annotations, "time", time.Now())
-	return nil
 }
 
 // updateVcStatus updates the ValidatorConfig's status subresource
-func (r *ValidatorConfigReconciler) updateVcStatus(ctx context.Context) error {
+func (r *ValidatorConfigReconciler) updateVcStatus(ctx context.Context) {
 	if err := r.Get(ctx, vcKey, vc); err != nil {
 		r.Log.V(0).Error(err, "failed to get ValidatorConfig")
-		return err
+		return
 	}
 
 	// all status modifications must happen after r.Client.Update
 	vc.Status.Conditions = conditions
 
 	if err := r.Status().Update(ctx, vc); err != nil {
-		r.Log.V(1).Info("warning: failed to update ValidatorConfig status", "error", err)
+		r.Log.Error(err, "failed to update ValidatorConfig status")
+	} else {
+		r.Log.V(0).Info("Updated ValidatorConfig status", "conditions", vc.Status.Conditions, "time", time.Now())
 	}
-
-	r.Log.V(0).Info("Updated ValidatorConfig status", "conditions", vc.Status.Conditions, "time", time.Now())
-	return nil
 }
 
 // redeployIfNeeded deploys/redeploys each validator plugin in a ValidatorConfig and deletes plugins that have been removed
