@@ -59,7 +59,23 @@ func (c *helmClient) exec(args []string) error {
 		return nil
 	}
 
-	fmt.Println("helm " + strings.Join(args, " "))
+	sb := strings.Builder{}
+	mask := false
+	for _, a := range args {
+		if mask {
+			sb.WriteString("***** ")
+			mask = false
+			continue
+		}
+		if a == "--password" {
+			mask = true
+		}
+		sb.WriteString(a)
+		sb.WriteString(" ")
+	}
+	sanitizedArgs := sb.String()
+
+	fmt.Println("helm " + sanitizedArgs)
 	cmd := exec.Command(c.helmPath, args...)
 	if c.stdout != nil {
 		cmd.Stdout = c.stdout
@@ -72,7 +88,7 @@ func (c *helmClient) exec(args []string) error {
 		if strings.Contains(string(output), "release: not found") {
 			return nil
 		}
-		klog.Errorf("Error executing command: helm %s", strings.Join(args, " "))
+		klog.Errorf("Error executing command: helm %s", sanitizedArgs)
 		klog.Errorf("Output: %s, Error: %v", string(output), err)
 		return fmt.Errorf("error executing helm %s: %s", args[0], string(output))
 	}
