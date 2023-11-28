@@ -132,12 +132,13 @@ plugins:
         targetPort: https
       type: ClusterIP
     auth:
-      # Option 1: Leave secret undefined for implicit auth (node instance role, IMDSv2, etc.)
+      # Option 1: Leave secret undefined for implicit auth (node instance IAM role, IMDSv2, etc.)
       # Option 2: Create a secret via pluginSecrets (see below). Note: secretName and pluginSecrets.aws.secretName must match.
       # Option 3: Specify the name of a preexisting secret in your target cluster and leave pluginSecrets.aws undefined.
       #
       secret: {}  # Delete these curly braces if you're specifying secretName!
         # secretName: aws-creds
+
       # Override the service account used by AWS validator (optional, could be used for IMDSv2 on EKS)
       # WARNING: the chosen service account must include all RBAC privileges found in the AWS plugin template:
       #          https://github.com/spectrocloud-labs/validator-plugin-aws/blob/main/chart/validator-plugin-aws/templates/manager-rbac.yaml
@@ -347,9 +348,13 @@ pluginSecrets:
   #
   aws: {}  # Don't forget to delete these curly braces if you're specifying credentials here!
     # secretName: aws-creds  # ensure this matches the AWS plugin values above
-    # accessKeyId: ""
-    # secretAccessKey: ""
-    # sessionToken: ""
+    #
+    # Any valid combination of AWS credential environment variables, per the options defined in:
+    # https://aws.github.io/aws-sdk-go-v2/docs/configuring-sdk/#environment-variables.
+    # env:
+    #   AWS_ACCESS_KEY_ID: ""
+    #   AWS_SECRET_ACCESS_KEY: ""
+    #   AWS_SESSION_TOKEN: ""
 
   # If installing the Azure plugin, the below config is required unless one of the following applies:
   # - The target cluster already contains a secret with the correct format and you've specified its name above.
