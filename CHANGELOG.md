@@ -1,5 +1,30 @@
 # Changelog
 
+## [0.0.26](https://github.com/spectrocloud-labs/validator/compare/v0.0.25...v0.0.26) (2023-11-28)
+
+
+### Features
+
+* add Azure plugin ([#131](https://github.com/spectrocloud-labs/validator/issues/131)) ([25073e3](https://github.com/spectrocloud-labs/validator/commit/25073e3c6fdc6b2556d3f0d59192b1b6ec65281b))
+* support private helm repos ([#132](https://github.com/spectrocloud-labs/validator/issues/132)) ([cb0cf32](https://github.com/spectrocloud-labs/validator/commit/cb0cf32e1c8b09bdaa791c1933f36321f1687046))
+
+
+### Bug Fixes
+
+* **deps:** update golang.org/x/exp digest to 6522937 ([#133](https://github.com/spectrocloud-labs/validator/issues/133)) ([531c8ca](https://github.com/spectrocloud-labs/validator/commit/531c8ca2647164ac99777601c95ae469cb5c67c3))
+
+
+### Other
+
+* bump azure chart version ([9230953](https://github.com/spectrocloud-labs/validator/commit/9230953434f15ef1c8bc19658d8bc8e9156df74a))
+* **deps:** update anchore/sbom-action action to v0.15.0 ([#129](https://github.com/spectrocloud-labs/validator/issues/129)) ([961377b](https://github.com/spectrocloud-labs/validator/commit/961377b591c7c071f85046a8c5211ee6e161a38d))
+* update AWS auth config ([#134](https://github.com/spectrocloud-labs/validator/issues/134)) ([9513e43](https://github.com/spectrocloud-labs/validator/commit/9513e43a9860cc1ac2f1fcea01e8d7727d81b11c))
+
+
+### Docs
+
+* refer to secret templates in values.yaml ([eeae1e7](https://github.com/spectrocloud-labs/validator/commit/eeae1e710a2dd584ea74e8017ddb359a165c9079))
+
 ## [0.0.25](https://github.com/spectrocloud-labs/validator/compare/v0.0.24...v0.0.25) (2023-11-17)
 
 
