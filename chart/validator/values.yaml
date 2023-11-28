@@ -282,7 +282,7 @@ plugins:
 - chart:
     name: validator-plugin-network
     repository: "https://spectrocloud-labs.github.io/validator-plugin-network"
-    version: v0.0.7
+    version: v0.0.8
   values: |-
     controllerManager:
       kubeRbacProxy:
@@ -298,7 +298,7 @@ plugins:
             - ALL
         image:
           repository: gcr.io/kubebuilder/kube-rbac-proxy
-          tag: v0.14.1
+          tag: v0.15.0
         resources:
           limits:
             cpu: 500m
@@ -319,7 +319,7 @@ plugins:
             - ALL
         image:
           repository: quay.io/spectrocloud-labs/validator-plugin-network
-          tag: v0.0.7
+          tag: v0.0.8
         resources:
           limits:
             cpu: 500m
@@ -338,6 +338,19 @@ plugins:
         protocol: TCP
         targetPort: https
       type: ClusterIP
+    env: {}
+      # Optional proxy configuration
+      # - name: HTTP_PROXY
+      #   value: http://192.168.1.100:8080
+      # - name: HTTPS_PROXY
+      #   value: http://192.168.1.100:8080
+      # - name: NO_PROXY
+      #   value: foo.bar.com,127.0.0.1
+    proxy:
+      enabled: false
+      image: ubuntu:latest
+      # The name of a Secret containing a proxy CA certificate
+      secretName: proxy-cert
 pluginSecrets:
   # If installing the AWS plugin, the below config is required unless one of the following applies:
   # - The target cluster already contains a secret with the correct format and you've specified its name above.
