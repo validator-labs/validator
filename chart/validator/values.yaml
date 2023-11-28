@@ -77,7 +77,7 @@ plugins:
 - chart:
     name: validator-plugin-aws
     repository: "https://spectrocloud-labs.github.io/validator-plugin-aws"
-    version: v0.0.17
+    version: v0.0.18
   values: |-
     controllerManager:
       kubeRbacProxy:
@@ -93,7 +93,7 @@ plugins:
             - ALL
         image:
           repository: gcr.io/kubebuilder/kube-rbac-proxy
-          tag: v0.14.1
+          tag: v0.15.0
         resources:
           limits:
             cpu: 500m
@@ -112,7 +112,7 @@ plugins:
             - ALL
         image:
           repository: quay.io/spectrocloud-labs/validator-plugin-aws
-          tag: v0.0.17
+          tag: v0.0.18
         resources:
           limits:
             cpu: 500m
