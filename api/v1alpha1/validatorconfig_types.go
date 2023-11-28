@@ -23,28 +23,28 @@ import (
 
 // ValidatorConfigSpec defines the desired state of ValidatorConfig
 type ValidatorConfigSpec struct {
-	Plugins []HelmRelease `json:"plugins,omitempty"`
-	Sink    *Sink         `json:"sink,omitempty"`
+	Plugins []HelmRelease `json:"plugins,omitempty" yaml:"plugins,omitempty"`
+	Sink    *Sink         `json:"sink,omitempty" yaml:"sink,omitempty"`
 }
 
 type Sink struct {
 	// +kubebuilder:validation:Enum=alertmanager;slack
-	Type string `json:"type"`
+	Type string `json:"type" yaml:"type"`
 	// Name of a K8s secret containing configuration details for the sink
-	SecretName string `json:"secretName"`
+	SecretName string `json:"secretName" yaml:"secretName"`
 }
 
 type HelmRelease struct {
-	Chart  HelmChart `json:"chart"`
-	Values string    `json:"values"`
+	Chart  HelmChart `json:"chart" yaml:"chart"`
+	Values string    `json:"values" yaml:"values"`
 }
 
 type HelmChart struct {
-	Name                  string `json:"name"`
-	Repository            string `json:"repository"`
-	Version               string `json:"version"`
-	InsecureSkipTlsVerify bool   `json:"insecureSkipVerify,omitempty"`
-	AuthSecretName        string `json:"authSecretName,omitempty"`
+	Name                  string `json:"name" yaml:"name"`
+	Repository            string `json:"repository" yaml:"repository"`
+	Version               string `json:"version" yaml:"version"`
+	InsecureSkipTlsVerify bool   `json:"insecureSkipVerify,omitempty" yaml:"insecureSkipVerify,omitempty"`
+	AuthSecretName        string `json:"authSecretName,omitempty" yaml:"authSecretName,omitempty"`
 }
 
 // ValidatorConfigStatus defines the observed state of ValidatorConfig
