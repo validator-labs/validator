@@ -24,14 +24,6 @@ controllerManager:
     args:
     - --health-probe-bind-address=:8081
     - --leader-elect
-    env: []
-    # Optional proxy configuration
-    # - name: HTTP_PROXY
-    #   value: http://192.168.1.100:8080
-    # - name: HTTPS_PROXY
-    #   value: http://192.168.1.100:8080
-    # - name: NO_PROXY
-    #   value: foo.bar.com,127.0.0.1
     containerSecurityContext:
       allowPrivilegeEscalation: false
       capabilities:
@@ -59,6 +51,15 @@ metricsService:
     protocol: TCP
     targetPort: https
   type: ClusterIP
+
+# Optional environment variable configuration
+env: []
+# - name: HTTP_PROXY
+#   value: http://192.168.1.100:8080
+# - name: HTTPS_PROXY
+#   value: http://192.168.1.100:8080
+# - name: NO_PROXY
+#   value: foo.bar.com,127.0.0.1
 
 # Optional proxy configuration. If enabled, the secret containing your proxy CA certificate
 # will be mounted in the manager container and configured via an init container.
@@ -328,6 +329,14 @@ plugins:
         args:
         - --health-probe-bind-address=:8081
         - --leader-elect
+        # Optional environment variable configuration
+        env: []
+        # - name: HTTP_PROXY
+        #   value: http://192.168.1.100:8080
+        # - name: HTTPS_PROXY
+        #   value: http://192.168.1.100:8080
+        # - name: NO_PROXY
+        #   value: foo.bar.com,127.0.0.1
         containerSecurityContext:
           allowPrivilegeEscalation: true
           capabilities:
@@ -356,19 +365,16 @@ plugins:
         protocol: TCP
         targetPort: https
       type: ClusterIP
-    env: {}
-      # Optional proxy configuration
-      # - name: HTTP_PROXY
-      #   value: http://192.168.1.100:8080
-      # - name: HTTPS_PROXY
-      #   value: http://192.168.1.100:8080
-      # - name: NO_PROXY
-      #   value: foo.bar.com,127.0.0.1
+    # Optional proxy configuration. If enabled, the secret containing your proxy CA certificate
+    # will be mounted in the manager container and configured via an init container.
     proxy:
       enabled: false
-      image: ubuntu:latest
-      # The name of a Secret containing a proxy CA certificate
+      # The image used by the init container. Must include the update-ca-certificates command.
+      image: quay.io/spectrocloud-labs/validator-certs-init:latest
+      # The name of a secret containing a proxy CA certificate.
+      # WARNING: the key whose value is the CA certificate must end with '.crt'.
       secretName: proxy-cert
+
 pluginSecrets:
   # If installing the AWS plugin, the below config is required unless one of the following applies:
   # - The target cluster already contains a secret with the correct format and you've specified its name above.

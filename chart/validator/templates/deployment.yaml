@@ -61,8 +61,8 @@ spec:
           valueFrom:
             fieldRef:
               fieldPath: metadata.namespace
-          {{- if .Values.controllerManager.manager.env }}
-          {{- toYaml .Values.controllerManager.manager.env | nindent 8 }}
+          {{- if .Values.env }}
+          {{- toYaml .Values.env | nindent 8 }}
           {{- end }}
         - name: SINK_WEBHOOK_TIMEOUT_SECONDS
           value: {{ quote .Values.controllerManager.manager.sinkWebhookTimeout }}
