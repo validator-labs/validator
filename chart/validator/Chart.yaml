@@ -2,5 +2,5 @@ apiVersion: v2
 name: validator
 description: Monitor results created by validator plugins and upload them to a configurable sink
 type: application
-version: 0.0.25  # x-release-please-version
-appVersion: "0.0.25"  # x-release-please-version
+version: 0.0.26  # x-release-please-version
+appVersion: "0.0.26"  # x-release-please-version
