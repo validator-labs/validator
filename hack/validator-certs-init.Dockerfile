@@ -9,3 +9,6 @@ FROM --platform=$TARGETPLATFORM ubuntu:latest
 
 COPY --from=install /usr/bin/openssl /usr/bin/openssl
 COPY --from=install /usr/sbin/update-ca-certificates /usr/sbin/update-ca-certificates
+
+COPY --from=install /usr/share/ca-certificates /usr/share/ca-certificates
+COPY --from=install /etc/ca-certificates.conf /etc/ca-certificates.conf
