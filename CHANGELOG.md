@@ -1,5 +1,24 @@
 # Changelog
 
+## [0.0.27](https://github.com/spectrocloud-labs/validator/compare/v0.0.26...v0.0.27) (2023-11-29)
+
+
+### Features
+
+* support proxy configuration (env vars & CA certificate) ([#137](https://github.com/spectrocloud-labs/validator/issues/137)) ([63c3bc8](https://github.com/spectrocloud-labs/validator/commit/63c3bc8497766564d7e76a3da2dabc53ba3b7d54))
+
+
+### Bug Fixes
+
+* add yaml tags to ValidatorConfig types ([63afc70](https://github.com/spectrocloud-labs/validator/commit/63afc70819a4fffc6d90ba40cea12bca2577e743))
+* **deps:** update module github.com/onsi/ginkgo/v2 to v2.13.2 ([#138](https://github.com/spectrocloud-labs/validator/issues/138)) ([31746d6](https://github.com/spectrocloud-labs/validator/commit/31746d68c3f43ac3be1c0abacb62a35c57a7f1ce))
+
+
+### Other
+
+* bump AWS chart version ([c569524](https://github.com/spectrocloud-labs/validator/commit/c569524ad2cb0e7ca2995c1fde327abe82c61425))
+* update network plugin values ([#135](https://github.com/spectrocloud-labs/validator/issues/135)) ([1049435](https://github.com/spectrocloud-labs/validator/commit/104943556a73e3aa4e5acd80c99542222035a867))
+
 ## [0.0.26](https://github.com/spectrocloud-labs/validator/compare/v0.0.25...v0.0.26) (2023-11-28)
 
 
