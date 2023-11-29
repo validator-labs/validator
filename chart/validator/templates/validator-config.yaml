@@ -1,10 +1,23 @@
+{{ $env := .Values.env }}
+{{ $proxy := .Values.proxy }}
 apiVersion: validation.spectrocloud.labs/v1alpha1
 kind: ValidatorConfig
 metadata:
   name: validator-config
 spec:
   plugins:
-{{ toYaml .Values.plugins | indent 2 }}
+{{- range .Values.plugins }}
+  -
+{{- toYaml . | nindent 4 }}
+      {{- if $env }}
+      env:
+      {{- toYaml $env | nindent 8 }}
+      {{- else }}
+      env: []
+      {{- end }}
+      proxy:
+      {{- toYaml $proxy | nindent 8 }}
+{{- end }}
 {{- if .Values.sink }}
   sink:
     type: {{ required ".Values.sink.type is required!" .Values.sink.type }}
