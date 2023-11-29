@@ -68,8 +68,10 @@ proxy:
   # The image used by the init container. Must include the update-ca-certificates command.
   image: quay.io/spectrocloud-labs/validator-certs-init:latest
   # The name of a secret containing a proxy CA certificate.
-  # WARNING: the key whose value is the CA certificate must end with '.crt'.
   secretName: proxy-cert
+  # If false (using an existing secret), the key whose value is the CA certificate must end with '.crt'.
+  createSecret: false
+  caCert: ""  # Raw CA certificate, required if createSecret is true
 
 # Optional sink configuration
 sink: {}
