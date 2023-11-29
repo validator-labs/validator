@@ -303,7 +303,7 @@ plugins:
 - chart:
     name: validator-plugin-network
     repository: "https://spectrocloud-labs.github.io/validator-plugin-network"
-    version: v0.0.8
+    version: v0.0.9
   values: |-
     controllerManager:
       kubeRbacProxy:
@@ -340,7 +340,7 @@ plugins:
             - ALL
         image:
           repository: quay.io/spectrocloud-labs/validator-plugin-network
-          tag: v0.0.8
+          tag: v0.0.9
         resources:
           limits:
             cpu: 500m
