@@ -22,22 +22,35 @@ spec:
       annotations:
         kubectl.kubernetes.io/default-container: manager
     spec:
+      {{- if .Values.proxy.enabled }}
+      initContainers:
+      - name: init-certs
+        image: {{ required ".Values.proxy.image is required!" .Values.proxy.image }}
+        command: ["/bin/bash", "-c"]
+        args: ["update-ca-certificates && cp -r /etc/ca-certificates.conf /usr/share/ca-certificates /etc/ssl/certs"]
+        volumeMounts:
+        - name: ca-pemstore
+          mountPath: /usr/local/share/ca-certificates
+          readOnly: false
+        - name: certs
+          mountPath: /etc/ssl/certs
+          readOnly: false
+        securityContext:
+          runAsNonRoot: false
+      {{- end }}
       containers:
       - args: {{- toYaml .Values.controllerManager.kubeRbacProxy.args | nindent 8 }}
         env:
         - name: KUBERNETES_CLUSTER_DOMAIN
           value: {{ quote .Values.kubernetesClusterDomain }}
-        image: {{ .Values.controllerManager.kubeRbacProxy.image.repository }}:{{ .Values.controllerManager.kubeRbacProxy.image.tag
-          | default .Chart.AppVersion }}
+        image: {{ .Values.controllerManager.kubeRbacProxy.image.repository }}:{{ .Values.controllerManager.kubeRbacProxy.image.tag | default .Chart.AppVersion }}
         name: kube-rbac-proxy
         ports:
         - containerPort: 8443
           name: https
           protocol: TCP
-        resources: {{- toYaml .Values.controllerManager.kubeRbacProxy.resources | nindent
-          10 }}
-        securityContext: {{- toYaml .Values.controllerManager.kubeRbacProxy.containerSecurityContext
-          | nindent 10 }}
+        resources: {{- toYaml .Values.controllerManager.kubeRbacProxy.resources | nindent 10 }}
+        securityContext: {{- toYaml .Values.controllerManager.kubeRbacProxy.containerSecurityContext | nindent 10 }}
       - args: {{- toYaml .Values.controllerManager.manager.args | nindent 8 }}
         command:
         - /manager
@@ -48,10 +61,12 @@ spec:
           valueFrom:
             fieldRef:
               fieldPath: metadata.namespace
+          {{- if .Values.env }}
+          {{- toYaml .Values.env | nindent 8 }}
+          {{- end }}
         - name: SINK_WEBHOOK_TIMEOUT_SECONDS
           value: {{ quote .Values.controllerManager.manager.sinkWebhookTimeout }}
-        image: {{ .Values.controllerManager.manager.image.repository }}:{{ .Values.controllerManager.manager.image.tag
-          | default .Chart.AppVersion }}
+        image: {{ .Values.controllerManager.manager.image.repository }}:{{ .Values.controllerManager.manager.image.tag | default .Chart.AppVersion }}
         livenessProbe:
           httpGet:
             path: /healthz
@@ -65,13 +80,33 @@ spec:
             port: 8081
           initialDelaySeconds: 5
           periodSeconds: 10
-        resources: {{- toYaml .Values.controllerManager.manager.resources | nindent 10
-          }}
-        securityContext: {{- toYaml .Values.controllerManager.manager.containerSecurityContext
-          | nindent 10 }}
+        resources: {{- toYaml .Values.controllerManager.manager.resources | nindent 10 }}
+        securityContext: {{- toYaml .Values.controllerManager.manager.containerSecurityContext | nindent 10 }}
+        {{- if .Values.proxy.enabled }}
+        volumeMounts:
+        - name: certs
+          mountPath: /etc/ca-certificates.conf
+          subPath: ca-certificates.conf
+          readOnly: true
+        - name: certs
+          mountPath: /usr/share/ca-certificates
+          subPath: ca-certificates
+          readOnly: true
+        - name: certs
+          mountPath: /etc/ssl/certs
+          readOnly: true
+        {{- end }}
       securityContext:
         runAsNonRoot: true
         seccompProfile:
           type: RuntimeDefault
       serviceAccountName: {{ include "chart.fullname" . }}-controller-manager
       terminationGracePeriodSeconds: 10
+      {{- if .Values.proxy.enabled }}
+      volumes:
+      - name: ca-pemstore
+        secret:
+          secretName: {{ required ".Values.proxy.secretName is required!" .Values.proxy.secretName }}
+      - name: certs
+        emptyDir: {}
+      {{- end}}

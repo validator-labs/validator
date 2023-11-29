@@ -1,6 +1,7 @@
 
 # Image URL to use all building/pushing image targets
 IMG ?= quay.io/spectrocloud-labs/validator:latest
+CERTS_INIT_IMG ?= quay.io/spectrocloud-labs/validator-certs-init:latest
 
 GOARCH ?= $(shell go env GOARCH)
 
@@ -80,6 +81,10 @@ run: manifests generate fmt vet ## Run a controller from your host.
 .PHONY: docker-build
 docker-build: test ## Build docker image with the manager.
 	$(CONTAINER_TOOL) build -t ${IMG} . --platform linux/$(GOARCH)
+
+.PHONY: docker-build-certs-init
+docker-build-certs-init: ## Build validator-certs-init docker image.
+	$(CONTAINER_TOOL) build -f hack/validator-certs-init.Dockerfile -t ${CERTS_INIT_IMG} . --platform linux/$(GOARCH)
 
 .PHONY: docker-push
 docker-push: ## Push docker image with the manager.

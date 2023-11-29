@@ -52,6 +52,27 @@ metricsService:
     targetPort: https
   type: ClusterIP
 
+# Optional environment variable configuration
+env: []
+# - name: HTTP_PROXY
+#   value: http://192.168.1.100:8080
+# - name: HTTPS_PROXY
+#   value: http://192.168.1.100:8080
+# - name: NO_PROXY
+#   value: foo.bar.com,127.0.0.1
+
+# Optional proxy configuration. If enabled, the secret containing your proxy CA certificate
+# will be mounted in the manager container and configured via an init container.
+proxy:
+  enabled: false
+  # The image used by the init container. Must include the update-ca-certificates command.
+  image: quay.io/spectrocloud-labs/validator-certs-init:latest
+  # The name of a secret containing a proxy CA certificate.
+  secretName: proxy-cert
+  # If false (using an existing secret), the key whose value is the CA certificate must end with '.crt'.
+  createSecret: false
+  caCert: ""  # Raw CA certificate, required if createSecret is true
+
 # Optional sink configuration
 sink: {}
   # type: alertmanager
@@ -282,7 +303,7 @@ plugins:
 - chart:
     name: validator-plugin-network
     repository: "https://spectrocloud-labs.github.io/validator-plugin-network"
-    version: v0.0.8
+    version: v0.0.9
   values: |-
     controllerManager:
       kubeRbacProxy:
@@ -319,7 +340,7 @@ plugins:
             - ALL
         image:
           repository: quay.io/spectrocloud-labs/validator-plugin-network
-          tag: v0.0.8
+          tag: v0.0.9
         resources:
           limits:
             cpu: 500m
@@ -338,19 +359,7 @@ plugins:
         protocol: TCP
         targetPort: https
       type: ClusterIP
-    env: {}
-      # Optional proxy configuration
-      # - name: HTTP_PROXY
-      #   value: http://192.168.1.100:8080
-      # - name: HTTPS_PROXY
-      #   value: http://192.168.1.100:8080
-      # - name: NO_PROXY
-      #   value: foo.bar.com,127.0.0.1
-    proxy:
-      enabled: false
-      image: ubuntu:latest
-      # The name of a Secret containing a proxy CA certificate
-      secretName: proxy-cert
+
 pluginSecrets:
   # If installing the AWS plugin, the below config is required unless one of the following applies:
   # - The target cluster already contains a secret with the correct format and you've specified its name above.
