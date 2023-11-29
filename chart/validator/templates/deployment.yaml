@@ -27,10 +27,10 @@ spec:
       - name: init-certs
         image: {{ required ".Values.proxy.image is required!" .Values.proxy.image }}
         command: ["/bin/bash", "-c"]
-        args: ["update-ca-certificates"]
+        args: ["update-ca-certificates && cp -r /etc/ca-certificates.conf /usr/share/ca-certificates /etc/ssl/certs"]
         volumeMounts:
         - name: ca-pemstore
-          mountPath: /usr/local/share/ca-certificates/
+          mountPath: /usr/local/share/ca-certificates
           readOnly: false
         - name: certs
           mountPath: /etc/ssl/certs
@@ -85,8 +85,16 @@ spec:
         {{- if .Values.proxy.enabled }}
         volumeMounts:
         - name: certs
-          mountPath: "/etc/ssl/certs"
-          readOnly: false
+          mountPath: /etc/ca-certificates.conf
+          subPath: ca-certificates.conf
+          readOnly: true
+        - name: certs
+          mountPath: /usr/share/ca-certificates
+          subPath: ca-certificates
+          readOnly: true
+        - name: certs
+          mountPath: /etc/ssl/certs
+          readOnly: true
         {{- end }}
       securityContext:
         runAsNonRoot: true
