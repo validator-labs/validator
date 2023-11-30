@@ -471,6 +471,11 @@ pluginSecrets:
     # vcenterServer: ""
     # insecureSkipVerify: ""
 
+  # If installing the OCI plugin and validating against private registries, the below config is required unless the following applies:
+  # - The target cluster already contains secrets with the correct format for all private registries.
+  #   If specifying your own secret, refer to chart/validator/templates/plugin-secret-oci.yaml for
+  #   an example of the expected format and ensure that it exists in the same namespace as the Helm release.
+  #
   oci: []  # Don't forget to delete these square brackets if you're specifying credentials here!
     # - secretName: registry-creds # ensure this matches the secretName in the OciRegistryRule
     #   username: username # for ECR Registries, store the AWS_ACCESS_KEY_ID here
