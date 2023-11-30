@@ -22,6 +22,7 @@ import (
 	"encoding/base64"
 	"fmt"
 	"strings"
+	"sync"
 	"time"
 
 	"github.com/go-logr/logr"
@@ -273,6 +274,7 @@ func getPluginHashKey(pluginName string) string {
 
 // deletePlugins deletes each validator plugin's Helm release
 func (r *ValidatorConfigReconciler) deletePlugins(ctx context.Context, vc *v1alpha1.ValidatorConfig) error {
+	var wg sync.WaitGroup
 	for _, p := range vc.Spec.Plugins {
 		release, err := r.HelmSecretsClient.Get(ctx, p.Chart.Name, vc.Namespace)
 		if err != nil {
@@ -284,8 +286,15 @@ func (r *ValidatorConfigReconciler) deletePlugins(ctx context.Context, vc *v1alp
 		if release.Secret.Labels == nil || release.Secret.Labels["owner"] != "helm" {
 			return nil
 		}
-		r.deletePlugin(vc, p.Chart.Name)
+
+		wg.Add(1)
+		go func(name string) {
+			defer wg.Done()
+			r.deletePlugin(vc, name)
+		}(p.Chart.Name)
 	}
+
+	wg.Wait()
 	return nil
 }
 
