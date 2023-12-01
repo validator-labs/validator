@@ -246,7 +246,7 @@ plugins:
 - chart:
     name: validator-plugin-vsphere
     repository: "https://spectrocloud-labs.github.io/validator-plugin-vsphere"
-    version: v0.0.13
+    version: v0.0.15
   values: |-
     controllerManager:
       kubeRbacProxy:
@@ -281,7 +281,7 @@ plugins:
             - ALL
         image:
           repository: quay.io/spectrocloud-labs/validator-plugin-vsphere
-          tag: v0.0.13
+          tag: v0.0.15
         resources:
           limits:
             cpu: 500m
