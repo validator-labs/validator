@@ -95,7 +95,7 @@ spec:
         command: ["/cleanup"]
         env:
         - name: CLEANUP_DELAY_SECONDS
-          value: "10"
+          value: {{ mul 10 (max 1 (len (required ".Values.plugins is required!" .Values.plugins))) | quote }}
         resources:
           requests:
             cpu: "10m"
