@@ -1,5 +1,25 @@
 # Changelog
 
+## [0.0.28](https://github.com/spectrocloud-labs/validator/compare/v0.0.27...v0.0.28) (2023-12-04)
+
+
+### Features
+
+* add OCI plugin ([#139](https://github.com/spectrocloud-labs/validator/issues/139)) ([3ae7b70](https://github.com/spectrocloud-labs/validator/commit/3ae7b70920ed27f8ad1325fdbe0461c71ae48a71))
+
+
+### Bug Fixes
+
+* delete plugins in parallel to avoid hitting timeouts ([#141](https://github.com/spectrocloud-labs/validator/issues/141)) ([a3fc0dc](https://github.com/spectrocloud-labs/validator/commit/a3fc0dc56c7c1964b2ee38b666a866c78711010e))
+* dynamically set cleanup wait time ([#143](https://github.com/spectrocloud-labs/validator/issues/143)) ([13d0399](https://github.com/spectrocloud-labs/validator/commit/13d039915a4f5d9c66dae3c6938f55fc2ff210d6))
+
+
+### Other
+
+* Bump vsphere plugin version to 0.0.15 ([#142](https://github.com/spectrocloud-labs/validator/issues/142)) ([8b69b33](https://github.com/spectrocloud-labs/validator/commit/8b69b33463280ab3f44330f037f2958c41367d9a))
+* **deps:** update anchore/sbom-action action to v0.15.1 ([#145](https://github.com/spectrocloud-labs/validator/issues/145)) ([7cbb94c](https://github.com/spectrocloud-labs/validator/commit/7cbb94c17599865ea68e7fe1019cb93acad37524))
+* **deps:** update google-github-actions/release-please-action action to v4 ([#144](https://github.com/spectrocloud-labs/validator/issues/144)) ([c4d008c](https://github.com/spectrocloud-labs/validator/commit/c4d008c391fbf4c0bcd932668ed0684b571fa7fe))
+
 ## [0.0.27](https://github.com/spectrocloud-labs/validator/compare/v0.0.26...v0.0.27) (2023-11-29)
 
 
