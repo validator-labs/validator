@@ -1,0 +1,26 @@
+name: GoVulnCheck
+
+on:
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: govulncheck-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  govulncheck-pr-scan:
+    runs-on: ubuntu-latest
+    container:
+      image: gcr.io/spectro-images-public/golang:1.21-alpine
+    steps:
+      - name: install-govulncheck
+        run: GOBIN=/usr/local/bin go install golang.org/x/vuln/cmd/govulncheck@latest
+
+      - name: checkout
+        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4
+
+      - name: govulncheck-scan
+        run: |
+          go version
+          govulncheck -mode source ./...

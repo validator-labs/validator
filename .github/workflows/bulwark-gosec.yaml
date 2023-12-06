@@ -1,0 +1,49 @@
+name: BulwarkGoSec
+
+on:
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: gosec-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  gosec-pr-scan:
+    runs-on: ubuntu-latest
+    container:
+      image: gcr.io/spectro-dev-public/bulwark/gosec:latest
+      env:
+        REPO: ${{ github.event.repository.name }}
+    steps:
+
+      - name: Set up Go
+        uses: actions/setup-go@0c52d547c9bc32b1aa3301fd7a9cb496313a4491 # v5
+        with:
+          go-version: '1.21'
+
+      - name: checkout
+        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4
+
+      - name: run-gosec-scan
+        shell: sh
+        env:
+          BRANCH: ${{ github.head_ref || github.ref_name }}
+          GO111MODULE: on
+        run: /workspace/bulwark -name CodeSASTGoSec -verbose -organization spectrocloud-labs -target $REPO -tags "branch:$BRANCH"
+
+      - name: check-result
+        shell: sh
+        run: |
+          resultPath=$REPO-result.json
+          issues=$(cat $resultPath | jq -r '.Stats.found')
+          echo "Found ${issues} issues"
+          echo "Issues by Rule ID"
+          jq -r '.Issues | group_by (.rule_id)[] | {rule: .[0].rule_id, count: length}' $resultPath
+          if [ "$issues" -gt 0 ]; then
+            echo "GoSec SAST scan failed with below findings..."
+            cat $resultPath
+            exit 1
+          else 
+            echo "GoSec SAST scan passed"
+          fi 

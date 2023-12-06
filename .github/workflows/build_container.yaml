@@ -1,16 +1,7 @@
 name: Build
 
 on:
-  push:
-    branches:
-      - 'main'
-      - '[0-9]+.[1-9][0-9]*.x'
   pull_request:
-    branches:
-      - 'main'
-      - '[0-9]+.[1-9][0-9]*.x'
-    paths-ignore:
-      - "**.md"
   workflow_dispatch:
 
 env:
@@ -24,6 +15,7 @@ jobs:
   prepare_ci_run:
     name: Prepare CI Run
     runs-on: ubuntu-22.04
+    if: "!(contains(github.head_ref, 'release-please') || contains(github.ref, 'release-please'))"
     outputs:
       GIT_SHA: ${{ steps.extract_branch.outputs.GIT_SHA }}
       BRANCH: ${{ steps.extract_branch.outputs.BRANCH }}

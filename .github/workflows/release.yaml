@@ -35,7 +35,7 @@ jobs:
         id: release
         with:
           command: manifest
-          token: ${{secrets.GITHUB_TOKEN}}
+          token: ${{ secrets.PAT }}
           default-branch: main
 
   release-charts:
@@ -49,7 +49,7 @@ jobs:
       - name: Publish Helm chart
         uses: stefanprodan/helm-gh-pages@master
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.PAT }}
           charts_dir: chart
           owner: spectrocloud-labs
           branch: ${{ env.GITHUB_PAGES_BRANCH }}

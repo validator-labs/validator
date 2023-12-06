@@ -1,14 +1,7 @@
 name: Test
 
 on:
-  push:
-    branches:
-      - 'main'
-      - '[0-9]+.[1-9][0-9]*.x'
   pull_request:
-    branches:
-      - 'main'
-      - '[0-9]+.[1-9][0-9]*.x'
   workflow_dispatch:
 
 env:
@@ -40,6 +33,7 @@ jobs:
   test-chart:
     name: Run Helm Chart Tests
     runs-on: ubuntu-latest
+    if: "!(contains(github.head_ref, 'release-please') || contains(github.ref, 'release-please'))"
     steps:
       - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4
         with:
