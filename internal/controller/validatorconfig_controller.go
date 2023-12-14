@@ -21,10 +21,13 @@ import (
 	"crypto/sha256"
 	"encoding/base64"
 	"fmt"
+	"net/http"
+	"os"
 	"strings"
 	"sync"
 	"time"
 
+	connect "connectrpc.com/connect"
 	"github.com/go-logr/logr"
 	"golang.org/x/exp/slices"
 	corev1 "k8s.io/api/core/v1"
@@ -35,6 +38,8 @@ import (
 	ctrl "sigs.k8s.io/controller-runtime"
 	"sigs.k8s.io/controller-runtime/pkg/client"
 
+	"buf.build/gen/go/spectrocloud/spectro-cleanup/connectrpc/go/cleanup/v1/cleanupv1connect"
+	cleanv1 "buf.build/gen/go/spectrocloud/spectro-cleanup/protocolbuffers/go/cleanup/v1"
 	v1alpha1 "github.com/spectrocloud-labs/validator/api/v1alpha1"
 	"github.com/spectrocloud-labs/validator/pkg/helm"
 )
@@ -100,7 +105,11 @@ func (r *ValidatorConfigReconciler) Reconcile(ctx context.Context, req ctrl.Requ
 		if err := r.deletePlugins(ctx, vc); err != nil {
 			return ctrl.Result{}, err
 		}
-		return ctrl.Result{}, removeFinalizer(ctx, r.Client, vc, CleanupFinalizer)
+
+		err = removeFinalizer(ctx, r.Client, vc, CleanupFinalizer)
+		r.emitFinalizeCleanup()
+
+		return ctrl.Result{}, err
 	}
 
 	// TODO: implement a proper patcher to avoid this hacky approach with global vars
@@ -372,4 +381,29 @@ func isConditionTrue(vc *v1alpha1.ValidatorConfig, chartName string, conditionTy
 		return v1alpha1.ValidatorPluginCondition{}, false
 	}
 	return vc.Status.Conditions[idx], vc.Status.Conditions[idx].Status == corev1.ConditionTrue
+}
+
+func (r *ValidatorConfigReconciler) emitFinalizeCleanup() {
+	grpcEnabled := os.Getenv("CLEANUP_GRPC_ENABLED")
+	if grpcEnabled != "true" {
+		r.Log.V(0).Info("Cleanup job gRPC server is not enabled")
+		return
+	}
+
+	host := os.Getenv("CLEANUP_GRPC_SERVER_HOST")
+	port := os.Getenv("CLEANUP_GRPC_SERVER_PORT")
+
+	url := fmt.Sprintf("https://%s:%s", host, port)
+
+	client := cleanupv1connect.NewCleanupServiceClient(
+		http.DefaultClient,
+		url,
+	)
+	_, err := client.FinalizeCleanup(
+		context.Background(),
+		connect.NewRequest(&cleanv1.FinalizeCleanupRequest{}),
+	)
+	if err != nil {
+		r.Log.Error(err, "FinalizeCleanup request failed", "url", url)
+	}
 }
