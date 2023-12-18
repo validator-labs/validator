@@ -266,7 +266,7 @@ func TestEmitFinalizeCleanup(t *testing.T) {
 				"CLEANUP_GRPC_SERVER_HOST":    "localhost",
 				"CLEANUP_GRPC_SERVER_PORT":    "1234",
 			},
-			expected: errors.New(`FinalizeCleanup request to https://localhost:1234 failed: unavailable: dial tcp [::1]:1234: connect: connection refused`),
+			expected: errors.New(`FinalizeCleanup request to http://localhost:1234 failed: unavailable: dial tcp [::1]:1234: connect: connection refused`),
 		},
 	}
 	for _, c := range cs {
