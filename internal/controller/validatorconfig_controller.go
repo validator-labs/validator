@@ -20,9 +20,11 @@ import (
 	"context"
 	"crypto/sha256"
 	"encoding/base64"
+	"errors"
 	"fmt"
 	"net/http"
 	"os"
+	"strconv"
 	"strings"
 	"sync"
 	"time"
@@ -107,7 +109,10 @@ func (r *ValidatorConfigReconciler) Reconcile(ctx context.Context, req ctrl.Requ
 		}
 
 		err = removeFinalizer(ctx, r.Client, vc, CleanupFinalizer)
-		r.emitFinalizeCleanup()
+
+		if emitErr := r.emitFinalizeCleanup(); emitErr != nil {
+			r.Log.Error(emitErr, "Failed to emit FinalizeCleanup request")
+		}
 
 		return ctrl.Result{}, err
 	}
@@ -383,27 +388,35 @@ func isConditionTrue(vc *v1alpha1.ValidatorConfig, chartName string, conditionTy
 	return vc.Status.Conditions[idx], vc.Status.Conditions[idx].Status == corev1.ConditionTrue
 }
 
-func (r *ValidatorConfigReconciler) emitFinalizeCleanup() {
-	grpcEnabled := os.Getenv("CLEANUP_GRPC_ENABLED")
+func (r *ValidatorConfigReconciler) emitFinalizeCleanup() error {
+	grpcEnabled := os.Getenv("CLEANUP_GRPC_SERVER_ENABLED")
 	if grpcEnabled != "true" {
 		r.Log.V(0).Info("Cleanup job gRPC server is not enabled")
-		return
+		return nil
 	}
 
 	host := os.Getenv("CLEANUP_GRPC_SERVER_HOST")
+	if host == "" {
+		return errors.New("CLEANUP_GRPC_SERVER_HOST is invalid")
+	}
+
 	port := os.Getenv("CLEANUP_GRPC_SERVER_PORT")
+	_, err := strconv.Atoi(port)
+	if err != nil {
+		return fmt.Errorf("CLEANUP_GRPC_SERVER_PORT is invalid: %w", err)
+	}
 
 	url := fmt.Sprintf("https://%s:%s", host, port)
-
 	client := cleanupv1connect.NewCleanupServiceClient(
 		http.DefaultClient,
 		url,
 	)
-	_, err := client.FinalizeCleanup(
+	_, err = client.FinalizeCleanup(
 		context.Background(),
 		connect.NewRequest(&cleanv1.FinalizeCleanupRequest{}),
 	)
 	if err != nil {
-		r.Log.Error(err, "FinalizeCleanup request failed", "url", url)
+		return fmt.Errorf("FinalizeCleanup request to %s failed: %w", url, err)
 	}
+	return nil
 }
