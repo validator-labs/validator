@@ -97,6 +97,11 @@ sink: {}
   # WARNING: the existing secret must match the format used in sink-secret.yaml
   # createSecret: true
 
+cleanup:
+  grpcServerEnabled: true
+  hostname: validator-cleanup-service
+  port: 3006
+
 # Validation plugin charts
 plugins:
 - chart:
