@@ -1,3 +1,9 @@
+buf.build/gen/go/spectrocloud/spectro-cleanup/connectrpc/go v1.13.0-20231213011348-5645e27c876a.1 h1:flYv+oyV4sGFTc8UrA6bSxCkGE7mvSUyydrCiXk5s7A=
+buf.build/gen/go/spectrocloud/spectro-cleanup/connectrpc/go v1.13.0-20231213011348-5645e27c876a.1/go.mod h1:pNAXVmeA3b2y1Hi/j2poNtPTT0Bvo2LgRK7FThfG0oc=
+buf.build/gen/go/spectrocloud/spectro-cleanup/protocolbuffers/go v1.31.0-20231213011348-5645e27c876a.2 h1:ub8BpTL/wC0JVAjnfKzSdqu3xjJBFn4ndVPGu0u3KHU=
+buf.build/gen/go/spectrocloud/spectro-cleanup/protocolbuffers/go v1.31.0-20231213011348-5645e27c876a.2/go.mod h1:629c8Zj/8OXoFZZfqhsjqXJ0MIIVuonsR0x8/Nngi+U=
+connectrpc.com/connect v1.13.0 h1:lGs5maZZzWOOD+PFFiOt5OncKmMsk9ZdPwpy5jcmaYg=
+connectrpc.com/connect v1.13.0/go.mod h1:uHAFHtYgeSZJxXrkN1IunDpKghnTXhYbVh0wW4StPW0=
 github.com/benbjohnson/clock v1.1.0/go.mod h1:J11/hYXuz8f4ySSvYwY0FKfm+ezbsZBKZxNJlLklBHA=
 github.com/benbjohnson/clock v1.3.0 h1:ip6w0uFQkncKQ979AypyG0ER7mqUSBdKLOgAle/AT8A=
 github.com/beorn7/perks v1.0.1 h1:VlbKKnNfV8bJzeqoa4cOKqO6bYr3WgKZxO8Z16+hsOM=

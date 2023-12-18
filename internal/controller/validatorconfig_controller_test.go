@@ -210,3 +210,76 @@ func TestConfigureHelmBasicAuth(t *testing.T) {
 		}
 	}
 }
+
+func TestEmitFinalizeCleanup(t *testing.T) {
+	cs := []struct {
+		name       string
+		reconciler ValidatorConfigReconciler
+		env        map[string]string
+		expected   error
+	}{
+		{
+			name:       "CLEANUP_GRPC_SERVER_ENABLED is empty",
+			reconciler: ValidatorConfigReconciler{},
+			env:        map[string]string{},
+			expected:   errors.New("CLEANUP_GRPC_SERVER_HOST is empty"),
+		},
+		{
+			name:       "CLEANUP_GRPC_SERVER_ENABLED is disabled",
+			reconciler: ValidatorConfigReconciler{},
+			env:        map[string]string{"CLEANUP_GRPC_SERVER_ENABLED": "false"},
+			expected:   nil,
+		},
+		{
+			name:       "CLEANUP_GRPC_SERVER_HOST is empty",
+			reconciler: ValidatorConfigReconciler{},
+			env: map[string]string{
+				"CLEANUP_GRPC_SERVER_ENABLED": "true",
+				"CLEANUP_GRPC_SERVER_PORT":    "1234",
+			},
+			expected: errors.New("CLEANUP_GRPC_SERVER_HOST is invalid"),
+		},
+		{
+			name:       "CLEANUP_GRPC_SERVER_PORT is empty",
+			reconciler: ValidatorConfigReconciler{},
+			env: map[string]string{
+				"CLEANUP_GRPC_SERVER_ENABLED": "true",
+				"CLEANUP_GRPC_SERVER_HOST":    "localhost",
+			},
+			expected: errors.New(`CLEANUP_GRPC_SERVER_PORT is invalid: strconv.Atoi: parsing "": invalid syntax`),
+		},
+		{
+			name:       "CLEANUP_GRPC_SERVER_PORT is invalid",
+			reconciler: ValidatorConfigReconciler{},
+			env: map[string]string{
+				"CLEANUP_GRPC_SERVER_ENABLED": "true",
+				"CLEANUP_GRPC_SERVER_HOST":    "localhost",
+				"CLEANUP_GRPC_SERVER_PORT":    "abcd",
+			},
+			expected: errors.New(`CLEANUP_GRPC_SERVER_PORT is invalid: strconv.Atoi: parsing "abcd": invalid syntax`),
+		},
+		{
+			name:       "Request fails",
+			reconciler: ValidatorConfigReconciler{},
+			env: map[string]string{
+				"CLEANUP_GRPC_SERVER_ENABLED": "true",
+				"CLEANUP_GRPC_SERVER_HOST":    "localhost",
+				"CLEANUP_GRPC_SERVER_PORT":    "1234",
+			},
+			expected: errors.New(`FinalizeCleanup request to https://localhost:1234 failed: unavailable: dial tcp [::1]:1234: connect: connection refused`),
+		},
+	}
+	for _, c := range cs {
+		t.Log(c.name)
+
+		os.Clearenv()
+		for k, v := range c.env {
+			os.Setenv(k, v)
+		}
+
+		err := c.reconciler.emitFinalizeCleanup()
+		if err != nil && !reflect.DeepEqual(err.Error(), c.expected.Error()) {
+			t.Errorf("expected (%v), got (%v)", c.expected, err)
+		}
+	}
+}
