@@ -406,7 +406,7 @@ func (r *ValidatorConfigReconciler) emitFinalizeCleanup() error {
 		return fmt.Errorf("CLEANUP_GRPC_SERVER_PORT is invalid: %w", err)
 	}
 
-	url := fmt.Sprintf("https://%s:%s", host, port)
+	url := fmt.Sprintf("http://%s:%s", host, port)
 	client := cleanupv1connect.NewCleanupServiceClient(
 		http.DefaultClient,
 		url,
