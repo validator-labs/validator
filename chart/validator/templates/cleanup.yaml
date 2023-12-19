@@ -98,7 +98,7 @@ spec:
         command: ["/cleanup"]
         env:
         - name: CLEANUP_DELAY_SECONDS
-          value: {{ mul 15 (max 1 (len (required ".Values.plugins is required!" .Values.plugins))) | quote }}
+          value: "300"
         {{- if .Values.cleanup.grpcServerEnabled }}
         - name: CLEANUP_GRPC_SERVER_ENABLED
           value: "true"
