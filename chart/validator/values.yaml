@@ -97,6 +97,12 @@ sink: {}
   # WARNING: the existing secret must match the format used in sink-secret.yaml
   # createSecret: true
 
+cleanup:
+  image: gcr.io/spectro-images-public/release/spectro-cleanup:1.2.0
+  grpcServerEnabled: true
+  hostname: validator-cleanup-service
+  port: 3006
+
 # Validation plugin charts
 plugins:
 - chart:

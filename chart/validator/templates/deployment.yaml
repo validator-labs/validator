@@ -66,6 +66,14 @@ spec:
           {{- end }}
         - name: SINK_WEBHOOK_TIMEOUT_SECONDS
           value: {{ quote .Values.controllerManager.manager.sinkWebhookTimeout }}
+        {{- if .Values.cleanup.grpcServerEnabled }}
+        - name: CLEANUP_GRPC_SERVER_ENABLED
+          value: "true"
+        - name: CLEANUP_GRPC_SERVER_HOST
+          value: {{ required ".Values.cleanup.hostname is required!" .Values.cleanup.hostname | toString }}
+        - name: CLEANUP_GRPC_SERVER_PORT
+          value: {{ required ".Values.cleanup.port is required!" .Values.cleanup.port | toString | quote }}
+        {{- end }}
         image: {{ .Values.controllerManager.manager.image.repository }}:{{ .Values.controllerManager.manager.image.tag | default .Chart.AppVersion }}
         livenessProbe:
           httpGet:
