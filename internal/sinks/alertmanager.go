@@ -82,7 +82,7 @@ func (s *AlertmanagerSink) Configure(c Client, config map[string][]byte) error {
 
 	c.hclient.Transport = &http.Transport{
 		TLSClientConfig: &tls.Config{
-			InsecureSkipVerify: insecureSkipVerify,
+			InsecureSkipVerify: insecureSkipVerify, //#nosec G402
 			MinVersion:         tls.VersionTLS12,
 			RootCAs:            caCertPool,
 		},
