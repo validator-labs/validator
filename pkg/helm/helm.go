@@ -76,7 +76,7 @@ func (c *helmClient) exec(args []string) error {
 	sanitizedArgs := sb.String()
 
 	fmt.Println("helm " + sanitizedArgs)
-	cmd := exec.Command(c.helmPath, args...) //#nosec G204
+	cmd := exec.Command(c.helmPath, args...) // #nosec G204
 	if c.stdout != nil {
 		cmd.Stdout = c.stdout
 		cmd.Stderr = c.stderr
