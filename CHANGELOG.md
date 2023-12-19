@@ -1,5 +1,24 @@
 # Changelog
 
+## [0.0.29](https://github.com/spectrocloud-labs/validator/compare/v0.0.28...v0.0.29) (2023-12-19)
+
+
+### Features
+
+* implement client to send FinalizeCleanup requests to spectro-cleanup ([#155](https://github.com/spectrocloud-labs/validator/issues/155)) ([2ae0348](https://github.com/spectrocloud-labs/validator/commit/2ae03480b48d7b1bffb20227889c7f1c2a12f60e))
+
+
+### Bug Fixes
+
+* resolve all gosec issues ([#158](https://github.com/spectrocloud-labs/validator/issues/158)) ([dbca19b](https://github.com/spectrocloud-labs/validator/commit/dbca19bc47ae73a1589ba2b561002a431b881d12))
+* use http to make request to gRPC server ([#157](https://github.com/spectrocloud-labs/validator/issues/157)) ([1c960f8](https://github.com/spectrocloud-labs/validator/commit/1c960f80e2014d87696f993a598ecd49d36fc84b))
+
+
+### Other
+
+* **deps:** update actions/setup-go action to v5 ([#147](https://github.com/spectrocloud-labs/validator/issues/147)) ([335d452](https://github.com/spectrocloud-labs/validator/commit/335d452d73f4ec5d86ca9cb00d2d5cb9598c0c0b))
+* **deps:** update actions/setup-python action to v5 ([#146](https://github.com/spectrocloud-labs/validator/issues/146)) ([d8fec57](https://github.com/spectrocloud-labs/validator/commit/d8fec5758fb948ee758c5a1deb1f4c4d9fe86d63))
+
 ## [0.0.28](https://github.com/spectrocloud-labs/validator/compare/v0.0.27...v0.0.28) (2023-12-04)
 
 
