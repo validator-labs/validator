@@ -94,7 +94,7 @@ spec:
       serviceAccountName: spectro-cleanup
       containers:
       - name: validator-cleanup
-        image: gcr.io/spectro-images-public/release/spectro-cleanup:1.2.0
+        image: {{ required ".Values.cleanup.image is required!" .Values.cleanup.image }}
         command: ["/cleanup"]
         env:
         - name: CLEANUP_DELAY_SECONDS

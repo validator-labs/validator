@@ -98,6 +98,7 @@ sink: {}
   # createSecret: true
 
 cleanup:
+  image: gcr.io/spectro-images-public/release/spectro-cleanup:1.2.0
   grpcServerEnabled: true
   hostname: validator-cleanup-service
   port: 3006
