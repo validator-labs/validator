@@ -1,5 +1,22 @@
 # Changelog
 
+## [0.0.30](https://github.com/spectrocloud-labs/validator/compare/v0.0.29...v0.0.30) (2023-12-19)
+
+
+### Features
+
+* update helm chart to enable fast cleanup in spectro-cleanup via gRPC endpoint ([#156](https://github.com/spectrocloud-labs/validator/issues/156)) ([6f91745](https://github.com/spectrocloud-labs/validator/commit/6f91745c9db6e92071e691a74942c0bb53692384))
+
+
+### Bug Fixes
+
+* **deps:** update golang.org/x/exp digest to 73b9e39 ([#151](https://github.com/spectrocloud-labs/validator/issues/151)) ([bfaf2de](https://github.com/spectrocloud-labs/validator/commit/bfaf2de249f6edfb583ff5870be7572ddd2a55ee))
+
+
+### Other
+
+* **deps:** update google-github-actions/release-please-action digest to cc61a07 ([#152](https://github.com/spectrocloud-labs/validator/issues/152)) ([908de87](https://github.com/spectrocloud-labs/validator/commit/908de87b359b6e22cb16e69f981d793aec18aa71))
+
 ## [0.0.29](https://github.com/spectrocloud-labs/validator/compare/v0.0.28...v0.0.29) (2023-12-19)
 
 
