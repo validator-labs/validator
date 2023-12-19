@@ -76,7 +76,7 @@ func (c *helmClient) exec(args []string) error {
 	sanitizedArgs := sb.String()
 
 	fmt.Println("helm " + sanitizedArgs)
-	cmd := exec.Command(c.helmPath, args...)
+	cmd := exec.Command(c.helmPath, args...) // #nosec G204
 	if c.stdout != nil {
 		cmd.Stdout = c.stdout
 		cmd.Stderr = c.stderr
@@ -142,12 +142,16 @@ func (c *helmClient) run(name, namespace string, options UpgradeOptions, command
 		// Write to temp file
 		_, err = tempFile.Write([]byte(options.Values))
 		if err != nil {
-			os.Remove(tempFile.Name())
+			if removeErr := os.Remove(tempFile.Name()); removeErr != nil {
+				klog.Errorf("failed to remove temp file %s: %v", tempFile.Name(), err)
+			}
 			return errors.Wrap(err, "write temp file")
 		}
 
 		// Close temp file
-		tempFile.Close()
+		if err := tempFile.Close(); err != nil {
+			return errors.Wrap(err, "close temp file")
+		}
 		defer os.Remove(tempFile.Name())
 
 		// Wait quickly so helm will find the file
@@ -215,12 +219,16 @@ func writeKubeConfig(configRaw *clientcmdapi.Config) (string, error) {
 	// Write to temp file
 	_, err = tempFile.Write(data)
 	if err != nil {
-		os.Remove(tempFile.Name())
+		if removeErr := os.Remove(tempFile.Name()); removeErr != nil {
+			klog.Errorf("failed to remove temp file %s: %v", tempFile.Name(), err)
+		}
 		return "", errors.Wrap(err, "write temp file")
 	}
 
 	// Close temp file
-	tempFile.Close()
+	if err := tempFile.Close(); err != nil {
+		return "", errors.Wrap(err, "close temp file")
+	}
 
 	// Okay sometimes the file is written so quickly that helm somehow
 	// cannot read it immediately which causes errors
@@ -233,8 +241,9 @@ func writeKubeConfig(configRaw *clientcmdapi.Config) (string, error) {
 				time.Sleep(time.Millisecond * 50)
 				continue
 			}
-
-			os.Remove(tempFile.Name())
+			if removeErr := os.Remove(tempFile.Name()); removeErr != nil {
+				klog.Errorf("failed to remove temp file %s: %v", tempFile.Name(), err)
+			}
 			return "", err
 		}
 		break
