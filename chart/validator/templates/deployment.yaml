@@ -22,7 +22,7 @@ spec:
       annotations:
         kubectl.kubernetes.io/default-container: manager
     spec:
-      {{- if .Values.proxy.enabled }}
+      {{- if and .Values.proxy.enabled }}
       initContainers:
       - name: init-certs
         image: {{ required ".Values.proxy.image is required!" .Values.proxy.image }}
@@ -90,7 +90,7 @@ spec:
           periodSeconds: 10
         resources: {{- toYaml .Values.controllerManager.manager.resources | nindent 10 }}
         securityContext: {{- toYaml .Values.controllerManager.manager.containerSecurityContext | nindent 10 }}
-        {{- if .Values.proxy.enabled }}
+        {{- if and .Values.proxy.enabled }}
         volumeMounts:
         - name: certs
           mountPath: /etc/ca-certificates.conf
@@ -110,7 +110,7 @@ spec:
           type: RuntimeDefault
       serviceAccountName: {{ include "chart.fullname" . }}-controller-manager
       terminationGracePeriodSeconds: 10
-      {{- if .Values.proxy.enabled }}
+      {{- if and .Values.proxy.enabled }}
       volumes:
       - name: ca-pemstore
         secret:
