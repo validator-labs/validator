@@ -196,6 +196,11 @@ func (c *helmClient) run(name, namespace string, options UpgradeOptions, command
 	if options.Atomic {
 		args = append(args, "--atomic")
 	}
+
+	// TLS options
+	if options.CaFile != "" {
+		args = append(args, "--ca-file", options.CaFile)
+	}
 	if options.InsecureSkipTlsVerify {
 		args = append(args, "--insecure-skip-tls-verify")
 	}

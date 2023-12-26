@@ -67,6 +67,7 @@ type UpgradeOptions struct {
 	Force           bool
 	CreateNamespace bool
 
+	CaFile                string
 	InsecureSkipTlsVerify bool
 
 	ExtraArgs []string
