@@ -43,6 +43,7 @@ type HelmChart struct {
 	Name                  string `json:"name" yaml:"name"`
 	Repository            string `json:"repository" yaml:"repository"`
 	Version               string `json:"version" yaml:"version"`
+	CaFile                string `json:"caFile,omitempty" yaml:"caFile,omitempty"`
 	InsecureSkipTlsVerify bool   `json:"insecureSkipVerify,omitempty" yaml:"insecureSkipVerify,omitempty"`
 	AuthSecretName        string `json:"authSecretName,omitempty" yaml:"authSecretName,omitempty"`
 }

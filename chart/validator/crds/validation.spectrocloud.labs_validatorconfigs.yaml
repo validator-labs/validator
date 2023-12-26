@@ -41,6 +41,8 @@ spec:
                       properties:
                         authSecretName:
                           type: string
+                        caFile:
+                          type: string
                         insecureSkipVerify:
                           type: boolean
                         name:
