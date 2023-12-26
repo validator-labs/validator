@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.0.31](https://github.com/spectrocloud-labs/validator/compare/v0.0.30...v0.0.31) (2023-12-26)
+
+
+### Features
+
+* add caFile Helm option ([#166](https://github.com/spectrocloud-labs/validator/issues/166)) ([2425599](https://github.com/spectrocloud-labs/validator/commit/24255997119b75edde4e8f94568a906c7da6b37f))
+
 ## [0.0.30](https://github.com/spectrocloud-labs/validator/compare/v0.0.29...v0.0.30) (2023-12-19)
 
 
