@@ -31,6 +31,7 @@ import (
 
 	connect "connectrpc.com/connect"
 	"github.com/go-logr/logr"
+	wrapErrors "github.com/pkg/errors"
 	"golang.org/x/exp/slices"
 	corev1 "k8s.io/api/core/v1"
 	apierrs "k8s.io/apimachinery/pkg/api/errors"
@@ -52,6 +53,8 @@ const (
 
 	// An annotation added to a ValidatorConfig to determine whether or not to update a plugin's Helm release
 	PluginValuesHash = "validator/plugin-values"
+
+	helmCAFile = "/tmp/ca.crt"
 )
 
 var (
@@ -205,7 +208,7 @@ func (r *ValidatorConfigReconciler) redeployIfNeeded(ctx context.Context, vc *v1
 
 		if p.Chart.AuthSecretName != "" {
 			nn := types.NamespacedName{Name: p.Chart.AuthSecretName, Namespace: vc.Namespace}
-			if err := r.configureHelmBasicAuth(nn, upgradeOpts); err != nil {
+			if err := r.configureHelmOpts(nn, upgradeOpts); err != nil {
 				r.Log.V(0).Error(err, "failed to configure basic auth for Helm upgrade")
 				conditions[i] = r.buildHelmChartCondition(p.Chart.Name, err)
 				continue
@@ -239,7 +242,7 @@ func (r *ValidatorConfigReconciler) redeployIfNeeded(ctx context.Context, vc *v1
 	return nil
 }
 
-func (r *ValidatorConfigReconciler) configureHelmBasicAuth(nn types.NamespacedName, opts *helm.UpgradeOptions) error {
+func (r *ValidatorConfigReconciler) configureHelmOpts(nn types.NamespacedName, opts *helm.UpgradeOptions) error {
 	secret := &corev1.Secret{}
 	if err := r.Get(context.TODO(), nn, secret); err != nil {
 		return fmt.Errorf(
@@ -259,6 +262,14 @@ func (r *ValidatorConfigReconciler) configureHelmBasicAuth(nn types.NamespacedNa
 		return fmt.Errorf("auth secret for chart %s in repo %s missing required key: 'password'", opts.Chart, opts.Repo)
 	}
 	opts.Password = string(password)
+
+	caCert, ok := secret.Data["caCert"]
+	if ok {
+		if err := os.WriteFile(helmCAFile, caCert, 0600); err != nil {
+			return wrapErrors.Wrap(err, "failed to write Helm CA file")
+		}
+		opts.CaFile = helmCAFile
+	}
 
 	return nil
 }
