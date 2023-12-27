@@ -204,7 +204,7 @@ func TestConfigureHelmBasicAuth(t *testing.T) {
 	}
 	for _, c := range cs {
 		t.Log(c.name)
-		err := c.reconciler.configureHelmBasicAuth(c.nn, c.opts)
+		err := c.reconciler.configureHelmOpts(c.nn, c.opts)
 		if err != nil && !reflect.DeepEqual(err.Error(), c.expected.Error()) {
 			t.Errorf("expected (%v), got (%v)", c.expected, err)
 		}
