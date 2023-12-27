@@ -1,5 +1,20 @@
 # Changelog
 
+## [0.0.32](https://github.com/spectrocloud-labs/validator/compare/v0.0.31...v0.0.32) (2023-12-27)
+
+
+### Bug Fixes
+
+* **deps:** update golang.org/x/exp digest to 02704c9 ([#161](https://github.com/spectrocloud-labs/validator/issues/161)) ([72990b7](https://github.com/spectrocloud-labs/validator/commit/72990b7d01a917d0d2bbdedcfa41e019af993b34))
+* **deps:** update module connectrpc.com/connect to v1.14.0 ([#165](https://github.com/spectrocloud-labs/validator/issues/165)) ([4a7f94a](https://github.com/spectrocloud-labs/validator/commit/4a7f94abc464d77d0f162ae9b71e73bd40ff7ee8))
+* **deps:** update module github.com/go-logr/logr to v1.4.1 ([#164](https://github.com/spectrocloud-labs/validator/issues/164)) ([bfd0488](https://github.com/spectrocloud-labs/validator/commit/bfd04887ba3c430e14cdc7964eff21e64cd3e924))
+* write Helm CA cert to disk ([#169](https://github.com/spectrocloud-labs/validator/issues/169)) ([51c7e6d](https://github.com/spectrocloud-labs/validator/commit/51c7e6df1d6d88621dada3e8fa2fa22a73d3361e))
+
+
+### Other
+
+* **deps:** update actions/upload-artifact action to v4 ([#154](https://github.com/spectrocloud-labs/validator/issues/154)) ([7792867](https://github.com/spectrocloud-labs/validator/commit/77928676b59c162411491144f42e75a28a07fec6))
+
 ## [0.0.31](https://github.com/spectrocloud-labs/validator/compare/v0.0.30...v0.0.31) (2023-12-26)
 
 
