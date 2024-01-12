@@ -7,7 +7,7 @@ require (
 	buf.build/gen/go/spectrocloud/spectro-cleanup/protocolbuffers/go v1.31.0-20231213011348-5645e27c876a.2
 	connectrpc.com/connect v1.14.0
 	github.com/go-logr/logr v1.4.1
-	github.com/onsi/ginkgo/v2 v2.13.2
+	github.com/onsi/ginkgo/v2 v2.14.0
 	github.com/onsi/gomega v1.30.0
 	github.com/pkg/errors v0.9.1
 	github.com/slack-go/slack v0.12.3
@@ -62,7 +62,7 @@ require (
 	golang.org/x/term v0.15.0 // indirect
 	golang.org/x/text v0.14.0 // indirect
 	golang.org/x/time v0.3.0 // indirect
-	golang.org/x/tools v0.16.0 // indirect
+	golang.org/x/tools v0.16.1 // indirect
 	gomodules.xyz/jsonpatch/v2 v2.4.0 // indirect
 	google.golang.org/appengine v1.6.7 // indirect
 	google.golang.org/protobuf v1.32.0 // indirect
