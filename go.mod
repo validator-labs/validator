@@ -8,7 +8,7 @@ require (
 	connectrpc.com/connect v1.14.0
 	github.com/go-logr/logr v1.4.1
 	github.com/onsi/ginkgo/v2 v2.15.0
-	github.com/onsi/gomega v1.31.0
+	github.com/onsi/gomega v1.31.1
 	github.com/pkg/errors v0.9.1
 	github.com/slack-go/slack v0.12.3
 	golang.org/x/exp v0.0.0-20240119083558-1b970713d09a
