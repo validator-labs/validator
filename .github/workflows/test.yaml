@@ -29,9 +29,11 @@ jobs:
         run: make test
 
       - name: Codecov
-        uses: codecov/codecov-action@4fe8c5f003fae66aa5ebb77cfd3e7bfbbda0b6b0 # v3
+        uses: codecov/codecov-action@f30e4959ba63075080d4f7f90cacc18d9f3fafd7 # v4
         with:
           file: ./cover.out
+          fail_ci_if_error: true
+          token: ${{ secrets.CODECOV_TOKEN }}
 
   test-chart:
     name: Run Helm Chart Tests
