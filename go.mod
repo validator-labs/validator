@@ -4,7 +4,7 @@ go 1.20
 
 require (
 	buf.build/gen/go/spectrocloud/spectro-cleanup/connectrpc/go v1.13.0-20231213011348-5645e27c876a.1
-	buf.build/gen/go/spectrocloud/spectro-cleanup/protocolbuffers/go v1.31.0-20231213011348-5645e27c876a.2
+	buf.build/gen/go/spectrocloud/spectro-cleanup/protocolbuffers/go v1.32.0-20231213011348-5645e27c876a.1
 	connectrpc.com/connect v1.14.0
 	github.com/go-logr/logr v1.4.1
 	github.com/onsi/ginkgo/v2 v2.15.0
