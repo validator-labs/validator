@@ -1,7 +1,7 @@
 buf.build/gen/go/spectrocloud/spectro-cleanup/connectrpc/go v1.13.0-20231213011348-5645e27c876a.1 h1:flYv+oyV4sGFTc8UrA6bSxCkGE7mvSUyydrCiXk5s7A=
 buf.build/gen/go/spectrocloud/spectro-cleanup/connectrpc/go v1.13.0-20231213011348-5645e27c876a.1/go.mod h1:pNAXVmeA3b2y1Hi/j2poNtPTT0Bvo2LgRK7FThfG0oc=
-buf.build/gen/go/spectrocloud/spectro-cleanup/protocolbuffers/go v1.31.0-20231213011348-5645e27c876a.2 h1:ub8BpTL/wC0JVAjnfKzSdqu3xjJBFn4ndVPGu0u3KHU=
-buf.build/gen/go/spectrocloud/spectro-cleanup/protocolbuffers/go v1.31.0-20231213011348-5645e27c876a.2/go.mod h1:629c8Zj/8OXoFZZfqhsjqXJ0MIIVuonsR0x8/Nngi+U=
+buf.build/gen/go/spectrocloud/spectro-cleanup/protocolbuffers/go v1.32.0-20231213011348-5645e27c876a.1 h1:LhkzasJgluUTXNJLYjbVnuUcN7CmGMy2JrFSSEKPcQ8=
+buf.build/gen/go/spectrocloud/spectro-cleanup/protocolbuffers/go v1.32.0-20231213011348-5645e27c876a.1/go.mod h1:PRbE52FMZxLF1VV+ev+c0MlfVmGGn911UXrZRom+G5s=
 connectrpc.com/connect v1.14.0 h1:PDS+J7uoz5Oui2VEOMcfz6Qft7opQM9hPiKvtGC01pA=
 connectrpc.com/connect v1.14.0/go.mod h1:uoAq5bmhhn43TwhaKdGKN/bZcGtzPW1v+ngDTn5u+8s=
 github.com/benbjohnson/clock v1.1.0/go.mod h1:J11/hYXuz8f4ySSvYwY0FKfm+ezbsZBKZxNJlLklBHA=
@@ -200,7 +200,6 @@ google.golang.org/appengine v1.6.7 h1:FZR1q0exgwxzPzp/aF+VccGrSfxfPpkBqjIIEq3ru6
 google.golang.org/appengine v1.6.7/go.mod h1:8WjMMxjGQR8xUklV/ARdw2HLXBOI7O7uCIDZVag1xfc=
 google.golang.org/protobuf v1.26.0-rc.1/go.mod h1:jlhhOSvTdKEhbULTjvd4ARK9grFBp09yW+WbY/TyQbw=
 google.golang.org/protobuf v1.26.0/go.mod h1:9q0QmTI4eRPtz6boOQmLYwt+qCgq0jsYwAQnmE0givc=
-google.golang.org/protobuf v1.31.0/go.mod h1:HV8QOd/L58Z+nl8r43ehVNZIU/HEI6OcFqwMG9pJV4I=
 google.golang.org/protobuf v1.32.0 h1:pPC6BG5ex8PDFnkbrGU3EixyhKcQ2aDuBS36lqK/C7I=
 google.golang.org/protobuf v1.32.0/go.mod h1:c6P6GXX6sHbq/GpV6MGZEdwhWPcYBgnhAHhKbcUYpos=
 gopkg.in/check.v1 v0.0.0-20161208181325-20d25e280405/go.mod h1:Co6ibVJAznAaIkqp8huTwlJQCZ016jof/cbN4VW5Yz0=
