@@ -1,5 +1,5 @@
-buf.build/gen/go/spectrocloud/spectro-cleanup/connectrpc/go v1.13.0-20231213011348-5645e27c876a.1 h1:flYv+oyV4sGFTc8UrA6bSxCkGE7mvSUyydrCiXk5s7A=
-buf.build/gen/go/spectrocloud/spectro-cleanup/connectrpc/go v1.13.0-20231213011348-5645e27c876a.1/go.mod h1:pNAXVmeA3b2y1Hi/j2poNtPTT0Bvo2LgRK7FThfG0oc=
+buf.build/gen/go/spectrocloud/spectro-cleanup/connectrpc/go v1.14.0-20231213011348-5645e27c876a.1 h1:gFg4rEDJCG7wsEMTCIvUcaRNY6Ce4kgGxWcVrgl6a8o=
+buf.build/gen/go/spectrocloud/spectro-cleanup/connectrpc/go v1.14.0-20231213011348-5645e27c876a.1/go.mod h1:OokgG79jTMFTkzv0rZIF/7zjuZw+4lVppKn+u68JM+Y=
 buf.build/gen/go/spectrocloud/spectro-cleanup/protocolbuffers/go v1.32.0-20231213011348-5645e27c876a.1 h1:LhkzasJgluUTXNJLYjbVnuUcN7CmGMy2JrFSSEKPcQ8=
 buf.build/gen/go/spectrocloud/spectro-cleanup/protocolbuffers/go v1.32.0-20231213011348-5645e27c876a.1/go.mod h1:PRbE52FMZxLF1VV+ev+c0MlfVmGGn911UXrZRom+G5s=
 connectrpc.com/connect v1.14.0 h1:PDS+J7uoz5Oui2VEOMcfz6Qft7opQM9hPiKvtGC01pA=
