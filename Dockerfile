@@ -1,5 +1,5 @@
 # Build the manager binary
-FROM --platform=$TARGETPLATFORM golang:alpine3.17 AS builder
+FROM --platform=$TARGETPLATFORM golang:alpine3.19 AS builder
 ARG TARGETOS
 ARG TARGETARCH
 
