@@ -73,7 +73,7 @@ func HandleNewValidationResult(c client.Client, vr *v1alpha1.ValidationResult, l
 
 // SafeUpdateValidationResult updates the overall validation result, ensuring
 // that the overall validation status remains failed if a single rule fails
-func SafeUpdateValidationResult(c client.Client, nn ktypes.NamespacedName, res *types.ValidationResult, resErr error, l logr.Logger) {
+func SafeUpdateValidationResult(c client.Client, nn ktypes.NamespacedName, res *types.ValidationResult, resCount int, resErr error, l logr.Logger) {
 	var err error
 	vr := &v1alpha1.ValidationResult{}
 
@@ -84,6 +84,7 @@ func SafeUpdateValidationResult(c client.Client, nn ktypes.NamespacedName, res *
 		}
 
 		updateValidationResult(vr, res, resErr)
+		vr.Spec.ExpectedResults = resCount
 
 		err = c.Status().Update(context.Background(), vr)
 		if err != nil {

@@ -132,27 +132,30 @@ func TestHandleNewValidationResult(t *testing.T) {
 
 func TestSafeUpdateValidationResult(t *testing.T) {
 	cs := []struct {
-		name   string
-		client test.ClientMock
-		nn     ktypes.NamespacedName
-		res    *types.ValidationResult
-		resErr error
+		name     string
+		client   test.ClientMock
+		nn       ktypes.NamespacedName
+		res      *types.ValidationResult
+		resCount int
+		resErr   error
 	}{
 		{
-			name:   "Pass",
-			client: test.ClientMock{},
-			nn:     ktypes.NamespacedName{Name: "", Namespace: ""},
-			res:    res(corev1.ConditionTrue, v1alpha1.ValidationSucceeded),
-			resErr: nil,
+			name:     "Pass",
+			client:   test.ClientMock{},
+			nn:       ktypes.NamespacedName{Name: "", Namespace: ""},
+			res:      res(corev1.ConditionTrue, v1alpha1.ValidationSucceeded),
+			resCount: 1,
+			resErr:   nil,
 		},
 		{
 			name: "Fail (get)",
 			client: test.ClientMock{
 				GetErrors: []error{errors.New("get failed")},
 			},
-			nn:     ktypes.NamespacedName{Name: "", Namespace: ""},
-			res:    res(corev1.ConditionTrue, v1alpha1.ValidationSucceeded),
-			resErr: errors.New("get failed"),
+			nn:       ktypes.NamespacedName{Name: "", Namespace: ""},
+			res:      res(corev1.ConditionTrue, v1alpha1.ValidationSucceeded),
+			resCount: 1,
+			resErr:   errors.New("get failed"),
 		},
 		{
 			name: "Fail (update)",
@@ -161,14 +164,15 @@ func TestSafeUpdateValidationResult(t *testing.T) {
 					UpdateErrors: []error{errors.New("status update failed")},
 				},
 			},
-			nn:     ktypes.NamespacedName{Name: "", Namespace: ""},
-			res:    res(corev1.ConditionTrue, v1alpha1.ValidationSucceeded),
-			resErr: errors.New("status update failed"),
+			nn:       ktypes.NamespacedName{Name: "", Namespace: ""},
+			res:      res(corev1.ConditionTrue, v1alpha1.ValidationSucceeded),
+			resCount: 1,
+			resErr:   errors.New("status update failed"),
 		},
 	}
 	for _, c := range cs {
 		t.Log(c.name)
-		SafeUpdateValidationResult(c.client, c.nn, c.res, c.resErr, logr.Logger{})
+		SafeUpdateValidationResult(c.client, c.nn, c.res, c.resCount, c.resErr, logr.Logger{})
 	}
 }
 
