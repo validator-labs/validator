@@ -1,5 +1,40 @@
 # Changelog
 
+## [0.0.33](https://github.com/spectrocloud-labs/validator/compare/v0.0.32...v0.0.33) (2024-02-05)
+
+
+### Bug Fixes
+
+* **deps:** update golang.org/x/exp digest to 0dcbfd6 ([#175](https://github.com/spectrocloud-labs/validator/issues/175)) ([31469da](https://github.com/spectrocloud-labs/validator/commit/31469da899767e2d8a6766f609a9e280b6e49609))
+* **deps:** update golang.org/x/exp digest to 1b97071 ([#187](https://github.com/spectrocloud-labs/validator/issues/187)) ([27581fa](https://github.com/spectrocloud-labs/validator/commit/27581fa0282aee29a032bfff15a29f23f9ff6390))
+* **deps:** update golang.org/x/exp digest to be819d1 ([#171](https://github.com/spectrocloud-labs/validator/issues/171)) ([6d5d2a2](https://github.com/spectrocloud-labs/validator/commit/6d5d2a2c5fe210647db4d347b83b81fe7486e31b))
+* **deps:** update golang.org/x/exp digest to db7319d ([#179](https://github.com/spectrocloud-labs/validator/issues/179)) ([04e3a3d](https://github.com/spectrocloud-labs/validator/commit/04e3a3d87324910cb8f32dc46865386e20f43378))
+* **deps:** update module buf.build/gen/go/spectrocloud/spectro-cleanup/connectrpc/go to v1.14.0-20231213011348-5645e27c876a.1 ([#192](https://github.com/spectrocloud-labs/validator/issues/192)) ([31123a2](https://github.com/spectrocloud-labs/validator/commit/31123a25e9c4a1b3f99645113fc78dc178f3814e))
+* **deps:** update module buf.build/gen/go/spectrocloud/spectro-cleanup/protocolbuffers/go to v1.32.0-20231213011348-5645e27c876a.1 ([#193](https://github.com/spectrocloud-labs/validator/issues/193)) ([2abdb84](https://github.com/spectrocloud-labs/validator/commit/2abdb848f6de7b4b3d8206cd3c5edf8391cea574))
+* **deps:** update module github.com/onsi/ginkgo/v2 to v2.14.0 ([#178](https://github.com/spectrocloud-labs/validator/issues/178)) ([b25c95c](https://github.com/spectrocloud-labs/validator/commit/b25c95c8b8b8cd2dd7f5e492fe33e39e3f6a1fa6))
+* **deps:** update module github.com/onsi/ginkgo/v2 to v2.15.0 ([#182](https://github.com/spectrocloud-labs/validator/issues/182)) ([d421bd6](https://github.com/spectrocloud-labs/validator/commit/d421bd61e0e427cc95aa3a271f8773cfc91cc4b9))
+* **deps:** update module github.com/onsi/gomega to v1.31.0 ([#183](https://github.com/spectrocloud-labs/validator/issues/183)) ([6a4ee30](https://github.com/spectrocloud-labs/validator/commit/6a4ee30cc58348fd117c1b6384ae97534c606187))
+* **deps:** update module github.com/onsi/gomega to v1.31.1 ([#188](https://github.com/spectrocloud-labs/validator/issues/188)) ([4a86ea9](https://github.com/spectrocloud-labs/validator/commit/4a86ea968446181b33acb3a45d3f17b9917acb8e))
+* **deps:** update module k8s.io/klog/v2 to v2.120.0 ([#176](https://github.com/spectrocloud-labs/validator/issues/176)) ([62bdb0a](https://github.com/spectrocloud-labs/validator/commit/62bdb0a802ea622796c90188c45f6712274a6d2c))
+* **deps:** update module k8s.io/klog/v2 to v2.120.1 ([#185](https://github.com/spectrocloud-labs/validator/issues/185)) ([fad66e0](https://github.com/spectrocloud-labs/validator/commit/fad66e04a584456bfaf9991fd661d070f716afac))
+* update VRs to support rule addition ([#198](https://github.com/spectrocloud-labs/validator/issues/198)) ([c8de386](https://github.com/spectrocloud-labs/validator/commit/c8de3861fd4fe639c2cd27aa76a7883a0f1ae6d2))
+
+
+### Other
+
+* bump go version ([#199](https://github.com/spectrocloud-labs/validator/issues/199)) ([06d0a9a](https://github.com/spectrocloud-labs/validator/commit/06d0a9a9a1b0f60ad97dbb282c3d3a58bce41e52))
+* **deps:** update actions/upload-artifact digest to 1eb3cb2 ([#180](https://github.com/spectrocloud-labs/validator/issues/180)) ([e1d9cb7](https://github.com/spectrocloud-labs/validator/commit/e1d9cb7a3cfa552c84c657cd55845e13f87ddbea))
+* **deps:** update actions/upload-artifact digest to 26f96df ([#190](https://github.com/spectrocloud-labs/validator/issues/190)) ([43897d9](https://github.com/spectrocloud-labs/validator/commit/43897d987f95e9078c88ee42f0badb1e3bc2453e))
+* **deps:** update actions/upload-artifact digest to 694cdab ([#186](https://github.com/spectrocloud-labs/validator/issues/186)) ([d33add9](https://github.com/spectrocloud-labs/validator/commit/d33add9c8a0bde65eae799a0ed4c37af817a8ecc))
+* **deps:** update anchore/sbom-action action to v0.15.2 ([#170](https://github.com/spectrocloud-labs/validator/issues/170)) ([a37185a](https://github.com/spectrocloud-labs/validator/commit/a37185abcff714d1eb00d5eee9fef7ef82f18bbf))
+* **deps:** update anchore/sbom-action action to v0.15.3 ([#173](https://github.com/spectrocloud-labs/validator/issues/173)) ([3a5be4e](https://github.com/spectrocloud-labs/validator/commit/3a5be4eb483c051b26a6fa0143d0380708e2c7e5))
+* **deps:** update anchore/sbom-action action to v0.15.4 ([#184](https://github.com/spectrocloud-labs/validator/issues/184)) ([a58d980](https://github.com/spectrocloud-labs/validator/commit/a58d980b2ba3285e8efd59d9b389cc8d66859b78))
+* **deps:** update anchore/sbom-action action to v0.15.8 ([#189](https://github.com/spectrocloud-labs/validator/issues/189)) ([56d8a75](https://github.com/spectrocloud-labs/validator/commit/56d8a754bdfa950ab2e727780b0234dc9d4c6d6d))
+* **deps:** update codecov/codecov-action digest to 4fe8c5f ([#191](https://github.com/spectrocloud-labs/validator/issues/191)) ([7f55aad](https://github.com/spectrocloud-labs/validator/commit/7f55aad95486e87774e9c8bffe4453ccce14fa5f))
+* **deps:** update codecov/codecov-action digest to ab904c4 ([#194](https://github.com/spectrocloud-labs/validator/issues/194)) ([053afa3](https://github.com/spectrocloud-labs/validator/commit/053afa31e65fe700a4973f502aea2ad63b1e51d9))
+* **deps:** update codecov/codecov-action digest to e0b68c6 ([#197](https://github.com/spectrocloud-labs/validator/issues/197)) ([69fe200](https://github.com/spectrocloud-labs/validator/commit/69fe200a73f51c7f913d605f16c22091a029d91e))
+* **deps:** update gcr.io/spectro-images-public/golang docker tag to v1.22 ([#174](https://github.com/spectrocloud-labs/validator/issues/174)) ([d9beecf](https://github.com/spectrocloud-labs/validator/commit/d9beecfff64c26ddce8206de808667b1ba3e0f24))
+
 ## [0.0.32](https://github.com/spectrocloud-labs/validator/compare/v0.0.31...v0.0.32) (2023-12-27)
 
 
