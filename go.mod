@@ -1,6 +1,6 @@
 module github.com/spectrocloud-labs/validator
 
-go 1.22rc2
+go 1.21.6
 
 require (
 	buf.build/gen/go/spectrocloud/spectro-cleanup/connectrpc/go v1.14.0-20231213011348-5645e27c876a.1
