@@ -16,7 +16,6 @@ jobs:
       env:
         REPO: ${{ github.event.repository.name }}
     steps:
-
       - name: Set up Go
         uses: actions/setup-go@0c52d547c9bc32b1aa3301fd7a9cb496313a4491 # v5
         with:
