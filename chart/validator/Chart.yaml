@@ -4,5 +4,5 @@ description: >-
   Monitor results created by validator plugins and upload them to a configurable
   sink
 type: application
-version: 0.0.32
+version: 0.0.33
 appVersion: 0.0.27
