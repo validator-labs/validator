@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.0.34](https://github.com/spectrocloud-labs/validator/compare/v0.0.33...v0.0.34) (2024-02-06)
+
+
+### Bug Fixes
+
+* **deps:** update kubernetes packages to v0.29.1 ([#153](https://github.com/spectrocloud-labs/validator/issues/153)) ([60bc244](https://github.com/spectrocloud-labs/validator/commit/60bc244537838596be433c3e2a59ce66fcb80350))
+* SafeUpdateValidationResult: update VR spec and status ([#205](https://github.com/spectrocloud-labs/validator/issues/205)) ([972eb55](https://github.com/spectrocloud-labs/validator/commit/972eb550968c32447aeba5ab7acfcbc566f0d929))
+
 ## [0.0.33](https://github.com/spectrocloud-labs/validator/compare/v0.0.32...v0.0.33) (2024-02-05)
 
 
