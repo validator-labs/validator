@@ -75,10 +75,11 @@ func HandleNewValidationResult(c client.Client, vr *v1alpha1.ValidationResult, l
 // that the overall validation status remains failed if a single rule fails
 func SafeUpdateValidationResult(c client.Client, nn ktypes.NamespacedName, res *types.ValidationResult, resCount int, resErr error, l logr.Logger) {
 	var err error
+	ctx := context.Background()
 	vr := &v1alpha1.ValidationResult{}
 
 	for i := 0; i < constants.StatusUpdateRetries; i++ {
-		if err := c.Get(context.Background(), nn, vr); err != nil {
+		if err := c.Get(ctx, nn, vr); err != nil {
 			l.V(0).Error(err, "failed to get ValidationResult", "name", nn.Name, "namespace", nn.Namespace)
 			return
 		}
@@ -86,9 +87,12 @@ func SafeUpdateValidationResult(c client.Client, nn ktypes.NamespacedName, res *
 		updateValidationResult(vr, res, resErr)
 		vr.Spec.ExpectedResults = resCount
 
-		err = c.Status().Update(context.Background(), vr)
-		if err != nil {
+		if err := c.Update(ctx, vr); err != nil {
 			l.V(1).Info("warning: failed to update ValidationResult", "name", nn.Name, "namespace", nn.Namespace, "error", err.Error())
+			continue
+		}
+		if err := c.Status().Update(ctx, vr); err != nil {
+			l.V(1).Info("warning: failed to update ValidationResult status", "name", nn.Name, "namespace", nn.Namespace, "error", err.Error())
 			continue
 		}
 
