@@ -176,7 +176,7 @@ func TestSafeUpdateValidationResult(t *testing.T) {
 	}
 }
 
-func TestUpdateValidationResult(t *testing.T) {
+func TestUpdateValidationResultStatus(t *testing.T) {
 	cs := []struct {
 		name       string
 		res        *types.ValidationResult
@@ -250,7 +250,7 @@ func TestUpdateValidationResult(t *testing.T) {
 	}
 	for _, c := range cs {
 		t.Log(c.name)
-		updateValidationResult(c.vrCurr, c.res, c.resErr)
+		updateValidationResultStatus(c.vrCurr, c.res, c.resErr)
 		if !reflect.DeepEqual(c.vrCurr.Hash(), c.vrExpected.Hash()) {
 			t.Errorf("expected (%+v), got (%+v)", c.vrExpected, c.vrCurr)
 		}
