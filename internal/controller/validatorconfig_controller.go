@@ -198,7 +198,7 @@ func (r *ValidatorConfigReconciler) redeployIfNeeded(ctx context.Context, vc *v1
 			continue
 		}
 
-		upgradeOpts := &helm.UpgradeOptions{
+		opts := &helm.Options{
 			Chart:                 p.Chart.Name,
 			Repo:                  p.Chart.Repository,
 			Version:               p.Chart.Version,
@@ -208,16 +208,31 @@ func (r *ValidatorConfigReconciler) redeployIfNeeded(ctx context.Context, vc *v1
 
 		if p.Chart.AuthSecretName != "" {
 			nn := types.NamespacedName{Name: p.Chart.AuthSecretName, Namespace: vc.Namespace}
-			if err := r.configureHelmOpts(nn, upgradeOpts); err != nil {
+			if err := r.configureHelmOpts(nn, opts); err != nil {
 				r.Log.V(0).Error(err, "failed to configure basic auth for Helm upgrade")
 				conditions[i] = r.buildHelmChartCondition(p.Chart.Name, err)
 				continue
 			}
 		}
 
-		r.Log.V(0).Info("Installing/upgrading plugin Helm chart", "namespace", vc.Namespace, "name", p.Chart.Name)
+		var cleanupLocalChart bool
+		if strings.HasPrefix(p.Chart.Repository, "oci://") {
+			r.Log.V(0).Info("Pulling plugin Helm chart", "name", p.Chart.Name)
+			opts.Untar = true
+			if err := r.HelmClient.Pull(*opts); err != nil {
+				r.Log.V(0).Error(err, "failed to pull Helm chart from OCI repository")
+				conditions[i] = r.buildHelmChartCondition(p.Chart.Name, err)
+				continue
+			}
 
-		err := r.HelmClient.Upgrade(p.Chart.Name, vc.Namespace, *upgradeOpts)
+			r.Log.V(0).Info("Reconfiguring Helm options to deploy local chart", "name", p.Chart.Name)
+			opts.Path = fmt.Sprintf("./%s", opts.Chart)
+			opts.Chart = ""
+			cleanupLocalChart = true
+		}
+
+		r.Log.V(0).Info("Installing/upgrading plugin Helm chart", "namespace", vc.Namespace, "name", p.Chart.Name)
+		err := r.HelmClient.Upgrade(p.Chart.Name, vc.Namespace, *opts)
 		if err != nil {
 			// if Helm install/upgrade failed, delete the release so installation is reattempted each iteration
 			if strings.Contains(err.Error(), "has no deployed releases") {
@@ -227,6 +242,13 @@ func (r *ValidatorConfigReconciler) redeployIfNeeded(ctx context.Context, vc *v1
 			}
 		}
 		conditions[i] = r.buildHelmChartCondition(p.Chart.Name, err)
+
+		if cleanupLocalChart {
+			r.Log.V(0).Info("Cleaning up local chart directory", "path", opts.Path)
+			if err := os.RemoveAll(opts.Path); err != nil {
+				r.Log.V(0).Error(err, "failed to remove local chart directory")
+			}
+		}
 	}
 
 	// delete any plugins that have been removed
@@ -242,7 +264,7 @@ func (r *ValidatorConfigReconciler) redeployIfNeeded(ctx context.Context, vc *v1
 	return nil
 }
 
-func (r *ValidatorConfigReconciler) configureHelmOpts(nn types.NamespacedName, opts *helm.UpgradeOptions) error {
+func (r *ValidatorConfigReconciler) configureHelmOpts(nn types.NamespacedName, opts *helm.Options) error {
 	secret := &corev1.Secret{}
 	if err := r.Get(context.TODO(), nn, secret); err != nil {
 		return fmt.Errorf(
@@ -337,7 +359,7 @@ func (r *ValidatorConfigReconciler) buildHelmChartCondition(chartName string, er
 		Type:               v1alpha1.HelmChartDeployedCondition,
 		PluginName:         chartName,
 		Status:             corev1.ConditionTrue,
-		Message:            fmt.Sprintf("Plugin %s is installed", chartName),
+		Message:            fmt.Sprintf("Plugin chart %s is installed/upgraded", chartName),
 		LastTransitionTime: metav1.Time{Time: time.Now()},
 	}
 	if err != nil {

@@ -13,7 +13,7 @@ import (
 	"github.com/spectrocloud-labs/validator/internal/test"
 	"github.com/spectrocloud-labs/validator/pkg/constants"
 	"github.com/spectrocloud-labs/validator/pkg/types"
-	"github.com/spectrocloud-labs/validator/pkg/util/ptr"
+	"github.com/spectrocloud-labs/validator/pkg/util"
 )
 
 var err = errors.New("error")
@@ -24,7 +24,7 @@ func res(s corev1.ConditionStatus, state v1alpha1.ValidationState) *types.Valida
 			Status:         s,
 			ValidationRule: constants.ValidationRulePrefix,
 		},
-		State: ptr.Ptr(state),
+		State: util.Ptr(state),
 	}
 }
 
