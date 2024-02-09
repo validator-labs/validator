@@ -218,7 +218,10 @@ func (r *ValidatorConfigReconciler) redeployIfNeeded(ctx context.Context, vc *v1
 		var cleanupLocalChart bool
 		if strings.HasPrefix(p.Chart.Repository, "oci://") {
 			r.Log.V(0).Info("Pulling plugin Helm chart", "name", p.Chart.Name)
+
 			opts.Untar = true
+			opts.Version = strings.TrimPrefix(opts.Version, "v")
+
 			if err := r.HelmClient.Pull(*opts); err != nil {
 				r.Log.V(0).Error(err, "failed to pull Helm chart from OCI repository")
 				conditions[i] = r.buildHelmChartCondition(p.Chart.Name, err)
