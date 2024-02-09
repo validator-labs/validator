@@ -12,7 +12,7 @@ import (
 	"github.com/spectrocloud-labs/validator/api/v1alpha1"
 	"github.com/spectrocloud-labs/validator/pkg/constants"
 	"github.com/spectrocloud-labs/validator/pkg/types"
-	"github.com/spectrocloud-labs/validator/pkg/util/ptr"
+	"github.com/spectrocloud-labs/validator/pkg/util"
 )
 
 const validationErrorMsg = "Validation failed with an unexpected error"
@@ -124,7 +124,7 @@ func updateValidationResultStatus(vr *v1alpha1.ValidationResult, res *types.Vali
 
 	// Finalize result State and Condition in the event of an unexpected error
 	if resErr != nil {
-		res.State = ptr.Ptr(v1alpha1.ValidationFailed)
+		res.State = util.Ptr(v1alpha1.ValidationFailed)
 		res.Condition.Status = corev1.ConditionFalse
 		res.Condition.Message = validationErrorMsg
 		res.Condition.Failures = append(res.Condition.Failures, resErr.Error())

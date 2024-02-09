@@ -178,7 +178,7 @@ func TestConfigureHelmBasicAuth(t *testing.T) {
 		name       string
 		reconciler ValidatorConfigReconciler
 		nn         types.NamespacedName
-		opts       *helm.UpgradeOptions
+		opts       *helm.Options
 		expected   error
 	}{
 		{
@@ -189,7 +189,7 @@ func TestConfigureHelmBasicAuth(t *testing.T) {
 					GetErrors: []error{errors.New("get failed")},
 				},
 			},
-			opts:     &helm.UpgradeOptions{Chart: "foo", Repo: "bar"},
+			opts:     &helm.Options{Chart: "foo", Repo: "bar"},
 			expected: errors.New("failed to get auth secret chart-secret in namespace validator for chart foo in repo bar: get failed"),
 		},
 		{
@@ -198,7 +198,7 @@ func TestConfigureHelmBasicAuth(t *testing.T) {
 			reconciler: ValidatorConfigReconciler{
 				Client: test.ClientMock{},
 			},
-			opts:     &helm.UpgradeOptions{Chart: "foo", Repo: "bar"},
+			opts:     &helm.Options{Chart: "foo", Repo: "bar"},
 			expected: errors.New("auth secret for chart foo in repo bar missing required key: 'username'"),
 		},
 	}

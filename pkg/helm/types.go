@@ -1,6 +1,8 @@
 package helm
 
-import corev1 "k8s.io/api/core/v1"
+import (
+	corev1 "k8s.io/api/core/v1"
+)
 
 // Release describes a deployment of a chart, together with the chart
 // and the variables used to deploy that chart.
@@ -49,8 +51,8 @@ type Chart struct {
 	Metadata *Metadata `json:"metadata,omitempty"`
 }
 
-// UpgradeOptions holds all the options for upgrading / installing a chart
-type UpgradeOptions struct {
+// Options holds all the options for installing/pulling/upgrading a chart
+type Options struct {
 	Chart string
 	Path  string
 
@@ -67,10 +69,55 @@ type UpgradeOptions struct {
 	Force           bool
 	CreateNamespace bool
 
+	Untar    bool
+	UntarDir string
+
 	CaFile                string
 	InsecureSkipTlsVerify bool
 
 	ExtraArgs []string
+}
+
+func (o Options) ConfigureRepo(args []string) []string {
+	args = append(args, "--repo", o.Repo)
+	return args
+}
+
+func (o Options) ConfigureVersion(args []string) []string {
+	if o.Version != "" {
+		args = append(args, "--version", o.Version)
+	}
+	return args
+}
+
+func (o Options) ConfigureArchive(args []string) []string {
+	if o.Untar {
+		args = append(args, "--untar")
+	}
+	if o.UntarDir != "" {
+		args = append(args, "--untardir", o.UntarDir)
+	}
+	return args
+}
+
+func (o Options) ConfigureAuth(args []string) []string {
+	if o.Username != "" {
+		args = append(args, "--username", o.Username)
+	}
+	if o.Password != "" {
+		args = append(args, "--password", o.Password)
+	}
+	return args
+}
+
+func (o Options) ConfigureTLS(args []string) []string {
+	if o.CaFile != "" {
+		args = append(args, "--ca-file", o.CaFile)
+	}
+	if o.InsecureSkipTlsVerify {
+		args = append(args, "--insecure-skip-tls-verify")
+	}
+	return args
 }
 
 type Maintainer struct {

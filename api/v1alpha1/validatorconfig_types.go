@@ -86,7 +86,7 @@ type ValidatorPluginCondition struct {
 // ConditionType is a valid value for Condition.Type.
 type ConditionType string
 
-// HelmChartDeployedCondition defines the helm chart deployed condition type that defines if the helm chart was deployed correctly.
+// HelmChartDeployedCondition defines whether the helm chart was installed/pulled/upgraded correctly.
 const HelmChartDeployedCondition ConditionType = "HelmChartDeployed"
 
 //+kubebuilder:object:root=true
