@@ -31,12 +31,19 @@ COPY pkg/ pkg/
 # by leaving it empty we can ensure that the container and binary shipped on it will have the same platform.
 RUN CGO_ENABLED=0 GOOS=${TARGETOS:-linux} GOARCH=${TARGETARCH} go build -a -o manager cmd/main.go
 
+RUN chmod 777 /etc /etc/ssl && chmod -R 777 /etc/ssl/certs && \
+    mkdir /charts && chmod -R 777 /charts
+
 # Use distroless as minimal base image to package the manager binary
 # Refer to https://github.com/GoogleContainerTools/distroless for more details
 FROM --platform=$TARGETPLATFORM gcr.io/distroless/static:nonroot AS production
 WORKDIR /
+
 COPY --from=builder /workspace/manager .
 COPY --from=builder /workspace/helm .
+COPY --from=builder --chown=65532:65532 /etc /etc
+COPY --from=builder --chown=65532:65532 /charts /charts
+
 USER 65532:65532
 
 ENTRYPOINT ["/manager"]

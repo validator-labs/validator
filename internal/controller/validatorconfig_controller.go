@@ -53,8 +53,6 @@ const (
 
 	// An annotation added to a ValidatorConfig to determine whether or not to update a plugin's Helm release
 	PluginValuesHash = "validator/plugin-values"
-
-	helmCAFile = "/tmp/ca.crt"
 )
 
 var (
@@ -220,6 +218,7 @@ func (r *ValidatorConfigReconciler) redeployIfNeeded(ctx context.Context, vc *v1
 			r.Log.V(0).Info("Pulling plugin Helm chart", "name", p.Chart.Name)
 
 			opts.Untar = true
+			opts.UntarDir = "/charts"
 			opts.Version = strings.TrimPrefix(opts.Version, "v")
 
 			if err := r.HelmClient.Pull(*opts); err != nil {
@@ -229,7 +228,7 @@ func (r *ValidatorConfigReconciler) redeployIfNeeded(ctx context.Context, vc *v1
 			}
 
 			r.Log.V(0).Info("Reconfiguring Helm options to deploy local chart", "name", p.Chart.Name)
-			opts.Path = fmt.Sprintf("./%s", opts.Chart)
+			opts.Path = fmt.Sprintf("/charts/%s", opts.Chart)
 			opts.Chart = ""
 			cleanupLocalChart = true
 		}
@@ -290,10 +289,11 @@ func (r *ValidatorConfigReconciler) configureHelmOpts(nn types.NamespacedName, o
 
 	caCert, ok := secret.Data["caCert"]
 	if ok {
-		if err := os.WriteFile(helmCAFile, caCert, 0600); err != nil {
+		caFile := fmt.Sprintf("/etc/ssl/certs/%s-ca.crt", opts.Chart)
+		if err := os.WriteFile(caFile, caCert, 0600); err != nil {
 			return wrapErrors.Wrap(err, "failed to write Helm CA file")
 		}
-		opts.CaFile = helmCAFile
+		opts.CaFile = caFile
 	}
 
 	return nil
