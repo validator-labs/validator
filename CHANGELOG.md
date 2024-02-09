@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.0.35](https://github.com/spectrocloud-labs/validator/compare/v0.0.34...v0.0.35) (2024-02-09)
+
+
+### Features
+
+* OCI repository support for Helm charts ([#207](https://github.com/spectrocloud-labs/validator/issues/207)) ([4b25d79](https://github.com/spectrocloud-labs/validator/commit/4b25d7980c9aac07a39294a27ca3540e83dce1fd))
+
 ## [0.0.34](https://github.com/spectrocloud-labs/validator/compare/v0.0.33...v0.0.34) (2024-02-06)
 
 
