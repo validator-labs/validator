@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.0.36](https://github.com/spectrocloud-labs/validator/compare/v0.0.35...v0.0.36) (2024-02-12)
+
+
+### Bug Fixes
+
+* ensure default helm cache is writable ([b1cc1ec](https://github.com/spectrocloud-labs/validator/commit/b1cc1ec5dd396cfe7238b90e60bdaef2ac3168a7))
+
 ## [0.0.35](https://github.com/spectrocloud-labs/validator/compare/v0.0.34...v0.0.35) (2024-02-09)
 
 

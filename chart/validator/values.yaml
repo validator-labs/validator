@@ -31,7 +31,7 @@ controllerManager:
         - ALL
     image:
       repository: quay.io/spectrocloud-labs/validator
-      tag: v0.0.35  # x-release-please-version
+      tag: v0.0.36  # x-release-please-version
     resources:
       limits:
         cpu: 500m
