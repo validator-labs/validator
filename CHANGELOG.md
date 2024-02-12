@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.0.35](https://github.com/spectrocloud-labs/validator/compare/v0.0.34...v0.0.35) (2024-02-12)
+
+
+### Features
+
+* OCI repository support for Helm charts ([#207](https://github.com/spectrocloud-labs/validator/issues/207)) ([4b25d79](https://github.com/spectrocloud-labs/validator/commit/4b25d7980c9aac07a39294a27ca3540e83dce1fd))
+
+
+### Bug Fixes
+
+* ensure default helm cache is writable ([85b3286](https://github.com/spectrocloud-labs/validator/commit/85b3286fec22fd02c3f7ebee0d3c6fa74895bfdd))
+
 ## [0.0.34](https://github.com/spectrocloud-labs/validator/compare/v0.0.33...v0.0.34) (2024-02-06)
 
 
