@@ -282,6 +282,9 @@ func TestEmitFinalizeCleanup(t *testing.T) {
 
 		err := c.reconciler.emitFinalizeCleanup()
 		var errOk bool
+		if c.expectedErrs == nil {
+			errOk = err == nil
+		}
 		for _, expectedErr := range c.expectedErrs {
 			if err != nil && reflect.DeepEqual(err.Error(), expectedErr.Error()) {
 				errOk = true
