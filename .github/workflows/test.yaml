@@ -7,10 +7,14 @@ on:
   pull_request:
   workflow_dispatch:
 
+concurrency:
+  group: test-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   test:
     name: Run Unit & Integration Tests
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, Linux, X64, validator]
     steps:
       - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4
 
@@ -25,6 +29,10 @@ jobs:
       - name: Test
         run: make test
 
+      - name: Workaround for https://github.com/codecov/feedback/issues/263
+        run: |
+          git config --global --add safe.directory "$GITHUB_WORKSPACE"
+
       - name: Codecov
         uses: codecov/codecov-action@e0b68c6749509c5f83f984dd99a76a1c1a231044 # v4
         with:
@@ -34,7 +42,7 @@ jobs:
 
   test-chart:
     name: Run Helm Chart Tests
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, Linux, X64, validator]
     if: "!(contains(github.head_ref, 'release-please') || contains(github.ref, 'release-please'))"
     steps:
       - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4
@@ -57,16 +65,18 @@ jobs:
       - name: Run chart-testing (list-changed)
         id: list-changed
         run: |
+          set -ex
           changed=$(ct list-changed --chart-dirs chart --target-branch ${{ github.event.repository.default_branch }})
           echo $changed
-          echo "Hallo"
           if [[ -n "$changed" ]]; then
             echo "changed=true" >> "$GITHUB_OUTPUT"
           fi
 
       - name: Run chart-testing (lint)
         if: steps.list-changed.outputs.changed == 'true'
-        run: ct lint --validate-maintainers=false --check-version-increment=false --chart-dirs chart --target-branch ${{ github.event.repository.default_branch }}
+        run: |
+          cd $GITHUB_WORKSPACE
+          ct lint --validate-maintainers=false --check-version-increment=false --chart-dirs chart --target-branch ${{ github.event.repository.default_branch }}
 
       - name: Create kind cluster
         if: steps.list-changed.outputs.changed == 'true'

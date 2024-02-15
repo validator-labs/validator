@@ -23,6 +23,7 @@ Dockerfile.cross
 .idea
 .vscode/
 !.vscode/launch.json
+*__debug_bin
 *.swp
 *.swo
 *~

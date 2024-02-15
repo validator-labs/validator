@@ -10,7 +10,7 @@ concurrency:
 
 jobs:
   golicense-pr-scan:
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, Linux, X64, validator]
     steps:
       - name: install-git
         run: sudo apt-get install -y git

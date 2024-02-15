@@ -213,22 +213,22 @@ func TestConfigureHelmBasicAuth(t *testing.T) {
 
 func TestEmitFinalizeCleanup(t *testing.T) {
 	cs := []struct {
-		name       string
-		reconciler ValidatorConfigReconciler
-		env        map[string]string
-		expected   error
+		name         string
+		reconciler   ValidatorConfigReconciler
+		env          map[string]string
+		expectedErrs []error
 	}{
 		{
-			name:       "CLEANUP_GRPC_SERVER_ENABLED is empty",
-			reconciler: ValidatorConfigReconciler{},
-			env:        map[string]string{},
-			expected:   errors.New("CLEANUP_GRPC_SERVER_HOST is empty"),
+			name:         "CLEANUP_GRPC_SERVER_ENABLED is empty",
+			reconciler:   ValidatorConfigReconciler{},
+			env:          map[string]string{},
+			expectedErrs: nil,
 		},
 		{
-			name:       "CLEANUP_GRPC_SERVER_ENABLED is disabled",
-			reconciler: ValidatorConfigReconciler{},
-			env:        map[string]string{"CLEANUP_GRPC_SERVER_ENABLED": "false"},
-			expected:   nil,
+			name:         "CLEANUP_GRPC_SERVER_ENABLED is disabled",
+			reconciler:   ValidatorConfigReconciler{},
+			env:          map[string]string{"CLEANUP_GRPC_SERVER_ENABLED": "false"},
+			expectedErrs: nil,
 		},
 		{
 			name:       "CLEANUP_GRPC_SERVER_HOST is empty",
@@ -237,7 +237,7 @@ func TestEmitFinalizeCleanup(t *testing.T) {
 				"CLEANUP_GRPC_SERVER_ENABLED": "true",
 				"CLEANUP_GRPC_SERVER_PORT":    "1234",
 			},
-			expected: errors.New("CLEANUP_GRPC_SERVER_HOST is invalid"),
+			expectedErrs: []error{errors.New("CLEANUP_GRPC_SERVER_HOST is invalid")},
 		},
 		{
 			name:       "CLEANUP_GRPC_SERVER_PORT is empty",
@@ -246,7 +246,7 @@ func TestEmitFinalizeCleanup(t *testing.T) {
 				"CLEANUP_GRPC_SERVER_ENABLED": "true",
 				"CLEANUP_GRPC_SERVER_HOST":    "localhost",
 			},
-			expected: errors.New(`CLEANUP_GRPC_SERVER_PORT is invalid: strconv.Atoi: parsing "": invalid syntax`),
+			expectedErrs: []error{errors.New(`CLEANUP_GRPC_SERVER_PORT is invalid: strconv.Atoi: parsing "": invalid syntax`)},
 		},
 		{
 			name:       "CLEANUP_GRPC_SERVER_PORT is invalid",
@@ -256,7 +256,7 @@ func TestEmitFinalizeCleanup(t *testing.T) {
 				"CLEANUP_GRPC_SERVER_HOST":    "localhost",
 				"CLEANUP_GRPC_SERVER_PORT":    "abcd",
 			},
-			expected: errors.New(`CLEANUP_GRPC_SERVER_PORT is invalid: strconv.Atoi: parsing "abcd": invalid syntax`),
+			expectedErrs: []error{errors.New(`CLEANUP_GRPC_SERVER_PORT is invalid: strconv.Atoi: parsing "abcd": invalid syntax`)},
 		},
 		{
 			name:       "Request fails",
@@ -266,7 +266,10 @@ func TestEmitFinalizeCleanup(t *testing.T) {
 				"CLEANUP_GRPC_SERVER_HOST":    "localhost",
 				"CLEANUP_GRPC_SERVER_PORT":    "1234",
 			},
-			expected: errors.New(`FinalizeCleanup request to http://localhost:1234 failed: unavailable: dial tcp [::1]:1234: connect: connection refused`),
+			expectedErrs: []error{
+				errors.New(`FinalizeCleanup request to http://localhost:1234 failed: unavailable: dial tcp [::1]:1234: connect: connection refused`),
+				errors.New(`FinalizeCleanup request to http://localhost:1234 failed: unavailable: dial tcp 127.0.0.1:1234: connect: connection refused`),
+			},
 		},
 	}
 	for _, c := range cs {
@@ -278,8 +281,15 @@ func TestEmitFinalizeCleanup(t *testing.T) {
 		}
 
 		err := c.reconciler.emitFinalizeCleanup()
-		if err != nil && !reflect.DeepEqual(err.Error(), c.expected.Error()) {
-			t.Errorf("expected (%v), got (%v)", c.expected, err)
+		errOk := err == nil && c.expectedErrs == nil
+		for _, expectedErr := range c.expectedErrs {
+			if err != nil && reflect.DeepEqual(err.Error(), expectedErr.Error()) {
+				errOk = true
+				break
+			}
+		}
+		if !errOk {
+			t.Errorf("expected one of (%v), got (%v)", c.expectedErrs, err)
 		}
 	}
 }
