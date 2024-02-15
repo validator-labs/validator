@@ -222,7 +222,7 @@ func TestEmitFinalizeCleanup(t *testing.T) {
 			name:         "CLEANUP_GRPC_SERVER_ENABLED is empty",
 			reconciler:   ValidatorConfigReconciler{},
 			env:          map[string]string{},
-			expectedErrs: []error{errors.New("CLEANUP_GRPC_SERVER_HOST is empty")},
+			expectedErrs: nil,
 		},
 		{
 			name:         "CLEANUP_GRPC_SERVER_ENABLED is disabled",
@@ -281,10 +281,7 @@ func TestEmitFinalizeCleanup(t *testing.T) {
 		}
 
 		err := c.reconciler.emitFinalizeCleanup()
-		var errOk bool
-		if c.expectedErrs == nil {
-			errOk = err == nil
-		}
+		errOk := err == nil && c.expectedErrs == nil
 		for _, expectedErr := range c.expectedErrs {
 			if err != nil && reflect.DeepEqual(err.Error(), expectedErr.Error()) {
 				errOk = true
