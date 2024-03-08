@@ -3,9 +3,11 @@ package validationresult
 import (
 	"context"
 	"strings"
+	"time"
 
 	"github.com/go-logr/logr"
 	corev1 "k8s.io/api/core/v1"
+	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	ktypes "k8s.io/apimachinery/pkg/types"
 	"sigs.k8s.io/controller-runtime/pkg/client"
 
@@ -126,7 +128,9 @@ func updateValidationResultStatus(vr *v1alpha1.ValidationResult, res *types.Vali
 	if resErr != nil {
 		if res == nil {
 			res = &types.ValidationResult{
-				Condition: &v1alpha1.ValidationCondition{},
+				Condition: &v1alpha1.ValidationCondition{
+					LastValidationTime: metav1.Time{Time: time.Now()},
+				},
 			}
 		}
 		res.State = util.Ptr(v1alpha1.ValidationFailed)
