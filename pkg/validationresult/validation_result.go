@@ -124,6 +124,11 @@ func updateValidationResultStatus(vr *v1alpha1.ValidationResult, res *types.Vali
 
 	// Finalize result State and Condition in the event of an unexpected error
 	if resErr != nil {
+		if res == nil {
+			res = &types.ValidationResult{
+				Condition: &v1alpha1.ValidationCondition{},
+			}
+		}
 		res.State = util.Ptr(v1alpha1.ValidationFailed)
 		res.Condition.Status = corev1.ConditionFalse
 		res.Condition.Message = validationErrorMsg
