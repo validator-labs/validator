@@ -3,9 +3,11 @@ package validationresult
 import (
 	"context"
 	"strings"
+	"time"
 
 	"github.com/go-logr/logr"
 	corev1 "k8s.io/api/core/v1"
+	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	ktypes "k8s.io/apimachinery/pkg/types"
 	"sigs.k8s.io/controller-runtime/pkg/client"
 
@@ -96,6 +98,14 @@ func SafeUpdateValidationResult(c client.Client, nn ktypes.NamespacedName, res *
 	if !updated {
 		l.V(0).Error(err, "failed to update ValidationResult", "name", nn.Name, "namespace", nn.Namespace)
 		return
+	}
+
+	if res == nil {
+		res = &types.ValidationResult{
+			Condition: &v1alpha1.ValidationCondition{
+				LastValidationTime: metav1.Time{Time: time.Now()},
+			},
+		}
 	}
 
 	for i := 0; i < constants.StatusUpdateRetries; i++ {

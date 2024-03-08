@@ -169,6 +169,18 @@ func TestSafeUpdateValidationResult(t *testing.T) {
 			resCount: 1,
 			resErr:   errors.New("status update failed"),
 		},
+		{
+			name: "Fail (nil)",
+			client: test.ClientMock{
+				SubResourceMock: test.SubResourceMock{
+					UpdateErrors: []error{errors.New("status update failed")},
+				},
+			},
+			nn:       ktypes.NamespacedName{Name: "", Namespace: ""},
+			res:      nil,
+			resCount: 0,
+			resErr:   errors.New("status update failed"),
+		},
 	}
 	for _, c := range cs {
 		t.Log(c.name)
