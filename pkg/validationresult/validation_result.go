@@ -100,6 +100,14 @@ func SafeUpdateValidationResult(c client.Client, nn ktypes.NamespacedName, res *
 		return
 	}
 
+	if res == nil {
+		res = &types.ValidationResult{
+			Condition: &v1alpha1.ValidationCondition{
+				LastValidationTime: metav1.Time{Time: time.Now()},
+			},
+		}
+	}
+
 	for i := 0; i < constants.StatusUpdateRetries; i++ {
 		if err := c.Get(ctx, nn, vr); err != nil {
 			l.V(0).Error(err, "failed to get ValidationResult", "name", nn.Name, "namespace", nn.Namespace)
@@ -126,13 +134,6 @@ func updateValidationResultStatus(vr *v1alpha1.ValidationResult, res *types.Vali
 
 	// Finalize result State and Condition in the event of an unexpected error
 	if resErr != nil {
-		if res == nil {
-			res = &types.ValidationResult{
-				Condition: &v1alpha1.ValidationCondition{
-					LastValidationTime: metav1.Time{Time: time.Now()},
-				},
-			}
-		}
 		res.State = util.Ptr(v1alpha1.ValidationFailed)
 		res.Condition.Status = corev1.ConditionFalse
 		res.Condition.Message = validationErrorMsg
