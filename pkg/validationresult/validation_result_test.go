@@ -86,6 +86,7 @@ func TestHandleNewValidationResult(t *testing.T) {
 			client: test.ClientMock{
 				SubResourceMock: test.SubResourceMock{},
 			},
+			patcher:  test.PatchHelperMock{},
 			vr:       vr(nil, v1alpha1.ValidationInProgress, nil),
 			expected: nil,
 		},
@@ -95,6 +96,7 @@ func TestHandleNewValidationResult(t *testing.T) {
 				CreateErrors:    []error{errors.New("creation failed")},
 				SubResourceMock: test.SubResourceMock{},
 			},
+			patcher:  test.PatchHelperMock{},
 			vr:       vr([]corev1.ConditionStatus{corev1.ConditionFalse}, v1alpha1.ValidationFailed, nil),
 			expected: errors.New("creation failed"),
 		},
@@ -104,6 +106,7 @@ func TestHandleNewValidationResult(t *testing.T) {
 				GetErrors:       []error{errors.New("get failed")},
 				SubResourceMock: test.SubResourceMock{},
 			},
+			patcher:  test.PatchHelperMock{},
 			vr:       vr([]corev1.ConditionStatus{corev1.ConditionFalse}, v1alpha1.ValidationFailed, nil),
 			expected: errors.New("get failed"),
 		},
@@ -114,8 +117,18 @@ func TestHandleNewValidationResult(t *testing.T) {
 					UpdateErrors: []error{errors.New("status update failed")},
 				},
 			},
+			patcher:  test.PatchHelperMock{},
 			vr:       vr(nil, v1alpha1.ValidationSucceeded, nil),
 			expected: errors.New("status update failed"),
+		},
+		{
+			name:   "Fail (patch)",
+			client: test.ClientMock{},
+			patcher: test.PatchHelperMock{
+				PatchErrors: []error{errors.New("patch failed")},
+			},
+			vr:       vr(nil, v1alpha1.ValidationSucceeded, nil),
+			expected: errors.New("patch failed"),
 		},
 	}
 	for _, c := range cs {
@@ -165,6 +178,16 @@ func TestSafeUpdateValidationResult(t *testing.T) {
 			vr:      &v1alpha1.ValidationResult{},
 			vrr:     res(corev1.ConditionTrue, v1alpha1.ValidationSucceeded),
 			vrrErr:  errors.New("status update failed"),
+		},
+		{
+			name:   "Fail (patch)",
+			client: test.ClientMock{},
+			patcher: test.PatchHelperMock{
+				PatchErrors: []error{errors.New("patch failed")},
+			},
+			vr:     &v1alpha1.ValidationResult{},
+			vrr:    res(corev1.ConditionTrue, v1alpha1.ValidationSucceeded),
+			vrrErr: errors.New("patch failed"),
 		},
 		{
 			name: "Fail (nil)",
