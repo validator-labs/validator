@@ -77,7 +77,7 @@ func HandleNewValidationResult(ctx context.Context, c client.Client, p Patcher, 
 
 // SafeUpdateValidationResult updates a ValidationResult, ensuring
 // that the overall validation status remains failed if a single rule fails.
-func SafeUpdateValidationResult(ctx context.Context, p Patcher, vr *v1alpha1.ValidationResult, vrr *types.ValidationRuleResult, vrrErr error, l logr.Logger) {
+func SafeUpdateValidationResult(ctx context.Context, p Patcher, vr *v1alpha1.ValidationResult, vrr *types.ValidationRuleResult, vrrErr error, l logr.Logger) error {
 	l = l.WithValues("name", vr.Name, "namespace", vr.Namespace)
 
 	// Handle nil ValidationRuleResult
@@ -94,7 +94,7 @@ func SafeUpdateValidationResult(ctx context.Context, p Patcher, vr *v1alpha1.Val
 	l.V(0).Info("Preparing to patch ValidationResult")
 	if err := patchValidationResult(ctx, p, vr); err != nil {
 		l.Error(err, "failed to patch ValidationResult")
-		return
+		return err
 	}
 
 	l.V(0).Info("Successfully patched ValidationResult",
@@ -102,6 +102,7 @@ func SafeUpdateValidationResult(ctx context.Context, p Patcher, vr *v1alpha1.Val
 		"validationRuleMessage", vrr.Condition.Message, "validationRuleDetails", vrr.Condition.Details,
 		"validationRuleFailures", vrr.Condition.Failures, "time", vrr.Condition.LastValidationTime,
 	)
+	return nil
 }
 
 // updateValidationResultStatus updates a ValidationResult's status with the result of a single validation rule
