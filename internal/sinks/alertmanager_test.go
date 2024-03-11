@@ -78,7 +78,7 @@ func TestAlertManagerEmit(t *testing.T) {
 			sink: AlertmanagerSink{},
 			res: v1alpha1.ValidationResult{
 				Status: v1alpha1.ValidationResultStatus{
-					Conditions: []v1alpha1.ValidationCondition{
+					ValidationConditions: []v1alpha1.ValidationCondition{
 						{
 							Status: corev1.ConditionTrue,
 						},

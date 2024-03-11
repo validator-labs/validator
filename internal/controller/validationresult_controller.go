@@ -21,10 +21,14 @@ import (
 	"time"
 
 	"github.com/go-logr/logr"
+	"github.com/pkg/errors"
 	corev1 "k8s.io/api/core/v1"
 	apierrs "k8s.io/apimachinery/pkg/api/errors"
+	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime"
 	ktypes "k8s.io/apimachinery/pkg/types"
+	clusterv1beta1 "sigs.k8s.io/cluster-api/api/v1beta1"
+	"sigs.k8s.io/cluster-api/util/patch"
 	ctrl "sigs.k8s.io/controller-runtime"
 	"sigs.k8s.io/controller-runtime/pkg/client"
 
@@ -36,12 +40,6 @@ import (
 
 // ValidationResultHash is used to determine whether to re-emit updates to a validation result sink.
 const ValidationResultHash = "validator/validation-result-hash"
-
-var (
-	vr        *v1alpha1.ValidationResult
-	vrKey     ktypes.NamespacedName
-	sinkState v1alpha1.SinkState
-)
 
 // ValidationResultReconciler reconciles a ValidationResult object
 type ValidationResultReconciler struct {
@@ -56,7 +54,7 @@ type ValidationResultReconciler struct {
 //+kubebuilder:rbac:groups=validation.spectrocloud.labs,resources=validationresults/status,verbs=get;update;patch
 //+kubebuilder:rbac:groups=validation.spectrocloud.labs,resources=validationresults/finalizers,verbs=update
 
-func (r *ValidationResultReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.Result, error) {
+func (r *ValidationResultReconciler) Reconcile(ctx context.Context, req ctrl.Request) (_ ctrl.Result, reterr error) {
 	r.Log.V(0).Info("Reconciling ValidationResult", "name", req.Name, "namespace", req.Namespace)
 
 	vc := &v1alpha1.ValidatorConfig{}
@@ -68,30 +66,38 @@ func (r *ValidationResultReconciler) Reconcile(ctx context.Context, req ctrl.Req
 		return ctrl.Result{}, client.IgnoreNotFound(err)
 	}
 
-	vr = &v1alpha1.ValidationResult{}
-	vrKey = req.NamespacedName
-
-	if err := r.Get(ctx, vrKey, vr); err != nil {
+	vr := &v1alpha1.ValidationResult{}
+	if err := r.Get(ctx, req.NamespacedName, vr); err != nil {
 		if !apierrs.IsNotFound(err) {
 			r.Log.Error(err, "failed to fetch ValidationResult", "key", req)
 		}
 		return ctrl.Result{}, client.IgnoreNotFound(err)
 	}
 
+	patcher, err := patch.NewHelper(vr, r.Client)
+	if err != nil {
+		return ctrl.Result{}, errors.Wrapf(err, "failed to create patch helper for ValidationResult %s", vr.Name)
+	}
+
 	currHash := vr.Hash()
 	prevHash, ok := vr.ObjectMeta.Annotations[ValidationResultHash]
-	sinkState = v1alpha1.SinkEmitNone
 
-	// TODO: implement a proper patcher to avoid this hacky approach with retries & global vars
+	sinkConditionIdx, sinkCondition := getConditionByType(vr.Status.Conditions, v1alpha1.SinkEmission)
+	if sinkConditionIdx == -1 {
+		sinkCondition.Type = v1alpha1.SinkEmission
+		sinkCondition.Reason = string(v1alpha1.SinkEmitNA)
+		sinkCondition.Status = corev1.ConditionTrue
+		sinkCondition.LastTransitionTime = metav1.Now()
+	}
+
 	defer func() {
-		// Always update the ValidationResult's Status with a retry due to race condition with
-		// SafeUpdateValidationResult, which also updates the VR's Status and is continuously
-		// being called by the validator plugins.
-		for i := 0; i < constants.StatusUpdateRetries; i++ {
-			if err := r.updateStatus(ctx); err == nil {
-				break
-			}
+		r.Log.V(1).Info("Preparing to patch ValidationResult", "validationResult", vr.Name)
+		if err := patchValidationResult(ctx, patcher, vr); err != nil && reterr == nil {
+			reterr = err
+			r.Log.Error(err, "failed to patch ValidationResult", "validationResult", vr.Name)
+			return
 		}
+		r.Log.V(1).Info("Successfully patched ValidationResult", "validationResult", vr.Name)
 	}()
 
 	r.Log.V(0).Info("Plugin", "name", vr.Spec.Plugin)
@@ -99,7 +105,7 @@ func (r *ValidationResultReconciler) Reconcile(ctx context.Context, req ctrl.Req
 	if vr.Status.State == v1alpha1.ValidationFailed || vr.Status.State == v1alpha1.ValidationSucceeded {
 		r.Log.V(0).Info("ValidationResult complete", "name", vr.Name, "state", vr.Status.State)
 
-		for _, c := range vr.Status.Conditions {
+		for _, c := range vr.Status.ValidationConditions {
 			r.Log.V(0).Info("ValidationResult metadata", "type", c.ValidationType,
 				"rule", c.ValidationRule, "status", c.Status,
 				"message", c.Message, "details", c.Details,
@@ -107,34 +113,14 @@ func (r *ValidationResultReconciler) Reconcile(ctx context.Context, req ctrl.Req
 			)
 		}
 
-		// Emit ValidationResult to a sink - either upon the completion of the 1st reconciliation, or if its hash changes.
-		// Do not emit until the number of conditions matches the expected number of results, otherwise N
+		// Do not emit until the number of conditions matches the expected number of results. Otherwise, N
 		// emissions will occur during the 1st reconciliation, where N is the number of rules in the validator.
-		if vc.Spec.Sink != nil && len(vr.Status.Conditions) == vr.Spec.ExpectedResults && (!ok || prevHash != currHash) {
-
-			sink := sinks.NewSink(types.SinkType(vc.Spec.Sink.Type), r.Log)
-			sinkState = v1alpha1.SinkEmitFailed
-
-			var sinkConfig map[string][]byte
-			if vc.Spec.Sink.SecretName != "" {
-				sinkSecret := &corev1.Secret{}
-				sinkConfigKey := ktypes.NamespacedName{Namespace: r.Namespace, Name: vc.Spec.Sink.SecretName}
-				if err := r.Client.Get(ctx, sinkConfigKey, sinkSecret); err != nil {
-					r.Log.Error(err, "failed to fetch sink configuration secret")
-					return ctrl.Result{}, err
-				}
-				sinkConfig = sinkSecret.Data
+		if vc.Spec.Sink != nil && len(vr.Status.ValidationConditions) == vr.Spec.ExpectedResults && (!ok || prevHash != currHash) {
+			sinkState, err := r.emitToSink(ctx, vc, vr)
+			if err != nil {
+				sinkCondition.Message = err.Error()
 			}
-
-			if err := sink.Configure(*r.SinkClient, sinkConfig); err != nil {
-				r.Log.Error(err, "failed to configure sink")
-				return ctrl.Result{}, err
-			}
-			if err := sink.Emit(*vr); err != nil {
-				r.Log.Error(err, "failed to emit ValidationResult to sink", "sinkType", vc.Spec.Sink.Type)
-			}
-
-			sinkState = v1alpha1.SinkEmitSucceeded
+			sinkCondition.Reason = string(sinkState)
 		}
 	}
 
@@ -144,9 +130,13 @@ func (r *ValidationResultReconciler) Reconcile(ctx context.Context, req ctrl.Req
 			vr.ObjectMeta.Annotations = make(map[string]string, 0)
 		}
 		vr.ObjectMeta.Annotations[ValidationResultHash] = currHash
-		if err := r.Client.Update(ctx, vr); err != nil {
-			return ctrl.Result{}, err
-		}
+	}
+
+	// update SinkEmission condition
+	if sinkConditionIdx == -1 {
+		vr.Status.Conditions = append(vr.Status.Conditions, sinkCondition)
+	} else {
+		vr.Status.Conditions[sinkConditionIdx] = sinkCondition
 	}
 
 	r.Log.V(0).Info("Validation in progress. Requeuing in 30s.", "name", req.Name, "namespace", req.Namespace)
@@ -160,21 +150,51 @@ func (r *ValidationResultReconciler) SetupWithManager(mgr ctrl.Manager) error {
 		Complete(r)
 }
 
-// updateStatus updates the ValidatorResult's status subresource
-func (r *ValidationResultReconciler) updateStatus(ctx context.Context) error {
-	if err := r.Get(ctx, vrKey, vr); err != nil {
-		r.Log.V(0).Error(err, "failed to get ValidationResult")
-		return err
+// emitToSink emits a ValidationResult to a sink - either upon the completion of the 1st reconciliation, or if its hash changes.
+func (r *ValidationResultReconciler) emitToSink(ctx context.Context, vc *v1alpha1.ValidatorConfig, vr *v1alpha1.ValidationResult) (v1alpha1.SinkEmitState, error) {
+	sink := sinks.NewSink(types.SinkType(vc.Spec.Sink.Type), r.Log)
+
+	var sinkConfig map[string][]byte
+	if vc.Spec.Sink.SecretName != "" {
+		sinkSecret := &corev1.Secret{}
+		sinkConfigKey := ktypes.NamespacedName{Namespace: r.Namespace, Name: vc.Spec.Sink.SecretName}
+		if err := r.Client.Get(ctx, sinkConfigKey, sinkSecret); err != nil {
+			r.Log.Error(err, "failed to fetch sink configuration secret")
+			return v1alpha1.SinkEmitFailed, err
+		}
+		sinkConfig = sinkSecret.Data
 	}
 
-	// all status modifications must happen after r.Client.Update
-	vr.Status.SinkState = sinkState
-
-	if err := r.Status().Update(context.Background(), vr); err != nil {
-		r.Log.V(1).Info("warning: failed to update ValidationResult status", "error", err)
-		return err
+	if err := sink.Configure(*r.SinkClient, sinkConfig); err != nil {
+		r.Log.Error(err, "failed to configure sink")
+		return v1alpha1.SinkEmitFailed, err
+	}
+	if err := sink.Emit(*vr); err != nil {
+		r.Log.Error(err, "failed to emit ValidationResult to sink", "sinkType", vc.Spec.Sink.Type)
+		return v1alpha1.SinkEmitFailed, err
 	}
 
-	r.Log.V(0).Info("Updated ValidationResult", "conditions", vr.Status.Conditions, "time", time.Now())
-	return nil
+	return v1alpha1.SinkEmitSucceeded, nil
+}
+
+// getConditionIndexByType retrieves the index of a condition from a Condition array matching a specific condition type.
+func getConditionByType(conditions []clusterv1beta1.Condition, conditionType clusterv1beta1.ConditionType) (int, clusterv1beta1.Condition) {
+	for i, c := range conditions {
+		if c.Type == conditionType {
+			return i, c
+		}
+	}
+	return -1, clusterv1beta1.Condition{}
+}
+
+// patchValidationResult patches a ValidationResult, ignoring conflicts on the conditions owned by this controller.
+func patchValidationResult(ctx context.Context, patchHelper *patch.Helper, vr *v1alpha1.ValidationResult) error {
+	return patchHelper.Patch(
+		ctx,
+		vr,
+		patch.WithOwnedConditions{Conditions: []clusterv1beta1.ConditionType{
+			v1alpha1.SinkEmission,
+		}},
+		patch.WithStatusObservedGeneration{},
+	)
 }

@@ -93,9 +93,9 @@ func (s *AlertmanagerSink) Configure(c Client, config map[string][]byte) error {
 }
 
 func (s *AlertmanagerSink) Emit(r v1alpha1.ValidationResult) error {
-	alerts := make([]Alert, 0, len(r.Status.Conditions))
+	alerts := make([]Alert, 0, len(r.Status.ValidationConditions))
 
-	for i, c := range r.Status.Conditions {
+	for i, c := range r.Status.ValidationConditions {
 		alerts = append(alerts, Alert{
 			Labels: map[string]string{
 				"alertname":         r.Name,
