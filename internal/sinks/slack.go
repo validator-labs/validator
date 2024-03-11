@@ -76,7 +76,7 @@ func (s *SlackSink) buildSlackBlocks(r v1alpha1.ValidationResult) []slack.Block 
 		slack.NewDividerBlock(),
 	}
 
-	for i, c := range r.Status.Conditions {
+	for i, c := range r.Status.ValidationConditions {
 
 		// Basics
 		blocks = append(blocks, []slack.Block{

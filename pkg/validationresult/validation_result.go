@@ -8,7 +8,7 @@ import (
 	"github.com/go-logr/logr"
 	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
-	ktypes "k8s.io/apimachinery/pkg/types"
+	"sigs.k8s.io/cluster-api/util/patch"
 	"sigs.k8s.io/controller-runtime/pkg/client"
 
 	"github.com/spectrocloud-labs/validator/api/v1alpha1"
@@ -19,21 +19,26 @@ import (
 
 const validationErrorMsg = "Validation failed with an unexpected error"
 
-// HandleExistingValidationResult processes a preexisting validation result for the active validator
-func HandleExistingValidationResult(nn ktypes.NamespacedName, vr *v1alpha1.ValidationResult, l logr.Logger) {
+type Patcher interface {
+	Patch(ctx context.Context, obj client.Object, opts ...patch.Option) error
+}
+
+// HandleExistingValidationResult processes a preexisting validation result for the active validator.
+func HandleExistingValidationResult(vr *v1alpha1.ValidationResult, l logr.Logger) {
+	l = l.WithValues("name", vr.Name, "namespace", vr.Namespace, "state", vr.Status.State)
+
 	switch vr.Status.State {
 
 	case v1alpha1.ValidationInProgress:
 		// validations are only left in progress if an unexpected error occurred
-		l.V(0).Info("Previous validation failed with unexpected error", "name", nn.Name, "namespace", nn.Namespace)
+		l.V(0).Info("Previous validation failed with unexpected error")
 
 	case v1alpha1.ValidationFailed:
 		// log validation failure, but continue and retry
-		cs := getInvalidConditions(vr.Status.Conditions)
+		cs := getInvalidConditions(vr.Status.ValidationConditions)
 		if len(cs) > 0 {
 			for _, c := range cs {
-				l.V(0).Info(
-					"Validation failed. Retrying.", "name", nn.Name, "namespace", nn.Namespace,
+				l.V(0).Info("Validation failed. Retrying.",
 					"validation", c.ValidationRule, "error", c.Message, "details", c.Details, "failures", c.Failures,
 				)
 			}
@@ -41,119 +46,90 @@ func HandleExistingValidationResult(nn ktypes.NamespacedName, vr *v1alpha1.Valid
 
 	case v1alpha1.ValidationSucceeded:
 		// log validation success, continue to re-validate
-		l.V(0).Info("Previous validation succeeded. Re-validating.", "name", nn.Name, "namespace", nn.Namespace)
+		l.V(0).Info("Previous validation succeeded. Re-validating.")
 	}
 }
 
-// HandleNewValidationResult creates a new validation result for the active validator
-func HandleNewValidationResult(c client.Client, vr *v1alpha1.ValidationResult, l logr.Logger) error {
+// HandleNewValidationResult creates a new validation result for the active validator.
+func HandleNewValidationResult(ctx context.Context, c client.Client, p Patcher, vr *v1alpha1.ValidationResult, l logr.Logger) error {
+	l = l.WithValues("name", vr.Name, "namespace", vr.Namespace, "state", vr.Status.State)
 
 	// Create the ValidationResult
-	if err := c.Create(context.Background(), vr, &client.CreateOptions{}); err != nil {
-		l.V(0).Error(err, "failed to create ValidationResult", "name", vr.Name, "namespace", vr.Namespace)
+	if err := c.Create(ctx, vr, &client.CreateOptions{}); err != nil {
+		l.V(0).Error(err, "failed to create ValidationResult")
 		return err
 	}
 
-	var err error
-	nn := ktypes.NamespacedName{Name: vr.Name, Namespace: vr.Namespace}
-
 	// Update the ValidationResult's status
-	for i := 0; i < constants.StatusUpdateRetries; i++ {
-		if err := c.Get(context.Background(), nn, vr); err != nil {
-			l.V(0).Error(err, "failed to get ValidationResult", "name", nn.Name, "namespace", nn.Namespace)
-			return err
-		}
-		vr.Status = v1alpha1.ValidationResultStatus{State: v1alpha1.ValidationInProgress}
-		err = c.Status().Update(context.Background(), vr)
-		if err == nil {
-			return nil
-		}
-		l.V(1).Info("warning: failed to update ValidationResult status", "name", vr.Name, "namespace", vr.Namespace, "error", err.Error())
+	vr.Status = v1alpha1.ValidationResultStatus{
+		State: v1alpha1.ValidationInProgress,
 	}
-	return err
+
+	l.V(0).Info("Preparing to patch ValidationResult")
+	if err := patchValidationResult(ctx, p, vr); err != nil {
+		l.Error(err, "failed to patch ValidationResult")
+		return err
+	}
+
+	l.V(0).Info("Successfully patched ValidationResult")
+	return nil
 }
 
-// SafeUpdateValidationResult updates the overall validation result, ensuring
-// that the overall validation status remains failed if a single rule fails
-func SafeUpdateValidationResult(c client.Client, nn ktypes.NamespacedName, res *types.ValidationResult, resCount int, resErr error, l logr.Logger) {
-	var err error
-	var updated bool
-	ctx := context.Background()
-	vr := &v1alpha1.ValidationResult{}
+// SafeUpdateValidationResult updates a ValidationResult, ensuring
+// that the overall validation status remains failed if a single rule fails.
+func SafeUpdateValidationResult(ctx context.Context, p Patcher, vr *v1alpha1.ValidationResult, vrr *types.ValidationRuleResult, vrrErr error, l logr.Logger) error {
+	l = l.WithValues("name", vr.Name, "namespace", vr.Namespace)
 
-	for i := 0; i < constants.StatusUpdateRetries; i++ {
-		if err := c.Get(ctx, nn, vr); err != nil {
-			l.V(0).Error(err, "failed to get ValidationResult", "name", nn.Name, "namespace", nn.Namespace)
-			continue
-		}
-		vr.Spec.ExpectedResults = resCount
-		if err := c.Update(ctx, vr); err != nil {
-			l.V(1).Info("warning: failed to update ValidationResult", "name", nn.Name, "namespace", nn.Namespace, "error", err.Error())
-			continue
-		}
-		l.V(0).Info("Updated ValidationResult", "plugin", vr.Spec.Plugin, "expectedResults", vr.Spec.ExpectedResults)
-		updated = true
-		break
-	}
-	if !updated {
-		l.V(0).Error(err, "failed to update ValidationResult", "name", nn.Name, "namespace", nn.Namespace)
-		return
-	}
-
-	if res == nil {
-		res = &types.ValidationResult{
+	// Handle nil ValidationRuleResult
+	if vrr == nil {
+		vrr = &types.ValidationRuleResult{
 			Condition: &v1alpha1.ValidationCondition{
 				LastValidationTime: metav1.Time{Time: time.Now()},
 			},
 		}
 	}
 
-	for i := 0; i < constants.StatusUpdateRetries; i++ {
-		if err := c.Get(ctx, nn, vr); err != nil {
-			l.V(0).Error(err, "failed to get ValidationResult", "name", nn.Name, "namespace", nn.Namespace)
-			continue
-		}
-		updateValidationResultStatus(vr, res, resErr)
-		if err := c.Status().Update(ctx, vr); err != nil {
-			l.V(1).Info("warning: failed to update ValidationResult status", "name", nn.Name, "namespace", nn.Namespace, "error", err.Error())
-			continue
-		}
-		l.V(0).Info(
-			"Updated ValidationResult status", "state", res.State, "reason", res.Condition.ValidationRule,
-			"message", res.Condition.Message, "details", res.Condition.Details,
-			"failures", res.Condition.Failures, "time", res.Condition.LastValidationTime,
-		)
-		return
+	updateValidationResultStatus(vr, vrr, vrrErr)
+
+	l.V(0).Info("Preparing to patch ValidationResult")
+	if err := patchValidationResult(ctx, p, vr); err != nil {
+		l.Error(err, "failed to patch ValidationResult")
+		return err
 	}
 
-	l.V(0).Error(err, "failed to update ValidationResult status", "name", nn.Name, "namespace", nn.Namespace)
+	l.V(0).Info("Successfully patched ValidationResult",
+		"validationRuleState", vrr.State, "validationRuleReason", vrr.Condition.ValidationRule,
+		"validationRuleMessage", vrr.Condition.Message, "validationRuleDetails", vrr.Condition.Details,
+		"validationRuleFailures", vrr.Condition.Failures, "time", vrr.Condition.LastValidationTime,
+	)
+	return nil
 }
 
 // updateValidationResultStatus updates a ValidationResult's status with the result of a single validation rule
-func updateValidationResultStatus(vr *v1alpha1.ValidationResult, res *types.ValidationResult, resErr error) {
+func updateValidationResultStatus(vr *v1alpha1.ValidationResult, vrr *types.ValidationRuleResult, vrrErr error) {
 
 	// Finalize result State and Condition in the event of an unexpected error
-	if resErr != nil {
-		res.State = util.Ptr(v1alpha1.ValidationFailed)
-		res.Condition.Status = corev1.ConditionFalse
-		res.Condition.Message = validationErrorMsg
-		res.Condition.Failures = append(res.Condition.Failures, resErr.Error())
+	if vrrErr != nil {
+		vrr.State = util.Ptr(v1alpha1.ValidationFailed)
+		vrr.Condition.Status = corev1.ConditionFalse
+		vrr.Condition.Message = validationErrorMsg
+		vrr.Condition.Failures = append(vrr.Condition.Failures, vrrErr.Error())
 	}
 
 	// Update and/or insert the ValidationResult's Conditions with the latest Condition
-	idx := getConditionIndexByValidationRule(vr.Status.Conditions, res.Condition.ValidationRule)
+	idx := getConditionIndexByValidationRule(vr.Status.ValidationConditions, vrr.Condition.ValidationRule)
 	if idx == -1 {
-		vr.Status.Conditions = append(vr.Status.Conditions, *res.Condition)
+		vr.Status.ValidationConditions = append(vr.Status.ValidationConditions, *vrr.Condition)
 	} else {
-		vr.Status.Conditions[idx] = *res.Condition
+		vr.Status.ValidationConditions[idx] = *vrr.Condition
 	}
 
 	// Set State to:
 	// - ValidationFailed if ANY condition failed
 	// - ValidationSucceeded if ALL conditions succeeded
 	// - ValidationInProgress otherwise
-	vr.Status.State = *res.State
-	for _, c := range vr.Status.Conditions {
+	vr.Status.State = *vrr.State
+	for _, c := range vr.Status.ValidationConditions {
 		if c.Status == corev1.ConditionTrue {
 			vr.Status.State = v1alpha1.ValidationSucceeded
 		}
@@ -183,4 +159,9 @@ func getConditionIndexByValidationRule(conditions []v1alpha1.ValidationCondition
 		}
 	}
 	return -1
+}
+
+// patchValidationResult patches a ValidationResult.
+func patchValidationResult(ctx context.Context, p Patcher, vr *v1alpha1.ValidationResult) error {
+	return p.Patch(ctx, vr, patch.WithStatusObservedGeneration{})
 }

@@ -2,11 +2,8 @@ package controller
 
 import (
 	"context"
-	"errors"
 	"os"
 	"path/filepath"
-	"reflect"
-	"testing"
 
 	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
@@ -16,7 +13,6 @@ import (
 	"k8s.io/apimachinery/pkg/types"
 
 	"github.com/spectrocloud-labs/validator/api/v1alpha1"
-	"github.com/spectrocloud-labs/validator/internal/test"
 	"github.com/spectrocloud-labs/validator/pkg/constants"
 	//+kubebuilder:scaffold:imports
 )
@@ -93,7 +89,7 @@ var _ = Describe("ValidationResult controller", Ordered, func() {
 				return false
 			}
 			stateOk := vr.Status.State == v1alpha1.ValidationInProgress
-			sinkStateOk := vr.Status.SinkState == v1alpha1.SinkEmitNone
+			sinkStateOk := len(vr.Status.Conditions) > 0 && vr.Status.Conditions[0].Type == v1alpha1.SinkEmission && vr.Status.Conditions[0].Reason == string(v1alpha1.SinkEmitNA)
 			hashOk := vr.ObjectMeta.Annotations[ValidationResultHash] == vr.Hash()
 			return stateOk && sinkStateOk && hashOk
 		}, timeout, interval).Should(BeTrue(), "failed to update ValidationResult Status")
@@ -106,54 +102,29 @@ var _ = Describe("ValidationResult controller", Ordered, func() {
 		vrBytes, err := os.ReadFile(vrServiceQuota)
 		Expect(err).NotTo(HaveOccurred())
 
+		statusUpdated := false
 		vrUpdated := &v1alpha1.ValidationResult{}
 		err = kyaml.Unmarshal(vrBytes, vrUpdated)
 		Expect(err).NotTo(HaveOccurred())
-
-		Expect(k8sClient.Get(ctx, vrKey, vr)).Should(Succeed())
-		vr.Status = vrUpdated.Status
-		Expect(k8sClient.Status().Update(ctx, vr)).Should(Succeed())
 
 		// Wait for the ValidationResult's Status to be updated
 		Eventually(func() bool {
 			if err := k8sClient.Get(ctx, vrKey, vr); err != nil {
 				return false
 			}
+
+			if !statusUpdated {
+				vr.Status.State = v1alpha1.ValidationSucceeded
+				vr.Status.ValidationConditions = vrUpdated.Status.ValidationConditions
+				if err := k8sClient.Status().Update(ctx, vr); err != nil {
+					return false
+				}
+				statusUpdated = true
+			}
+
 			// expect the sink to fail, as we've not created the slack secret
-			sinkStateOk := vr.Status.SinkState == v1alpha1.SinkEmitFailed
+			sinkStateOk := len(vr.Status.Conditions) > 0 && vr.Status.Conditions[0].Type == v1alpha1.SinkEmission && vr.Status.Conditions[0].Reason == string(v1alpha1.SinkEmitFailed)
 			return sinkStateOk
 		}, timeout, interval).Should(BeTrue(), "failed to update ValidationResult Status")
 	})
 })
-
-func TestUpdateStatus(t *testing.T) {
-	cs := []struct {
-		name       string
-		reconciler ValidationResultReconciler
-		vr         *v1alpha1.ValidationResult
-		expected   error
-	}{
-		{
-			name: "Fail (update_status)",
-			reconciler: ValidationResultReconciler{
-				Client: test.ClientMock{
-					SubResourceMock: test.SubResourceMock{
-						UpdateErrors: []error{errors.New("update failed")},
-					},
-				},
-			},
-			vr: &v1alpha1.ValidationResult{
-				Status: v1alpha1.ValidationResultStatus{},
-			},
-			expected: errors.New("update failed"),
-		},
-	}
-	for _, c := range cs {
-		t.Log(c.name)
-		vr = c.vr
-		err := c.reconciler.updateStatus(context.Background())
-		if err != nil && !reflect.DeepEqual(c.expected.Error(), err.Error()) {
-			t.Errorf("expected (%v), got (%v)", c.expected, err)
-		}
-	}
-}

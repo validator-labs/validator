@@ -6,7 +6,7 @@ spec:
   expectedResults: 4
   plugin: AWS
 status:
-  conditions:
+  validationConditions:
   - details:
     - 'EC2-VPC Elastic IPs: quota: 5, buffer: 1, max. usage: 3, max. usage entity:
       us-east-2'

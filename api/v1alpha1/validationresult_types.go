@@ -23,6 +23,7 @@ import (
 
 	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	clusterv1beta1 "sigs.k8s.io/cluster-api/api/v1beta1"
 )
 
 // ValidationResultSpec defines the desired state of ValidationResult
@@ -41,23 +42,29 @@ const (
 	ValidationSucceeded  ValidationState = "Succeeded"
 )
 
-type SinkState string
+const SinkEmission clusterv1beta1.ConditionType = "SinkEmission"
+
+type SinkEmitState string
 
 const (
-	SinkEmitNone      SinkState = "N/A"
-	SinkEmitFailed    SinkState = "Failed"
-	SinkEmitSucceeded SinkState = "Succeeded"
+	SinkEmitNA        SinkEmitState = "SinkEmitNA"
+	SinkEmitFailed    SinkEmitState = "SinkEmitFailed"
+	SinkEmitSucceeded SinkEmitState = "SinkEmitSucceeded"
 )
 
 // ValidationResultStatus defines the observed state of ValidationResult
 type ValidationResultStatus struct {
-	State     ValidationState `json:"state"`
-	SinkState SinkState       `json:"sinkState,omitempty"`
+	State ValidationState `json:"state"`
 
 	// +optional
 	// +patchMergeKey=type
 	// +patchStrategy=merge
-	Conditions []ValidationCondition `json:"conditions,omitempty" patchStrategy:"merge" patchMergeKey:"type"`
+	Conditions []clusterv1beta1.Condition `json:"conditions,omitempty" patchStrategy:"merge" patchMergeKey:"type"`
+
+	// +optional
+	// +patchMergeKey=type
+	// +patchStrategy=merge
+	ValidationConditions []ValidationCondition `json:"validationConditions,omitempty" patchStrategy:"merge" patchMergeKey:"type"`
 }
 
 type ValidationCondition struct {
@@ -71,7 +78,7 @@ type ValidationCondition struct {
 	Details []string `json:"details,omitempty"`
 	// Human-readable messages indicating additional failure details for the last transition.
 	Failures []string `json:"failures,omitempty"`
-	// True if the validation rule succeeded, otherwise False
+	// True if the validation rule succeeded, otherwise False.
 	Status corev1.ConditionStatus `json:"status"`
 	// Timestamp of most recent execution of the validation rule associated with the condition.
 	LastValidationTime metav1.Time `json:"lastValidationTime"`
@@ -108,7 +115,7 @@ func (r *ValidationResult) Hash() string {
 	fmt.Fprint(digester, r.Spec)
 	fmt.Fprint(digester, r.Status.State)
 
-	for _, condition := range r.Status.Conditions {
+	for _, condition := range r.Status.ValidationConditions {
 		c := condition.DeepCopy()
 		c.LastValidationTime = metav1.Time{}
 		fmt.Fprint(digester, c)
