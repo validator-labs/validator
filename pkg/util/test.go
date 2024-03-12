@@ -1,7 +1,6 @@
 package util
 
 import (
-	"errors"
 	"reflect"
 	"testing"
 
@@ -30,7 +29,12 @@ func CheckTestCase(t *testing.T, res *types.ValidationRuleResult, expectedResult
 	if !reflect.DeepEqual(res.Condition.Status, expectedResult.Condition.Status) {
 		t.Errorf("expected status (%s), got (%s)", expectedResult.Condition.Status, res.Condition.Status)
 	}
-	if !errors.Is(err, expectedError) {
-		t.Errorf("expected error (%v), got (%v)", expectedError, err)
+	if expectedError != nil {
+		if err == nil {
+			t.Errorf("expected error (%v), got nil", expectedError)
+		}
+		if !reflect.DeepEqual(err.Error(), expectedError.Error()) {
+			t.Errorf("expected error (%v), got (%v)", expectedError, err)
+		}
 	}
 }
