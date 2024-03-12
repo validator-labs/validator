@@ -52,7 +52,7 @@ func HandleExistingValidationResult(vr *v1alpha1.ValidationResult, l logr.Logger
 
 // HandleNewValidationResult creates a new validation result for the active validator.
 func HandleNewValidationResult(ctx context.Context, c client.Client, p Patcher, vr *v1alpha1.ValidationResult, l logr.Logger) error {
-	l = l.WithValues("name", vr.Name, "namespace", vr.Namespace, "state", vr.Status.State)
+	l = l.WithValues("name", vr.Name, "namespace", vr.Namespace)
 
 	// Create the ValidationResult
 	if err := c.Create(ctx, vr, &client.CreateOptions{}); err != nil {
@@ -64,6 +64,7 @@ func HandleNewValidationResult(ctx context.Context, c client.Client, p Patcher, 
 	vr.Status = v1alpha1.ValidationResultStatus{
 		State: v1alpha1.ValidationInProgress,
 	}
+	l = l.WithValues("state", vr.Status.State)
 
 	l.V(0).Info("Preparing to patch ValidationResult")
 	if err := patchValidationResult(ctx, p, vr); err != nil {
@@ -77,19 +78,21 @@ func HandleNewValidationResult(ctx context.Context, c client.Client, p Patcher, 
 
 // SafeUpdateValidationResult updates a ValidationResult, ensuring
 // that the overall validation status remains failed if a single rule fails.
-func SafeUpdateValidationResult(ctx context.Context, p Patcher, vr *v1alpha1.ValidationResult, vrr *types.ValidationRuleResult, vrrErr error, l logr.Logger) error {
+func SafeUpdateValidationResult(ctx context.Context, p Patcher, vr *v1alpha1.ValidationResult, vrr types.ValidationResponse, l logr.Logger) error {
 	l = l.WithValues("name", vr.Name, "namespace", vr.Namespace)
 
-	// Handle nil ValidationRuleResult
-	if vrr == nil {
-		vrr = &types.ValidationRuleResult{
-			Condition: &v1alpha1.ValidationCondition{
-				LastValidationTime: metav1.Time{Time: time.Now()},
-			},
+	for i, r := range vrr.ValidationRuleResults {
+		// Handle nil ValidationRuleResult
+		if r == nil {
+			r = &types.ValidationRuleResult{
+				Condition: &v1alpha1.ValidationCondition{
+					LastValidationTime: metav1.Time{Time: time.Now()},
+				},
+			}
 		}
+		// Update overall ValidationResult status
+		updateValidationResultStatus(vr, r, vrr.ValidationRuleErrors[i], l)
 	}
-
-	updateValidationResultStatus(vr, vrr, vrrErr)
 
 	l.V(0).Info("Preparing to patch ValidationResult")
 	if err := patchValidationResult(ctx, p, vr); err != nil {
@@ -97,16 +100,12 @@ func SafeUpdateValidationResult(ctx context.Context, p Patcher, vr *v1alpha1.Val
 		return err
 	}
 
-	l.V(0).Info("Successfully patched ValidationResult",
-		"validationRuleState", vrr.State, "validationRuleReason", vrr.Condition.ValidationRule,
-		"validationRuleMessage", vrr.Condition.Message, "validationRuleDetails", vrr.Condition.Details,
-		"validationRuleFailures", vrr.Condition.Failures, "time", vrr.Condition.LastValidationTime,
-	)
+	l.V(0).Info("Successfully patched ValidationResult", "state", vr.Status.State)
 	return nil
 }
 
 // updateValidationResultStatus updates a ValidationResult's status with the result of a single validation rule
-func updateValidationResultStatus(vr *v1alpha1.ValidationResult, vrr *types.ValidationRuleResult, vrrErr error) {
+func updateValidationResultStatus(vr *v1alpha1.ValidationResult, vrr *types.ValidationRuleResult, vrrErr error, l logr.Logger) {
 
 	// Finalize result State and Condition in the event of an unexpected error
 	if vrrErr != nil {
@@ -138,6 +137,10 @@ func updateValidationResultStatus(vr *v1alpha1.ValidationResult, vrr *types.Vali
 			break
 		}
 	}
+
+	l.V(0).Info("Updated ValidationResult status", "overallState", vr.Status.State, "validationRuleState", vrr.State,
+		"validationRuleReason", vrr.Condition.ValidationRule, "validationRuleMessage", vrr.Condition.Message,
+	)
 }
 
 // getInvalidConditions filters a ValidationCondition array and returns all conditions corresponding to a failed validation
