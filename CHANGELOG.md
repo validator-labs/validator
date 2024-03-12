@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.0.37](https://github.com/spectrocloud-labs/validator/compare/v0.0.36...v0.0.37) (2024-03-12)
+
+
+### Features
+
+* update multiple validation rule results at once ([#237](https://github.com/spectrocloud-labs/validator/issues/237)) ([5425ad0](https://github.com/spectrocloud-labs/validator/commit/5425ad0491be1e4765e3c90ccdce576f257bcdf7))
+
+
+### Refactoring
+
+* replace custom retries w/ patch helpers; make SinkState a condition ([#233](https://github.com/spectrocloud-labs/validator/issues/233)) ([38f1bc5](https://github.com/spectrocloud-labs/validator/commit/38f1bc58d1bcbf2cc83d7ee252ae56506859885d))
+
 ## [0.0.36](https://github.com/spectrocloud-labs/validator/compare/v0.0.35...v0.0.36) (2024-03-08)
 
 
