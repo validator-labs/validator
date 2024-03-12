@@ -52,7 +52,7 @@ func HandleExistingValidationResult(vr *v1alpha1.ValidationResult, l logr.Logger
 
 // HandleNewValidationResult creates a new validation result for the active validator.
 func HandleNewValidationResult(ctx context.Context, c client.Client, p Patcher, vr *v1alpha1.ValidationResult, l logr.Logger) error {
-	l = l.WithValues("name", vr.Name, "namespace", vr.Namespace, "state", vr.Status.State)
+	l = l.WithValues("name", vr.Name, "namespace", vr.Namespace)
 
 	// Create the ValidationResult
 	if err := c.Create(ctx, vr, &client.CreateOptions{}); err != nil {
@@ -64,6 +64,7 @@ func HandleNewValidationResult(ctx context.Context, c client.Client, p Patcher, 
 	vr.Status = v1alpha1.ValidationResultStatus{
 		State: v1alpha1.ValidationInProgress,
 	}
+	l = l.WithValues("state", vr.Status.State)
 
 	l.V(0).Info("Preparing to patch ValidationResult")
 	if err := patchValidationResult(ctx, p, vr); err != nil {
