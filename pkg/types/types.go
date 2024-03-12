@@ -14,6 +14,12 @@ type ValidationResponse struct {
 	ValidationRuleErrors  []error
 }
 
+// AddResult adds a ValidationRuleResult and associated error to a ValidationResponse.
+func (v *ValidationResponse) AddResult(vrr *ValidationRuleResult, err error) {
+	v.ValidationRuleResults = append(v.ValidationRuleResults, vrr)
+	v.ValidationRuleErrors = append(v.ValidationRuleErrors, err)
+}
+
 type SinkType string
 
 const (
