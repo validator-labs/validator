@@ -146,16 +146,19 @@ func TestSafeUpdateValidationResult(t *testing.T) {
 		client  test.ClientMock
 		patcher test.PatchHelperMock
 		vr      *v1alpha1.ValidationResult
-		vrr     *types.ValidationRuleResult
-		vrrErr  error
+		vrr     types.ValidationResponse
 	}{
 		{
 			name:    "Pass",
 			client:  test.ClientMock{},
 			patcher: test.PatchHelperMock{},
 			vr:      &v1alpha1.ValidationResult{},
-			vrr:     res(corev1.ConditionTrue, v1alpha1.ValidationSucceeded),
-			vrrErr:  nil,
+			vrr: types.ValidationResponse{
+				ValidationRuleResults: []*types.ValidationRuleResult{
+					res(corev1.ConditionTrue, v1alpha1.ValidationSucceeded),
+				},
+				ValidationRuleErrors: []error{nil},
+			},
 		},
 		{
 			name: "Fail (get)",
@@ -164,8 +167,12 @@ func TestSafeUpdateValidationResult(t *testing.T) {
 			},
 			patcher: test.PatchHelperMock{},
 			vr:      &v1alpha1.ValidationResult{},
-			vrr:     res(corev1.ConditionTrue, v1alpha1.ValidationSucceeded),
-			vrrErr:  errors.New("get failed"),
+			vrr: types.ValidationResponse{
+				ValidationRuleResults: []*types.ValidationRuleResult{
+					res(corev1.ConditionTrue, v1alpha1.ValidationSucceeded),
+				},
+				ValidationRuleErrors: []error{errors.New("get failed")},
+			},
 		},
 		{
 			name: "Fail (update)",
@@ -176,8 +183,12 @@ func TestSafeUpdateValidationResult(t *testing.T) {
 			},
 			patcher: test.PatchHelperMock{},
 			vr:      &v1alpha1.ValidationResult{},
-			vrr:     res(corev1.ConditionTrue, v1alpha1.ValidationSucceeded),
-			vrrErr:  errors.New("status update failed"),
+			vrr: types.ValidationResponse{
+				ValidationRuleResults: []*types.ValidationRuleResult{
+					res(corev1.ConditionTrue, v1alpha1.ValidationSucceeded),
+				},
+				ValidationRuleErrors: []error{errors.New("status update failed")},
+			},
 		},
 		{
 			name:   "Fail (patch)",
@@ -185,9 +196,13 @@ func TestSafeUpdateValidationResult(t *testing.T) {
 			patcher: test.PatchHelperMock{
 				PatchErrors: []error{errors.New("patch failed")},
 			},
-			vr:     &v1alpha1.ValidationResult{},
-			vrr:    res(corev1.ConditionTrue, v1alpha1.ValidationSucceeded),
-			vrrErr: errors.New("patch failed"),
+			vr: &v1alpha1.ValidationResult{},
+			vrr: types.ValidationResponse{
+				ValidationRuleResults: []*types.ValidationRuleResult{
+					res(corev1.ConditionTrue, v1alpha1.ValidationSucceeded),
+				},
+				ValidationRuleErrors: []error{errors.New("patch failed")},
+			},
 		},
 		{
 			name: "Fail (nil)",
@@ -198,13 +213,15 @@ func TestSafeUpdateValidationResult(t *testing.T) {
 			},
 			patcher: test.PatchHelperMock{},
 			vr:      &v1alpha1.ValidationResult{},
-			vrr:     nil,
-			vrrErr:  errors.New("status update failed"),
+			vrr: types.ValidationResponse{
+				ValidationRuleResults: []*types.ValidationRuleResult{nil},
+				ValidationRuleErrors:  []error{errors.New("status update failed")},
+			},
 		},
 	}
 	for _, c := range cs {
 		t.Log(c.name)
-		SafeUpdateValidationResult(context.Background(), c.patcher, c.vr, c.vrr, c.vrrErr, logr.Logger{})
+		SafeUpdateValidationResult(context.Background(), c.patcher, c.vr, c.vrr, logr.Logger{})
 	}
 }
 
@@ -282,7 +299,7 @@ func TestUpdateValidationResultStatus(t *testing.T) {
 	}
 	for _, c := range cs {
 		t.Log(c.name)
-		updateValidationResultStatus(c.vrCurr, c.vrr, c.vrrErr)
+		updateValidationResultStatus(c.vrCurr, c.vrr, c.vrrErr, logr.Logger{})
 		if !reflect.DeepEqual(c.vrCurr.Hash(), c.vrExpected.Hash()) {
 			t.Errorf("expected (%+v), got (%+v)", c.vrExpected, c.vrCurr)
 		}
