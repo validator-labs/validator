@@ -495,5 +495,7 @@ pluginSecrets:
     #
     pubKeys: []  # Don't forget to delete these square brackets if you're specifying public keys here!
       # - secretName: cosign-public-keys # ensure this matches the public key secretName in the OciRegistryRule
-      #   pubkey1.pub: <your pub key> # ensure the key name ends in .pub
-      #   pubkey2.pub: <your pub key>
+      #   key1.pub: |  # multiple public keys can be added to your secret, ensure each key name ends in .pub
+      #    -----BEGIN PUBLIC KEY-----
+      #    <your public key content here>
+      #    -----END PUBLIC KEY-----
