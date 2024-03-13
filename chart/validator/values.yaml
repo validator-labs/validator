@@ -372,7 +372,7 @@ plugins:
 - chart:
     name: validator-plugin-oci
     repository: "https://spectrocloud-labs.github.io/validator-plugin-oci"
-    version: v0.0.2
+    version: v0.0.7
   values: |-
     controllerManager:
       kubeRbacProxy:
@@ -407,7 +407,7 @@ plugins:
             - ALL
         image:
           repository: quay.io/spectrocloud-labs/validator-plugin-oci
-          tag: v0.0.2
+          tag: v0.0.7
         resources:
           limits:
             cpu: 500m
@@ -477,12 +477,23 @@ pluginSecrets:
     # vcenterServer: ""
     # insecureSkipVerify: ""
 
-  # If installing the OCI plugin and validating against private registries, the below config is required unless the following applies:
-  # - The target cluster already contains secrets with the correct format for all private registries.
-  #   If specifying your own secret, refer to chart/validator/templates/plugin-secret-oci.yaml for
-  #   an example of the expected format and ensure that it exists in the same namespace as the Helm release.
-  #
-  oci: []  # Don't forget to delete these square brackets if you're specifying credentials here!
-    # - secretName: registry-creds # ensure this matches the secretName in the OciRegistryRule
+  oci:
+    # If installing the OCI plugin and validating against private registries, the below config is required unless the following applies:
+    # - The target cluster already contains secrets with the correct format for all private registries.
+    #   If specifying your own secret, refer to chart/validator/templates/plugin-secret-oci-auth.yaml for
+    #   an example of the expected format and ensure that it exists in the same namespace as the Helm release.
+    #
+    auth: [] # Don't forget to delete these square brackets if you're specifying credentials here!
+    # - secretName: registry-creds # ensure this matches the credentials secretName in the OciRegistryRule
     #   username: username # for ECR Registries, store the AWS_ACCESS_KEY_ID here
     #   password: pa$$w0rd # for ECR Registries, store the AWS_SECRET_ACCESS_KEY here
+    #
+    # If installing the OCI plugin and enabling signature verification of artifacts, the below config is required unless the following applies:
+    # - The target cluster already contains secrets with the correct format for all public keys used for signing artifacts.
+    #   If specifying your own secret, refer to chart/validator/templates/plugin-secret-oci-pubkey.yaml for
+    #   an example of the expected format and ensure that it exists in the same namespace as the Helm release.
+    #
+    pubKeys: [] # Don't forget to delete these square brackets if you're specifying public keys here!
+    # - secretName: cosign-public-keys # ensure this matches the public key secretName in the OciRegistryRule
+    #   pubkey1.pub: <your pub key> # ensure the key name ends in .pub
+    #   pubkey2.pub: <your pub key>
