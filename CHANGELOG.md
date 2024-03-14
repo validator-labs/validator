@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.0.38](https://github.com/spectrocloud-labs/validator/compare/v0.0.37...v0.0.38) (2024-03-14)
+
+
+### Features
+
+* support pubkey secret creation for oci signature verification ([#240](https://github.com/spectrocloud-labs/validator/issues/240)) ([0a77ed3](https://github.com/spectrocloud-labs/validator/commit/0a77ed34efa019afd926f26ee4a8a858123ff439))
+
+
+### Other
+
+* bump validator plugin versions ([#243](https://github.com/spectrocloud-labs/validator/issues/243)) ([2987021](https://github.com/spectrocloud-labs/validator/commit/2987021f4c59553965ab94159363cf3c1d6d23e1))
+
 ## [0.0.37](https://github.com/spectrocloud-labs/validator/compare/v0.0.36...v0.0.37) (2024-03-12)
 
 
