@@ -108,7 +108,7 @@ plugins:
 - chart:
     name: validator-plugin-aws
     repository: "https://spectrocloud-labs.github.io/validator-plugin-aws"
-    version: v0.0.18
+    version: v0.0.25
   values: |-
     controllerManager:
       kubeRbacProxy:
@@ -143,7 +143,7 @@ plugins:
             - ALL
         image:
           repository: quay.io/spectrocloud-labs/validator-plugin-aws
-          tag: v0.0.18
+          tag: v0.0.25
         resources:
           limits:
             cpu: 500m
@@ -177,7 +177,7 @@ plugins:
 - chart:
     name: validator-plugin-azure
     repository: "https://spectrocloud-labs.github.io/validator-plugin-azure"
-    version: v0.0.2
+    version: v0.0.10
   values: |-
     controllerManager:
       kubeRbacProxy:
@@ -212,7 +212,7 @@ plugins:
             - ALL
         image:
           repository: quay.io/spectrocloud-labs/validator-plugin-azure
-          tag: v0.0.2
+          tag: v0.0.10
         resources:
           limits:
             cpu: 500m
@@ -252,7 +252,7 @@ plugins:
 - chart:
     name: validator-plugin-vsphere
     repository: "https://spectrocloud-labs.github.io/validator-plugin-vsphere"
-    version: v0.0.15
+    version: v0.0.19
   values: |-
     controllerManager:
       kubeRbacProxy:
@@ -268,7 +268,7 @@ plugins:
             - ALL
         image:
           repository: gcr.io/kubebuilder/kube-rbac-proxy
-          tag: v0.14.1
+          tag: v0.15.0
         resources:
           limits:
             cpu: 500m
@@ -287,7 +287,7 @@ plugins:
             - ALL
         image:
           repository: quay.io/spectrocloud-labs/validator-plugin-vsphere
-          tag: v0.0.15
+          tag: v0.0.19
         resources:
           limits:
             cpu: 500m
@@ -313,7 +313,7 @@ plugins:
 - chart:
     name: validator-plugin-network
     repository: "https://spectrocloud-labs.github.io/validator-plugin-network"
-    version: v0.0.9
+    version: v0.0.14
   values: |-
     controllerManager:
       kubeRbacProxy:
@@ -350,7 +350,7 @@ plugins:
             - ALL
         image:
           repository: quay.io/spectrocloud-labs/validator-plugin-network
-          tag: v0.0.9
+          tag: v0.0.14
         resources:
           limits:
             cpu: 500m
