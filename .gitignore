@@ -1,4 +1,3 @@
-
 # Binaries for programs and plugins
 *.exe
 *.exe~
@@ -27,3 +26,7 @@ Dockerfile.cross
 *.swp
 *.swo
 *~
+
+# misc
+.DS_Store
+.env
