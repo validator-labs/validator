@@ -463,8 +463,8 @@ plugins:
             drop:
             - ALL
         image:
-          repository: quay.io/spectrocloud-labs/validator-plugin-oci
-          tag: v0.0.8
+          repository: quay.io/spectrocloud-labs/validator-plugin-kubescape
+          tag: v0.0.1
         resources:
           limits:
             cpu: 500m
