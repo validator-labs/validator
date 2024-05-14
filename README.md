@@ -20,6 +20,7 @@ Plugins:
 - [Network](https://github.com/spectrocloud-labs/validator-plugin-network)
 - [OCI](https://github.com/spectrocloud-labs/validator-plugin-oci)
 - [vSphere](https://github.com/spectrocloud-labs/validator-plugin-vsphere)
+- [Kubescape](https://github.com/spectrocloud-labs/validator-plugin-kubescape)
 
 ## Installation
 
