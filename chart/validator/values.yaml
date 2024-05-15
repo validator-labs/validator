@@ -372,7 +372,7 @@ plugins:
 - chart:
     name: validator-plugin-oci
     repository: "https://spectrocloud-labs.github.io/validator-plugin-oci"
-    version: v0.0.8
+    version: v0.0.9
   values: |-
     controllerManager:
       kubeRbacProxy:
@@ -407,7 +407,7 @@ plugins:
             - ALL
         image:
           repository: quay.io/spectrocloud-labs/validator-plugin-oci
-          tag: v0.0.8
+          tag: v0.0.9
         resources:
           limits:
             cpu: 500m
