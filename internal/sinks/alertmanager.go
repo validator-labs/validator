@@ -79,10 +79,9 @@ func (s *AlertmanagerSink) Configure(c Client, config map[string][]byte) error {
 		}
 		caCertPool.AppendCertsFromPEM(caCert)
 	}
-	// #nosec G402
 	c.hclient.Transport = &http.Transport{
 		TLSClientConfig: &tls.Config{
-			InsecureSkipVerify: insecureSkipVerify,
+			InsecureSkipVerify: insecureSkipVerify, // #nosec G402
 			MinVersion:         tls.VersionTLS12,
 			RootCAs:            caCertPool,
 		},
