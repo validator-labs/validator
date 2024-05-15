@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.0.39](https://github.com/spectrocloud-labs/validator/compare/v0.0.38...v0.0.39) (2024-05-15)
+
+
+### Other
+
+* bump validator-plugin-oci to v0.0.9 ([#250](https://github.com/spectrocloud-labs/validator/issues/250)) ([432e35f](https://github.com/spectrocloud-labs/validator/commit/432e35fb4128f27a5ef2d4b0a916d2849554c040))
+* update kubescape version ([#248](https://github.com/spectrocloud-labs/validator/issues/248)) ([7a0dcd4](https://github.com/spectrocloud-labs/validator/commit/7a0dcd41f8b626e463810694d3cd990235213700))
+
 ## [0.0.38](https://github.com/spectrocloud-labs/validator/compare/v0.0.37...v0.0.38) (2024-03-14)
 
 
