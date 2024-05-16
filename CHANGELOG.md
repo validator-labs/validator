@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.0.40](https://github.com/validator-labs/validator/compare/v0.0.39...v0.0.40) (2024-05-16)
+
+
+### Other
+
+* update release.yaml ([06bde5e](https://github.com/validator-labs/validator/commit/06bde5e0a0f6010347e884a01065adcbb60e9eb7))
+
 ## [0.0.39](https://github.com/validator-labs/validator/compare/v0.0.38...v0.0.39) (2024-05-16)
 
 
