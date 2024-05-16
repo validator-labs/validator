@@ -9,7 +9,7 @@ import (
 	"github.com/go-logr/logr"
 	"github.com/slack-go/slack"
 
-	"github.com/spectrocloud-labs/validator/api/v1alpha1"
+	"github.com/validator-labs/validator/api/v1alpha1"
 )
 
 type SlackSink struct {
