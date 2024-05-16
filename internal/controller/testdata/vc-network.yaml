@@ -12,7 +12,7 @@ spec:
   plugins:
   - chart:
       name: validator-plugin-network
-      repository: https://spectrocloud-labs.github.io/validator-plugin-network
+      repository: https://validator-labs.github.io/validator-plugin-network
       authSecretName: validator-plugin-network-chart-secret
       version: v0.0.4
     values: |-
@@ -48,7 +48,7 @@ spec:
               drop:
               - ALL
           image:
-            repository: quay.io/spectrocloud-labs/validator-plugin-network
+            repository: quay.io/validator-labs/validator-plugin-network
             tag: v0.0.4
           resources:
             limits:

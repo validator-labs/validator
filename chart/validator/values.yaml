@@ -30,7 +30,7 @@ controllerManager:
         drop:
         - ALL
     image:
-      repository: quay.io/spectrocloud-labs/validator
+      repository: quay.io/validator-labs/validator
       tag: v0.0.38  # x-release-please-version
     resources:
       limits:
@@ -66,7 +66,7 @@ env: []
 proxy:
   enabled: false
   # The image used by the init container. Must include the update-ca-certificates command.
-  image: quay.io/spectrocloud-labs/validator-certs-init:latest
+  image: quay.io/validator-labs/validator-certs-init:latest
   # The name of a secret containing a proxy CA certificate.
   secretName: proxy-cert
   # If false (using an existing secret), the key whose value is the CA certificate must end with '.crt'.
@@ -107,7 +107,7 @@ cleanup:
 plugins:
 - chart:
     name: validator-plugin-aws
-    repository: "https://spectrocloud-labs.github.io/validator-plugin-aws"
+    repository: "https://validator-labs.github.io/validator-plugin-aws"
     version: v0.0.25
   values: |-
     controllerManager:
@@ -142,7 +142,7 @@ plugins:
             drop:
             - ALL
         image:
-          repository: quay.io/spectrocloud-labs/validator-plugin-aws
+          repository: quay.io/validator-labs/validator-plugin-aws
           tag: v0.0.25
         resources:
           limits:
@@ -172,11 +172,11 @@ plugins:
 
       # Override the service account used by AWS validator (optional, could be used for IMDSv2 on EKS)
       # WARNING: the chosen service account must include all RBAC privileges found in the AWS plugin template:
-      #          https://github.com/spectrocloud-labs/validator-plugin-aws/blob/main/chart/validator-plugin-aws/templates/manager-rbac.yaml
+      #          https://github.com/validator-labs/validator-plugin-aws/blob/main/chart/validator-plugin-aws/templates/manager-rbac.yaml
       serviceAccountName: ""
 - chart:
     name: validator-plugin-azure
-    repository: "https://spectrocloud-labs.github.io/validator-plugin-azure"
+    repository: "https://validator-labs.github.io/validator-plugin-azure"
     version: v0.0.10
   values: |-
     controllerManager:
@@ -211,7 +211,7 @@ plugins:
             drop:
             - ALL
         image:
-          repository: quay.io/spectrocloud-labs/validator-plugin-azure
+          repository: quay.io/validator-labs/validator-plugin-azure
           tag: v0.0.10
         resources:
           limits:
@@ -247,11 +247,11 @@ plugins:
 
       # Override the service account used by Azure validator (optional, could be used for WorkloadIdentityCredentials on AKS)
       # WARNING: the chosen service account must include all RBAC privileges found in the Azure plugin template:
-      #          https://github.com/spectrocloud-labs/validator-plugin-aws/blob/main/chart/validator-plugin-azure/templates/manager-rbac.yaml
+      #          https://github.com/validator-labs/validator-plugin-aws/blob/main/chart/validator-plugin-azure/templates/manager-rbac.yaml
       serviceAccountName: ""
 - chart:
     name: validator-plugin-vsphere
-    repository: "https://spectrocloud-labs.github.io/validator-plugin-vsphere"
+    repository: "https://validator-labs.github.io/validator-plugin-vsphere"
     version: v0.0.19
   values: |-
     controllerManager:
@@ -286,7 +286,7 @@ plugins:
             drop:
             - ALL
         image:
-          repository: quay.io/spectrocloud-labs/validator-plugin-vsphere
+          repository: quay.io/validator-labs/validator-plugin-vsphere
           tag: v0.0.19
         resources:
           limits:
@@ -312,7 +312,7 @@ plugins:
       secretName: vsphere-creds
 - chart:
     name: validator-plugin-network
-    repository: "https://spectrocloud-labs.github.io/validator-plugin-network"
+    repository: "https://validator-labs.github.io/validator-plugin-network"
     version: v0.0.14
   values: |-
     controllerManager:
@@ -349,7 +349,7 @@ plugins:
             drop:
             - ALL
         image:
-          repository: quay.io/spectrocloud-labs/validator-plugin-network
+          repository: quay.io/validator-labs/validator-plugin-network
           tag: v0.0.14
         resources:
           limits:
@@ -371,7 +371,7 @@ plugins:
       type: ClusterIP
 - chart:
     name: validator-plugin-oci
-    repository: "https://spectrocloud-labs.github.io/validator-plugin-oci"
+    repository: "https://validator-labs.github.io/validator-plugin-oci"
     version: v0.0.9
   values: |-
     controllerManager:
@@ -406,7 +406,7 @@ plugins:
             drop:
             - ALL
         image:
-          repository: quay.io/spectrocloud-labs/validator-plugin-oci
+          repository: quay.io/validator-labs/validator-plugin-oci
           tag: v0.0.9
         resources:
           limits:
@@ -428,7 +428,7 @@ plugins:
       type: ClusterIP
 - chart:
     name: validator-plugin-kubescape
-    repository: "https://spectrocloud-labs.github.io/validator-plugin-kubescape"
+    repository: "https://validator-labs.github.io/validator-plugin-kubescape"
     version: v0.0.2
   values: |-
     controllerManager:
@@ -463,7 +463,7 @@ plugins:
             drop:
             - ALL
         image:
-          repository: quay.io/spectrocloud-labs/validator-plugin-kubescape
+          repository: quay.io/validator-labs/validator-plugin-kubescape
           tag: v0.0.2
         resources:
           limits:

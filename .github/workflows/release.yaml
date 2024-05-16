@@ -49,10 +49,10 @@ jobs:
         with:
           token: ${{ secrets.PAT }}
           charts_dir: chart
-          owner: spectrocloud-labs
+          owner: validator-labs
           branch: ${{ env.GITHUB_PAGES_BRANCH }}
-          commit_username: spectrocloud-labs-bot
-          commit_email: bot@noreply.spectrocloud-labs.io
+          commit_username: validator-labs-bot
+          commit_email: bot@noreply.validator-labs.io
           
   build-container:
     if: needs.release-please.outputs.releases_created == 'true'
@@ -64,7 +64,7 @@ jobs:
       packages: write
       id-token: write
     env:
-      IMAGE_TAG: quay.io/spectrocloud-labs/validator:${{ needs.release-please.outputs.tag_name }}
+      IMAGE_TAG: quay.io/validator-labs/validator:${{ needs.release-please.outputs.tag_name }}
       IMAGE_NAME: validator
     steps:
       - name: Checkout
