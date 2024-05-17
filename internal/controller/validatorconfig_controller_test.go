@@ -29,8 +29,8 @@ import (
 const (
 	networkPluginDeploymentName  = "validator-plugin-network-controller-manager"
 	networkPluginDeploymentImage = "quay.io/validator-labs/validator-plugin-network"
-	networkPluginVersionPre      = "v0.0.4"
-	networkPluginVersionPost     = "v0.0.5"
+	networkPluginVersionPre      = "v0.0.14"
+	networkPluginVersionPost     = "v0.0.15"
 )
 
 var (
