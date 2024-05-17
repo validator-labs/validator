@@ -5,8 +5,6 @@
 [![codecov](https://codecov.io/gh/validator-labs/validator/graph/badge.svg?token=GVZ4LZ5SOY)](https://codecov.io/gh/validator-labs/validator)
 [![Go Reference](https://pkg.go.dev/badge/github.com/validator-labs/validator.svg)](https://pkg.go.dev/github.com/validator-labs/validator)
 
-![twitter_profile_image](https://github.com/validator-labs/validator/assets/1795270/fffe151d-596f-4951-8b72-19aa0410deb3)
-
 validator (AKA Validation Controller) monitors ValidationResults created by one or more validator plugins and uploads them to a sink of your choosing, e.g., Slack or Spectro Cloud Palette.
 
 <img width="1364" alt="image" src="https://github.com/validator-labs/validator/assets/1795270/e68dfdf5-25bf-4336-ad87-f783c4825c7e">
