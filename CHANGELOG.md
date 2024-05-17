@@ -1,5 +1,14 @@
 # Changelog
 
+## [0.0.40](https://github.com/validator-labs/validator/compare/v0.0.39...v0.0.40) (2024-05-17)
+
+
+### Other
+
+* bump plugin versions in helm chart ([#255](https://github.com/validator-labs/validator/issues/255)) ([1d053f0](https://github.com/validator-labs/validator/commit/1d053f0fd38eb405009291593b3532a85010ca00))
+* remove old logo from README.md ([650afcd](https://github.com/validator-labs/validator/commit/650afcd26b46e93fa52b1cbb9ebb89f6fc464676))
+* update chart docs ([#257](https://github.com/validator-labs/validator/issues/257)) ([16e3c1a](https://github.com/validator-labs/validator/commit/16e3c1a36faf4b5bd5891a0356796265997c7b3d))
+
 ## [0.0.39](https://github.com/validator-labs/validator/compare/v0.0.38...v0.0.39) (2024-05-17)
 
 
