@@ -1,5 +1,16 @@
 # Changelog
 
+## [0.0.39](https://github.com/validator-labs/validator/compare/v0.0.38...v0.0.39) (2024-05-17)
+
+
+### Other
+
+* bump validator-plugin-oci to v0.0.9 ([#250](https://github.com/validator-labs/validator/issues/250)) ([432e35f](https://github.com/validator-labs/validator/commit/432e35fb4128f27a5ef2d4b0a916d2849554c040))
+* migrate from spectrocloud-labs to validator-labs ([#251](https://github.com/validator-labs/validator/issues/251)) ([0386d7e](https://github.com/validator-labs/validator/commit/0386d7e690910fb67476c3d9e5bea9133e11b4fc))
+* release 0.0.39 ([1c594bd](https://github.com/validator-labs/validator/commit/1c594bda83cec0c749636a351b5279509519a012))
+* update kubescape version ([#248](https://github.com/validator-labs/validator/issues/248)) ([7a0dcd4](https://github.com/validator-labs/validator/commit/7a0dcd41f8b626e463810694d3cd990235213700))
+* update release.yaml ([44b4672](https://github.com/validator-labs/validator/commit/44b467285c7b8a67de7655765e3c11f7c20c3861))
+
 ## [0.0.38](https://github.com/validator-labs/validator/compare/v0.0.37...v0.0.38) (2024-03-14)
 
 
