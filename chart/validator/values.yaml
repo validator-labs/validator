@@ -313,7 +313,7 @@ plugins:
 - chart:
     name: validator-plugin-network
     repository: "https://validator-labs.github.io/validator-plugin-network"
-    version: v0.0.15
+    version: v0.0.16
   values: |-
     controllerManager:
       kubeRbacProxy:
@@ -350,7 +350,7 @@ plugins:
             - ALL
         image:
           repository: quay.io/validator-labs/validator-plugin-network
-          tag: v0.0.15
+          tag: v0.0.16
         resources:
           limits:
             cpu: 500m
