@@ -16,7 +16,7 @@ jobs:
     name: Run Unit & Integration Tests
     runs-on: [self-hosted, Linux, X64, validator]
     steps:
-      - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4
+      - uses: actions/checkout@0ad4b8fadaa221de15dcec353f45205ec38ea70b # v4
 
       - name: Set up Go
         uses: actions/setup-go@0c52d547c9bc32b1aa3301fd7a9cb496313a4491 # v5
@@ -45,7 +45,7 @@ jobs:
     runs-on: [self-hosted, Linux, X64, validator]
     if: "!(contains(github.head_ref, 'release-please') || contains(github.ref, 'release-please'))"
     steps:
-      - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4
+      - uses: actions/checkout@0ad4b8fadaa221de15dcec353f45205ec38ea70b # v4
         with:
           fetch-depth: 0
 
