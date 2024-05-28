@@ -11,10 +11,9 @@ concurrency:
 jobs:
   golicense-pr-scan:
     runs-on: [self-hosted, Linux, X64, validator]
+    container:
+      image: gcr.io/spectro-images-public/golang:1.22.3-alpine3.18
     steps:
-      - name: install-git
-        run: sudo apt-get install -y git
-
       - name: checkout
         uses: actions/checkout@0ad4b8fadaa221de15dcec353f45205ec38ea70b # v4
 
@@ -24,7 +23,7 @@ jobs:
           go-version-file: go.mod
 
       - name: install-golicenses
-        run: go install github.com/google/go-licenses@v1.6.0
+        run: go install github.com/google/go-licenses@latest
 
       - name: golicense-scan
         run: |
