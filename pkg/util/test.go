@@ -4,7 +4,7 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/spectrocloud-labs/validator/pkg/types"
+	"github.com/validator-labs/validator/pkg/types"
 )
 
 func CheckTestCase(t *testing.T, res *types.ValidationRuleResult, expectedResult types.ValidationRuleResult, err, expectedError error) {

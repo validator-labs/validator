@@ -11,10 +11,10 @@ import (
 	"sigs.k8s.io/cluster-api/util/patch"
 	"sigs.k8s.io/controller-runtime/pkg/client"
 
-	"github.com/spectrocloud-labs/validator/api/v1alpha1"
-	"github.com/spectrocloud-labs/validator/pkg/constants"
-	"github.com/spectrocloud-labs/validator/pkg/types"
-	"github.com/spectrocloud-labs/validator/pkg/util"
+	"github.com/validator-labs/validator/api/v1alpha1"
+	"github.com/validator-labs/validator/pkg/constants"
+	"github.com/validator-labs/validator/pkg/types"
+	"github.com/validator-labs/validator/pkg/util"
 )
 
 const validationErrorMsg = "Validation failed with an unexpected error"
