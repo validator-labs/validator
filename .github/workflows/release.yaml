@@ -27,7 +27,7 @@ jobs:
     # Release-please creates a PR that tracks all changes
     steps:
       - name: Checkout
-        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4
+        uses: actions/checkout@0ad4b8fadaa221de15dcec353f45205ec38ea70b # v4
 
       - uses: googleapis/release-please-action@v4
         id: release
@@ -41,7 +41,7 @@ jobs:
     runs-on: [self-hosted, Linux, X64, validator]
     if: needs.release-please.outputs.releases_created == 'true'
     steps:
-      - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4
+      - uses: actions/checkout@0ad4b8fadaa221de15dcec353f45205ec38ea70b # v4
       - name: Publish Helm chart
         uses: stefanprodan/helm-gh-pages@master
         with:
@@ -66,7 +66,7 @@ jobs:
       IMAGE_NAME: validator
     steps:
       - name: Checkout
-        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4
+        uses: actions/checkout@0ad4b8fadaa221de15dcec353f45205ec38ea70b # v4
         with:
           submodules: recursive
 
