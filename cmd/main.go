@@ -32,11 +32,11 @@ import (
 	"sigs.k8s.io/controller-runtime/pkg/healthz"
 	"sigs.k8s.io/controller-runtime/pkg/log/zap"
 
-	validationv1alpha1 "github.com/spectrocloud-labs/validator/api/v1alpha1"
-	"github.com/spectrocloud-labs/validator/internal/controller"
-	"github.com/spectrocloud-labs/validator/internal/kube"
-	"github.com/spectrocloud-labs/validator/internal/sinks"
-	"github.com/spectrocloud-labs/validator/pkg/helm"
+	validationv1alpha1 "github.com/validator-labs/validator/api/v1alpha1"
+	"github.com/validator-labs/validator/internal/controller"
+	"github.com/validator-labs/validator/internal/kube"
+	"github.com/validator-labs/validator/internal/sinks"
+	"github.com/validator-labs/validator/pkg/helm"
 	//+kubebuilder:scaffold:imports
 )
 
