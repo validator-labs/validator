@@ -10,7 +10,7 @@ concurrency:
 
 jobs:
   govulncheck-pr-scan:
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, Linux, X64, validator]
     container:
       image: gcr.io/spectro-images-public/golang:1.22-alpine
     steps:

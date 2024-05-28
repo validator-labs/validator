@@ -79,10 +79,9 @@ func (s *AlertmanagerSink) Configure(c Client, config map[string][]byte) error {
 		}
 		caCertPool.AppendCertsFromPEM(caCert)
 	}
-	// #nosec G402
 	c.hclient.Transport = &http.Transport{
 		TLSClientConfig: &tls.Config{
-			InsecureSkipVerify: insecureSkipVerify,
+			InsecureSkipVerify: insecureSkipVerify, // #nosec G402
 			MinVersion:         tls.VersionTLS12,
 			RootCAs:            caCertPool,
 		},
@@ -93,9 +92,9 @@ func (s *AlertmanagerSink) Configure(c Client, config map[string][]byte) error {
 }
 
 func (s *AlertmanagerSink) Emit(r v1alpha1.ValidationResult) error {
-	alerts := make([]Alert, 0, len(r.Status.Conditions))
+	alerts := make([]Alert, 0, len(r.Status.ValidationConditions))
 
-	for i, c := range r.Status.Conditions {
+	for i, c := range r.Status.ValidationConditions {
 		alerts = append(alerts, Alert{
 			Labels: map[string]string{
 				"alertname":         r.Name,

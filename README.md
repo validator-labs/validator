@@ -1,6 +1,6 @@
 [![Contributions Welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)](https://github.com/spectrocloud-labs/validator/issues)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
-![Build](https://github.com/spectrocloud-labs/validator/actions/workflows/build_container.yaml/badge.svg)
+![Test](https://github.com/spectrocloud-labs/validator/actions/workflows/test.yaml/badge.svg)
 [![Go Report Card](https://goreportcard.com/badge/github.com/spectrocloud-labs/validator)](https://goreportcard.com/report/github.com/spectrocloud-labs/validator)
 [![codecov](https://codecov.io/gh/spectrocloud-labs/validator/graph/badge.svg?token=GVZ4LZ5SOY)](https://codecov.io/gh/spectrocloud-labs/validator)
 [![Go Reference](https://pkg.go.dev/badge/github.com/spectrocloud-labs/validator.svg)](https://pkg.go.dev/github.com/spectrocloud-labs/validator)
@@ -20,6 +20,7 @@ Plugins:
 - [Network](https://github.com/spectrocloud-labs/validator-plugin-network)
 - [OCI](https://github.com/spectrocloud-labs/validator-plugin-oci)
 - [vSphere](https://github.com/spectrocloud-labs/validator-plugin-vsphere)
+- [Kubescape](https://github.com/spectrocloud-labs/validator-plugin-kubescape)
 
 ## Installation
 

@@ -20,7 +20,6 @@ import (
 	"context"
 	"crypto/sha256"
 	"encoding/base64"
-	"errors"
 	"fmt"
 	"net/http"
 	"os"
@@ -31,13 +30,14 @@ import (
 
 	connect "connectrpc.com/connect"
 	"github.com/go-logr/logr"
-	wrapErrors "github.com/pkg/errors"
+	"github.com/pkg/errors"
 	"golang.org/x/exp/slices"
 	corev1 "k8s.io/api/core/v1"
 	apierrs "k8s.io/apimachinery/pkg/api/errors"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apimachinery/pkg/types"
+	"sigs.k8s.io/cluster-api/util/patch"
 	ctrl "sigs.k8s.io/controller-runtime"
 	"sigs.k8s.io/controller-runtime/pkg/client"
 
@@ -53,15 +53,6 @@ const (
 
 	// An annotation added to a ValidatorConfig to determine whether or not to update a plugin's Helm release
 	PluginValuesHash = "validator/plugin-values"
-
-	helmCAFile = "/tmp/ca.crt"
-)
-
-var (
-	vc          *v1alpha1.ValidatorConfig
-	vcKey       types.NamespacedName
-	conditions  []v1alpha1.ValidatorPluginCondition
-	annotations map[string]string
 )
 
 // ValidatorConfigReconciler reconciles a ValidatorConfig object
@@ -77,22 +68,25 @@ type ValidatorConfigReconciler struct {
 //+kubebuilder:rbac:groups=validation.spectrocloud.labs,resources=validatorconfigs/status,verbs=get;update;patch
 //+kubebuilder:rbac:groups=validation.spectrocloud.labs,resources=validatorconfigs/finalizers,verbs=update
 
-func (r *ValidatorConfigReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.Result, error) {
+func (r *ValidatorConfigReconciler) Reconcile(ctx context.Context, req ctrl.Request) (_ ctrl.Result, reterr error) {
 	r.Log.V(0).Info("Reconciling ValidatorConfig", "name", req.Name, "namespace", req.Namespace)
 
-	vc = &v1alpha1.ValidatorConfig{}
-	vcKey = req.NamespacedName
+	vc := &v1alpha1.ValidatorConfig{}
 
-	if err := r.Get(ctx, vcKey, vc); err != nil {
+	if err := r.Get(ctx, req.NamespacedName, vc); err != nil {
 		if !apierrs.IsNotFound(err) {
 			r.Log.Error(err, "failed to fetch ValidatorConfig", "key", req)
 		}
 		return ctrl.Result{}, client.IgnoreNotFound(err)
 	}
-	if vc.Annotations != nil {
-		annotations = vc.Annotations
-	} else {
-		annotations = make(map[string]string)
+
+	patcher, err := patch.NewHelper(vc, r.Client)
+	if err != nil {
+		return ctrl.Result{}, errors.Wrapf(err, "failed to create patch helper for ValidatorConfig %s", vc.Name)
+	}
+
+	if vc.Annotations == nil {
+		vc.Annotations = make(map[string]string)
 	}
 
 	// handle ValidatorConfig deletion
@@ -120,10 +114,14 @@ func (r *ValidatorConfigReconciler) Reconcile(ctx context.Context, req ctrl.Requ
 		return ctrl.Result{}, err
 	}
 
-	// TODO: implement a proper patcher to avoid this hacky approach with global vars
 	defer func() {
-		r.updateVc(ctx)
-		r.updateVcStatus(ctx)
+		r.Log.V(1).Info("Preparing to patch ValidatorConfig", "validatorConfig", vc.Name)
+		if err := patchValidatorConfig(ctx, patcher, vc); err != nil && reterr == nil {
+			reterr = err
+			r.Log.Error(err, "failed to patch ValidatorConfig", "validatorConfig", vc.Name)
+			return
+		}
+		r.Log.V(1).Info("Successfully patched ValidatorConfig", "validatorConfig", vc.Name)
 	}()
 
 	// deploy/redeploy plugins as required
@@ -131,6 +129,10 @@ func (r *ValidatorConfigReconciler) Reconcile(ctx context.Context, req ctrl.Requ
 		r.Log.V(0).Error(err, "ValidatorConfig plugin deployment failed", "namespace", vc.Namespace, "name", vc.Name)
 		return ctrl.Result{}, err
 	}
+
+	// ensure cleanup finalizer
+	ensureFinalizer(vc, CleanupFinalizer)
+	r.Log.V(0).Info("Ensured ValidatorConfig finalizer")
 
 	return ctrl.Result{RequeueAfter: time.Second * 30}, nil
 }
@@ -142,53 +144,16 @@ func (r *ValidatorConfigReconciler) SetupWithManager(mgr ctrl.Manager) error {
 		Complete(r)
 }
 
-// updateVc updates the ValidatorConfig object
-func (r *ValidatorConfigReconciler) updateVc(ctx context.Context) {
-	if err := r.Get(ctx, vcKey, vc); err != nil {
-		r.Log.V(0).Error(err, "failed to get ValidatorConfig")
-		return
-	}
-
-	// ensure cleanup finalizer
-	ensureFinalizer(vc, CleanupFinalizer)
-	r.Log.V(0).Info("Ensured ValidatorConfig finalizer")
-
-	vc.Annotations = annotations
-
-	if err := r.Client.Update(ctx, vc); err != nil {
-		r.Log.Error(err, "failed to update ValidatorConfig")
-	} else {
-		r.Log.V(0).Info("Updated ValidatorConfig", "annotations", vc.Annotations, "time", time.Now())
-	}
-}
-
-// updateVcStatus updates the ValidatorConfig's status subresource
-func (r *ValidatorConfigReconciler) updateVcStatus(ctx context.Context) {
-	if err := r.Get(ctx, vcKey, vc); err != nil {
-		r.Log.V(0).Error(err, "failed to get ValidatorConfig")
-		return
-	}
-
-	// all status modifications must happen after r.Client.Update
-	vc.Status.Conditions = conditions
-
-	if err := r.Status().Update(ctx, vc); err != nil {
-		r.Log.Error(err, "failed to update ValidatorConfig status")
-	} else {
-		r.Log.V(0).Info("Updated ValidatorConfig status", "conditions", vc.Status.Conditions, "time", time.Now())
-	}
-}
-
 // redeployIfNeeded deploys/redeploys each validator plugin in a ValidatorConfig and deletes plugins that have been removed
 func (r *ValidatorConfigReconciler) redeployIfNeeded(ctx context.Context, vc *v1alpha1.ValidatorConfig) error {
 	specPlugins := make(map[string]bool)
-	conditions = make([]v1alpha1.ValidatorPluginCondition, len(vc.Spec.Plugins))
+	conditions := make([]v1alpha1.ValidatorPluginCondition, len(vc.Spec.Plugins))
 
 	for i, p := range vc.Spec.Plugins {
 		specPlugins[p.Chart.Name] = true
 
 		// update plugin's values hash
-		valuesUnchanged := r.updatePluginHash(p)
+		valuesUnchanged := r.updatePluginHash(vc, p)
 
 		// skip plugin if already deployed & no change in values
 		condition, ok := isConditionTrue(vc, p.Chart.Name, v1alpha1.HelmChartDeployedCondition)
@@ -198,7 +163,7 @@ func (r *ValidatorConfigReconciler) redeployIfNeeded(ctx context.Context, vc *v1
 			continue
 		}
 
-		upgradeOpts := &helm.UpgradeOptions{
+		opts := &helm.Options{
 			Chart:                 p.Chart.Name,
 			Repo:                  p.Chart.Repository,
 			Version:               p.Chart.Version,
@@ -208,16 +173,35 @@ func (r *ValidatorConfigReconciler) redeployIfNeeded(ctx context.Context, vc *v1
 
 		if p.Chart.AuthSecretName != "" {
 			nn := types.NamespacedName{Name: p.Chart.AuthSecretName, Namespace: vc.Namespace}
-			if err := r.configureHelmOpts(ctx, nn, upgradeOpts); err != nil {
+			if err := r.configureHelmOpts(ctx, nn, opts); err != nil {
 				r.Log.V(0).Error(err, "failed to configure basic auth for Helm upgrade")
 				conditions[i] = r.buildHelmChartCondition(p.Chart.Name, err)
 				continue
 			}
 		}
 
-		r.Log.V(0).Info("Installing/upgrading plugin Helm chart", "namespace", vc.Namespace, "name", p.Chart.Name)
+		var cleanupLocalChart bool
+		if strings.HasPrefix(p.Chart.Repository, "oci://") {
+			r.Log.V(0).Info("Pulling plugin Helm chart", "name", p.Chart.Name)
 
-		err := r.HelmClient.Upgrade(p.Chart.Name, vc.Namespace, *upgradeOpts)
+			opts.Untar = true
+			opts.UntarDir = "/charts"
+			opts.Version = strings.TrimPrefix(opts.Version, "v")
+
+			if err := r.HelmClient.Pull(*opts); err != nil {
+				r.Log.V(0).Error(err, "failed to pull Helm chart from OCI repository")
+				conditions[i] = r.buildHelmChartCondition(p.Chart.Name, err)
+				continue
+			}
+
+			r.Log.V(0).Info("Reconfiguring Helm options to deploy local chart", "name", p.Chart.Name)
+			opts.Path = fmt.Sprintf("/charts/%s", opts.Chart)
+			opts.Chart = ""
+			cleanupLocalChart = true
+		}
+
+		r.Log.V(0).Info("Installing/upgrading plugin Helm chart", "namespace", vc.Namespace, "name", p.Chart.Name)
+		err := r.HelmClient.Upgrade(p.Chart.Name, vc.Namespace, *opts)
 		if err != nil {
 			// if Helm install/upgrade failed, delete the release so installation is reattempted each iteration
 			if strings.Contains(err.Error(), "has no deployed releases") {
@@ -227,6 +211,13 @@ func (r *ValidatorConfigReconciler) redeployIfNeeded(ctx context.Context, vc *v1
 			}
 		}
 		conditions[i] = r.buildHelmChartCondition(p.Chart.Name, err)
+
+		if cleanupLocalChart {
+			r.Log.V(0).Info("Cleaning up local chart directory", "path", opts.Path)
+			if err := os.RemoveAll(opts.Path); err != nil {
+				r.Log.V(0).Error(err, "failed to remove local chart directory")
+			}
+		}
 	}
 
 	// delete any plugins that have been removed
@@ -235,14 +226,17 @@ func (r *ValidatorConfigReconciler) redeployIfNeeded(ctx context.Context, vc *v1
 		if !ok && c.Type == v1alpha1.HelmChartDeployedCondition && c.Status == corev1.ConditionTrue {
 			r.Log.V(0).Info("Deleting plugin Helm chart", "namespace", vc.Namespace, "name", c.PluginName)
 			r.deletePlugin(vc, c.PluginName)
-			delete(annotations, getPluginHashKey(c.PluginName))
+			delete(vc.Annotations, getPluginHashKey(c.PluginName))
 		}
 	}
+
+	// update plugin conditions
+	vc.Status.Conditions = conditions
 
 	return nil
 }
 
-func (r *ValidatorConfigReconciler) configureHelmOpts(ctx context.Context, nn types.NamespacedName, opts *helm.UpgradeOptions) error {
+func (r *ValidatorConfigReconciler) configureHelmOpts(ctx context.Context, nn types.NamespacedName, opts *helm.Options) error {
 	secret := &corev1.Secret{}
 	if err := r.Get(ctx, nn, secret); err != nil {
 		return fmt.Errorf(
@@ -265,10 +259,11 @@ func (r *ValidatorConfigReconciler) configureHelmOpts(ctx context.Context, nn ty
 
 	caCert, ok := secret.Data["caCert"]
 	if ok {
-		if err := os.WriteFile(helmCAFile, caCert, 0600); err != nil {
-			return wrapErrors.Wrap(err, "failed to write Helm CA file")
+		caFile := fmt.Sprintf("/etc/ssl/certs/%s-ca.crt", opts.Chart)
+		if err := os.WriteFile(caFile, caCert, 0600); err != nil {
+			return errors.Wrap(err, "failed to write Helm CA file")
 		}
-		opts.CaFile = helmCAFile
+		opts.CaFile = caFile
 	}
 
 	return nil
@@ -277,17 +272,17 @@ func (r *ValidatorConfigReconciler) configureHelmOpts(ctx context.Context, nn ty
 // updatePluginHash compares the current plugin's values hash annotation to a hash of its current values,
 // updates the values hash annotation on the ValidatorConfig for the current plugin, and returns a flag
 // indicating whether the values have changed or not since the last reconciliation
-func (r *ValidatorConfigReconciler) updatePluginHash(p v1alpha1.HelmRelease) bool {
+func (r *ValidatorConfigReconciler) updatePluginHash(vc *v1alpha1.ValidatorConfig, p v1alpha1.HelmRelease) bool {
 	valuesUnchanged := false
 	pluginValuesHashLatest := sha256.Sum256([]byte(p.Values))
 	pluginValuesHashLatestB64 := base64.StdEncoding.EncodeToString(pluginValuesHashLatest[:])
 	key := getPluginHashKey(p.Chart.Name)
 
-	pluginValuesHash, ok := annotations[key]
+	pluginValuesHash, ok := vc.Annotations[key]
 	if ok {
 		valuesUnchanged = pluginValuesHash == pluginValuesHashLatestB64
 	}
-	annotations[key] = pluginValuesHashLatestB64
+	vc.Annotations[key] = pluginValuesHashLatestB64
 
 	return valuesUnchanged
 }
@@ -337,7 +332,7 @@ func (r *ValidatorConfigReconciler) buildHelmChartCondition(chartName string, er
 		Type:               v1alpha1.HelmChartDeployedCondition,
 		PluginName:         chartName,
 		Status:             corev1.ConditionTrue,
-		Message:            fmt.Sprintf("Plugin %s is installed", chartName),
+		Message:            fmt.Sprintf("Plugin chart %s is installed/upgraded", chartName),
 		LastTransitionTime: metav1.Time{Time: time.Now()},
 	}
 	if err != nil {
@@ -427,4 +422,9 @@ func (r *ValidatorConfigReconciler) emitFinalizeCleanup(ctx context.Context) err
 		return fmt.Errorf("FinalizeCleanup request to %s failed: %w", url, err)
 	}
 	return nil
+}
+
+// patchValidatorConfig patches a ValidatorConfig.
+func patchValidatorConfig(ctx context.Context, patchHelper *patch.Helper, vc *v1alpha1.ValidatorConfig) error {
+	return patchHelper.Patch(ctx, vc, patch.WithStatusObservedGeneration{})
 }

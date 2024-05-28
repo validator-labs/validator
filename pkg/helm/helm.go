@@ -14,12 +14,22 @@ import (
 	klog "k8s.io/klog/v2"
 )
 
-var CommandPath = "./helm"
+var (
+	CommandPath   = "./helm"
+	preserveFiles = false // whether to preserve kubeconfig and Helm values files
+)
 
-// HelmClient defines the interface how to interact with Helm
+func init() {
+	if os.Getenv("HELM_PRESERVE_FILES") == "true" {
+		preserveFiles = true
+	}
+}
+
+// HelmClient is an interface for interacting with Helm
 type HelmClient interface {
-	Upgrade(name, namespace string, options UpgradeOptions) error
 	Delete(name, namespace string) error
+	Pull(options Options) error
+	Upgrade(name, namespace string, options Options) error
 }
 
 type helmClient struct {
@@ -43,86 +53,52 @@ func (c *helmClient) Delete(name, namespace string) error {
 	if err != nil {
 		return err
 	}
-	defer os.Remove(kubeConfig)
+	if !preserveFiles {
+		defer os.Remove(kubeConfig)
+	}
 
 	args := []string{"delete", name, "--namespace", namespace, "--kubeconfig", kubeConfig}
 	return c.exec(args)
 }
 
-func (c *helmClient) Upgrade(name, namespace string, options UpgradeOptions) error {
+func (c *helmClient) Pull(options Options) error {
+	if options.Repo == "" {
+		return fmt.Errorf("chart repo cannot be null")
+	}
+	args := []string{"pull", options.Repo}
+	args = options.ConfigureVersion(args)
+	args = options.ConfigureArchive(args)
+	args = options.ConfigureAuth(args)
+	args = options.ConfigureTLS(args)
+	return c.exec(args)
+}
+
+func (c *helmClient) Upgrade(name, namespace string, options Options) error {
 	options.ExtraArgs = append(options.ExtraArgs, "--install")
 	return c.run(name, namespace, options, "upgrade", options.ExtraArgs)
 }
 
-func (c *helmClient) exec(args []string) error {
-	if len(args) == 0 {
-		return nil
-	}
-
-	sb := strings.Builder{}
-	mask := false
-	for _, a := range args {
-		if mask {
-			sb.WriteString("***** ")
-			mask = false
-			continue
-		}
-		if a == "--password" {
-			mask = true
-		}
-		sb.WriteString(a)
-		sb.WriteString(" ")
-	}
-	sanitizedArgs := sb.String()
-
-	fmt.Println("helm " + sanitizedArgs)
-	cmd := exec.Command(c.helmPath, args...) // #nosec G204
-	if c.stdout != nil {
-		cmd.Stdout = c.stdout
-		cmd.Stderr = c.stderr
-		return cmd.Run()
-	}
-
-	output, err := cmd.CombinedOutput()
-	if err != nil {
-		if strings.Contains(string(output), "release: not found") {
-			return nil
-		}
-		klog.Errorf("Error executing command: helm %s", sanitizedArgs)
-		klog.Errorf("Output: %s, Error: %v", string(output), err)
-		return fmt.Errorf("error executing helm %s: %s", args[0], string(output))
-	}
-
-	return nil
-}
-
-func (c *helmClient) run(name, namespace string, options UpgradeOptions, command string, extraArgs []string) error {
+func (c *helmClient) run(name, namespace string, options Options, command string, extraArgs []string) error {
 	kubeConfig, err := writeKubeConfig(c.config)
 	if err != nil {
 		return err
 	}
-	defer os.Remove(kubeConfig)
+	if !preserveFiles {
+		defer os.Remove(kubeConfig)
+	}
 
 	args := []string{command, name}
 	if options.Path != "" {
 		args = append(args, options.Path)
 	} else if options.Chart != "" {
 		args = append(args, options.Chart)
-
 		if options.Repo == "" {
 			return fmt.Errorf("chart repo cannot be null")
 		}
-
-		args = append(args, "--repo", options.Repo)
-		if options.Version != "" {
-			args = append(args, "--version", options.Version)
-		}
-		if options.Username != "" {
-			args = append(args, "--username", options.Username)
-		}
-		if options.Password != "" {
-			args = append(args, "--password", options.Password)
-		}
+		args = options.ConfigureRepo(args)
+		args = options.ConfigureVersion(args)
+		args = options.ConfigureAuth(args)
+		args = options.ConfigureTLS(args)
 	}
 
 	args = append(args, "--kubeconfig", kubeConfig, "--namespace", namespace)
@@ -152,7 +128,9 @@ func (c *helmClient) run(name, namespace string, options UpgradeOptions, command
 		if err := tempFile.Close(); err != nil {
 			return errors.Wrap(err, "close temp file")
 		}
-		defer os.Remove(tempFile.Name())
+		if !preserveFiles {
+			defer os.Remove(tempFile.Name())
+		}
 
 		// Wait quickly so helm will find the file
 		time.Sleep(time.Millisecond)
@@ -197,15 +175,49 @@ func (c *helmClient) run(name, namespace string, options UpgradeOptions, command
 		args = append(args, "--atomic")
 	}
 
-	// TLS options
-	if options.CaFile != "" {
-		args = append(args, "--ca-file", options.CaFile)
-	}
-	if options.InsecureSkipTlsVerify {
-		args = append(args, "--insecure-skip-tls-verify")
+	return c.exec(args)
+}
+
+func (c *helmClient) exec(args []string) error {
+	if len(args) == 0 {
+		return nil
 	}
 
-	return c.exec(args)
+	sb := strings.Builder{}
+	mask := false
+	for _, a := range args {
+		if mask {
+			sb.WriteString("***** ")
+			mask = false
+			continue
+		}
+		if a == "--password" {
+			mask = true
+		}
+		sb.WriteString(a)
+		sb.WriteString(" ")
+	}
+	sanitizedArgs := sb.String()
+
+	fmt.Println("helm " + sanitizedArgs)
+	cmd := exec.Command(c.helmPath, args...) // #nosec G204
+	if c.stdout != nil {
+		cmd.Stdout = c.stdout
+		cmd.Stderr = c.stderr
+		return cmd.Run()
+	}
+
+	output, err := cmd.CombinedOutput()
+	if err != nil {
+		if strings.Contains(string(output), "release: not found") {
+			return nil
+		}
+		klog.Errorf("Error executing command: helm %s", sanitizedArgs)
+		klog.Errorf("Output: %s, Error: %v", string(output), err)
+		return fmt.Errorf("error executing helm %s: %s", args[0], string(output))
+	}
+
+	return nil
 }
 
 // writeKubeConfig writes the kubeconfig to a file and returns the filename

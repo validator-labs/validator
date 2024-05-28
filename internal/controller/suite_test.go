@@ -45,7 +45,7 @@ import (
 	"github.com/spectrocloud-labs/validator/internal/kube"
 	"github.com/spectrocloud-labs/validator/internal/sinks"
 	"github.com/spectrocloud-labs/validator/pkg/helm"
-	"github.com/spectrocloud-labs/validator/pkg/util/ptr"
+	"github.com/spectrocloud-labs/validator/pkg/util"
 	//+kubebuilder:scaffold:imports
 )
 
@@ -95,11 +95,11 @@ var _ = BeforeSuite(func() {
 		BinaryAssetsDirectory: filepath.Join(
 			"..", "..", "bin", "k8s", fmt.Sprintf("%s-%s-%s", k8sVersion, runtime.GOOS, runtime.GOARCH),
 		),
-		UseExistingCluster: ptr.Ptr(false),
+		UseExistingCluster: util.Ptr(false),
 	}
 
 	if os.Getenv("KUBECONFIG") != "" {
-		testEnv.UseExistingCluster = ptr.Ptr(true)
+		testEnv.UseExistingCluster = util.Ptr(true)
 	}
 
 	// monkey-patch binary paths
