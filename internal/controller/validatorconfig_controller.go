@@ -107,7 +107,7 @@ func (r *ValidatorConfigReconciler) Reconcile(ctx context.Context, req ctrl.Requ
 
 		err = removeFinalizer(ctx, r.Client, vc, CleanupFinalizer)
 
-		if emitErr := r.emitFinalizeCleanup(); emitErr != nil {
+		if emitErr := r.emitFinalizeCleanup(ctx); emitErr != nil {
 			r.Log.Error(emitErr, "Failed to emit FinalizeCleanup request")
 		}
 
@@ -394,7 +394,7 @@ func isConditionTrue(vc *v1alpha1.ValidatorConfig, chartName string, conditionTy
 	return vc.Status.Conditions[idx], vc.Status.Conditions[idx].Status == corev1.ConditionTrue
 }
 
-func (r *ValidatorConfigReconciler) emitFinalizeCleanup() error {
+func (r *ValidatorConfigReconciler) emitFinalizeCleanup(ctx context.Context) error {
 	grpcEnabled := os.Getenv("CLEANUP_GRPC_SERVER_ENABLED")
 	if grpcEnabled != "true" {
 		r.Log.V(0).Info("Cleanup job gRPC server is not enabled")
@@ -417,10 +417,7 @@ func (r *ValidatorConfigReconciler) emitFinalizeCleanup() error {
 		http.DefaultClient,
 		url,
 	)
-	_, err = client.FinalizeCleanup(
-		context.Background(),
-		connect.NewRequest(&cleanv1.FinalizeCleanupRequest{}),
-	)
+	_, err = client.FinalizeCleanup(ctx, connect.NewRequest(&cleanv1.FinalizeCleanupRequest{}))
 	if err != nil {
 		return fmt.Errorf("FinalizeCleanup request to %s failed: %w", url, err)
 	}

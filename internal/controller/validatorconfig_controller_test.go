@@ -204,7 +204,7 @@ func TestConfigureHelmBasicAuth(t *testing.T) {
 	}
 	for _, c := range cs {
 		t.Log(c.name)
-		err := c.reconciler.configureHelmOpts(context.Background(), c.nn, c.opts)
+		err := c.reconciler.configureHelmOpts(context.TODO(), c.nn, c.opts)
 		if err != nil && !reflect.DeepEqual(err.Error(), c.expected.Error()) {
 			t.Errorf("expected (%v), got (%v)", c.expected, err)
 		}
@@ -280,7 +280,7 @@ func TestEmitFinalizeCleanup(t *testing.T) {
 			os.Setenv(k, v)
 		}
 
-		err := c.reconciler.emitFinalizeCleanup()
+		err := c.reconciler.emitFinalizeCleanup(context.TODO())
 		errOk := err == nil && c.expectedErrs == nil
 		for _, expectedErr := range c.expectedErrs {
 			if err != nil && reflect.DeepEqual(err.Error(), expectedErr.Error()) {
