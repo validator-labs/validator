@@ -6,7 +6,7 @@ import (
 
 	"github.com/go-logr/logr"
 
-	"github.com/spectrocloud-labs/validator/pkg/types"
+	"github.com/validator-labs/validator/pkg/types"
 )
 
 func TestNewSink(t *testing.T) {

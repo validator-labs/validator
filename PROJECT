@@ -6,7 +6,7 @@ domain: spectrocloud.labs
 layout:
 - go.kubebuilder.io/v4
 projectName: validator
-repo: github.com/spectrocloud-labs/validator
+repo: github.com/validator-labs/validator
 resources:
 - api:
     crdVersion: v1
@@ -15,7 +15,7 @@ resources:
   domain: spectrocloud.labs
   group: validation
   kind: ValidationResult
-  path: github.com/spectrocloud-labs/validator/api/v1alpha1
+  path: github.com/validator-labs/validator/api/v1alpha1
   version: v1alpha1
 - api:
     crdVersion: v1
@@ -24,6 +24,6 @@ resources:
   domain: spectrocloud.labs
   group: validation
   kind: ValidatorConfig
-  path: github.com/spectrocloud-labs/validator/api/v1alpha1
+  path: github.com/validator-labs/validator/api/v1alpha1
   version: v1alpha1
 version: "3"
