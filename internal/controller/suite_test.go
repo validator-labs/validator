@@ -41,11 +41,11 @@ import (
 	logf "sigs.k8s.io/controller-runtime/pkg/log"
 	"sigs.k8s.io/controller-runtime/pkg/log/zap"
 
-	"github.com/spectrocloud-labs/validator/api/v1alpha1"
-	"github.com/spectrocloud-labs/validator/internal/kube"
-	"github.com/spectrocloud-labs/validator/internal/sinks"
-	"github.com/spectrocloud-labs/validator/pkg/helm"
-	"github.com/spectrocloud-labs/validator/pkg/util"
+	"github.com/validator-labs/validator/api/v1alpha1"
+	"github.com/validator-labs/validator/internal/kube"
+	"github.com/validator-labs/validator/internal/sinks"
+	"github.com/validator-labs/validator/pkg/helm"
+	"github.com/validator-labs/validator/pkg/util"
 	//+kubebuilder:scaffold:imports
 )
 
