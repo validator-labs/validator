@@ -113,7 +113,7 @@ func (r *ValidatorConfigReconciler) Reconcile(ctx context.Context, req ctrl.Requ
 
 		err = removeFinalizer(ctx, r.Client, vc, CleanupFinalizer)
 
-		if emitErr := r.emitFinalizeCleanup(); emitErr != nil {
+		if emitErr := r.emitFinalizeCleanup(ctx); emitErr != nil {
 			r.Log.Error(emitErr, "Failed to emit FinalizeCleanup request")
 		}
 
@@ -188,7 +188,7 @@ func (r *ValidatorConfigReconciler) redeployIfNeeded(ctx context.Context, vc *v1
 		specPlugins[p.Chart.Name] = true
 
 		// update plugin's values hash
-		valuesUnchanged := r.updatePluginHash(vc, p)
+		valuesUnchanged := r.updatePluginHash(p)
 
 		// skip plugin if already deployed & no change in values
 		condition, ok := isConditionTrue(vc, p.Chart.Name, v1alpha1.HelmChartDeployedCondition)
@@ -208,7 +208,7 @@ func (r *ValidatorConfigReconciler) redeployIfNeeded(ctx context.Context, vc *v1
 
 		if p.Chart.AuthSecretName != "" {
 			nn := types.NamespacedName{Name: p.Chart.AuthSecretName, Namespace: vc.Namespace}
-			if err := r.configureHelmOpts(nn, upgradeOpts); err != nil {
+			if err := r.configureHelmOpts(ctx, nn, upgradeOpts); err != nil {
 				r.Log.V(0).Error(err, "failed to configure basic auth for Helm upgrade")
 				conditions[i] = r.buildHelmChartCondition(p.Chart.Name, err)
 				continue
@@ -242,9 +242,9 @@ func (r *ValidatorConfigReconciler) redeployIfNeeded(ctx context.Context, vc *v1
 	return nil
 }
 
-func (r *ValidatorConfigReconciler) configureHelmOpts(nn types.NamespacedName, opts *helm.UpgradeOptions) error {
+func (r *ValidatorConfigReconciler) configureHelmOpts(ctx context.Context, nn types.NamespacedName, opts *helm.UpgradeOptions) error {
 	secret := &corev1.Secret{}
-	if err := r.Get(context.TODO(), nn, secret); err != nil {
+	if err := r.Get(ctx, nn, secret); err != nil {
 		return fmt.Errorf(
 			"failed to get auth secret %s in namespace %s for chart %s in repo %s: %v",
 			nn.Name, nn.Namespace, opts.Chart, opts.Repo, err,
@@ -277,7 +277,7 @@ func (r *ValidatorConfigReconciler) configureHelmOpts(nn types.NamespacedName, o
 // updatePluginHash compares the current plugin's values hash annotation to a hash of its current values,
 // updates the values hash annotation on the ValidatorConfig for the current plugin, and returns a flag
 // indicating whether the values have changed or not since the last reconciliation
-func (r *ValidatorConfigReconciler) updatePluginHash(vc *v1alpha1.ValidatorConfig, p v1alpha1.HelmRelease) bool {
+func (r *ValidatorConfigReconciler) updatePluginHash(p v1alpha1.HelmRelease) bool {
 	valuesUnchanged := false
 	pluginValuesHashLatest := sha256.Sum256([]byte(p.Values))
 	pluginValuesHashLatestB64 := base64.StdEncoding.EncodeToString(pluginValuesHashLatest[:])
@@ -399,7 +399,7 @@ func isConditionTrue(vc *v1alpha1.ValidatorConfig, chartName string, conditionTy
 	return vc.Status.Conditions[idx], vc.Status.Conditions[idx].Status == corev1.ConditionTrue
 }
 
-func (r *ValidatorConfigReconciler) emitFinalizeCleanup() error {
+func (r *ValidatorConfigReconciler) emitFinalizeCleanup(ctx context.Context) error {
 	grpcEnabled := os.Getenv("CLEANUP_GRPC_SERVER_ENABLED")
 	if grpcEnabled != "true" {
 		r.Log.V(0).Info("Cleanup job gRPC server is not enabled")
@@ -422,10 +422,7 @@ func (r *ValidatorConfigReconciler) emitFinalizeCleanup() error {
 		http.DefaultClient,
 		url,
 	)
-	_, err = client.FinalizeCleanup(
-		context.Background(),
-		connect.NewRequest(&cleanv1.FinalizeCleanupRequest{}),
-	)
+	_, err = client.FinalizeCleanup(ctx, connect.NewRequest(&cleanv1.FinalizeCleanupRequest{}))
 	if err != nil {
 		return fmt.Errorf("FinalizeCleanup request to %s failed: %w", url, err)
 	}
