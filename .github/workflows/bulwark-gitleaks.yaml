@@ -22,7 +22,7 @@ jobs:
         shell: sh
         env:
           BRANCH: ${{ github.head_ref || github.ref_name }}
-        run: /workspace/bulwark -name CodeSASTGitLeaks -organization spectrocloud-labs -target $REPO -tags "branch:$BRANCH,options:--log-opts origin..HEAD"
+        run: /workspace/bulwark -name CodeSASTGitLeaks -organization validator-labs -target $REPO -tags "branch:$BRANCH,options:--log-opts origin..HEAD"
 
       - name: check-result
         shell: sh

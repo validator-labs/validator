@@ -20,17 +20,17 @@ import (
 	"k8s.io/apimachinery/pkg/types"
 	kyaml "sigs.k8s.io/yaml"
 
-	"github.com/spectrocloud-labs/validator/api/v1alpha1"
-	"github.com/spectrocloud-labs/validator/internal/test"
-	"github.com/spectrocloud-labs/validator/pkg/helm"
+	"github.com/validator-labs/validator/api/v1alpha1"
+	"github.com/validator-labs/validator/internal/test"
+	"github.com/validator-labs/validator/pkg/helm"
 	//+kubebuilder:scaffold:imports
 )
 
 const (
 	networkPluginDeploymentName  = "validator-plugin-network-controller-manager"
-	networkPluginDeploymentImage = "quay.io/spectrocloud-labs/validator-plugin-network"
-	networkPluginVersionPre      = "v0.0.4"
-	networkPluginVersionPost     = "v0.0.5"
+	networkPluginDeploymentImage = "quay.io/validator-labs/validator-plugin-network"
+	networkPluginVersionPre      = "v0.0.15"
+	networkPluginVersionPost     = "v0.0.16"
 )
 
 var (

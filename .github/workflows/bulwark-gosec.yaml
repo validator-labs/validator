@@ -22,14 +22,14 @@ jobs:
           go-version: '1.21'
 
       - name: checkout
-        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4
+        uses: actions/checkout@0ad4b8fadaa221de15dcec353f45205ec38ea70b # v4
 
       - name: run-gosec-scan
         shell: sh
         env:
           BRANCH: ${{ github.head_ref || github.ref_name }}
           GO111MODULE: on
-        run: /workspace/bulwark -name CodeSASTGoSec -verbose -organization spectrocloud-labs -target $REPO -tags "branch:$BRANCH"
+        run: /workspace/bulwark -name CodeSASTGoSec -verbose -organization validator-labs -target $REPO -tags "branch:$BRANCH"
 
       - name: check-result
         shell: sh

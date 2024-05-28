@@ -2,7 +2,7 @@ resources:
 - ../default
 
 images:
-- name: quay.io/spectrocloud-labs/validator:latest
+- name: quay.io/validator-labs/validator:latest
   newTag: dev
 
 patches:
