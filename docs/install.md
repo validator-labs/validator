@@ -59,14 +59,14 @@ To further debug and diagnose cluster problems, use 'kubectl cluster-info dump'.
 Add the Validator Helm repository and update the local Helm cache.
 
 ```shell
-helm repo add validator https://spectrocloud-labs.github.io/validator/ && \
+helm repo add validator https://validator-labs.github.io/validator/ && \
 helm repo update
 ```
 
 Create a **values.yaml** containing the Validator configuration. Use the command below to download the default **values.yaml** file.
 
 ```shell
-wget https://raw.githubusercontent.com/spectrocloud-labs/validator/main/chart/validator/values.yaml
+wget https://raw.githubusercontent.com/validator-labs/validator/main/chart/validator/values.yaml
 ```
 
 Before you install Validator, you can configure the installation by editing the `values.yaml` file. The `values.yaml` file contains the default configuration for Validator. You can override the default configuration by editing the `values.yaml` file.
@@ -146,16 +146,16 @@ Now that you have Validator installed, you can create a validation. A validation
 
 ## Create a Validation
 
-The next step is to create a validation configuration. Each plugin contains a set of example validation configurations. You can use the example configurations as a starting point for your validation. For this guide, you will use the [`awsvalidator-spectro-cloud-base`](https://github.com/spectrocloud-labs/validator-plugin-aws/blob/main/config/samples/awsvalidator-iam-role-spectro-cloud-base.yaml) configuration. 
+The next step is to create a validation configuration. Each plugin contains a set of example validation configurations. You can use the example configurations as a starting point for your validation. For this guide, you will use the [`awsvalidator-spectro-cloud-base`](https://github.com/validator-labs/validator-plugin-aws/blob/main/config/samples/awsvalidator-iam-role-spectro-cloud-base.yaml) configuration. 
 
 > [!NOTE]
-> Check out the AWS [config samples](https://github.com/spectrocloud-labs/validator-plugin-aws/tree/main/config/samples) directory for more examples.
+> Check out the AWS [config samples](https://github.com/validator-labs/validator-plugin-aws/tree/main/config/samples) directory for more examples.
 
 
-Create a file named `validation.yaml` and copy the contents of the [`awsvalidator-spectro-cloud-base`](https://github.com/spectrocloud-labs/validator-plugin-aws/blob/main/config/samples/awsvalidator-iam-role-spectro-cloud-base.yaml) Use the following command to download the file and save it as `validation.yaml`.
+Create a file named `validation.yaml` and copy the contents of the [`awsvalidator-spectro-cloud-base`](https://github.com/validator-labs/validator-plugin-aws/blob/main/config/samples/awsvalidator-iam-role-spectro-cloud-base.yaml) Use the following command to download the file and save it as `validation.yaml`.
 
 ```shell
-wget https://raw.githubusercontent.com/spectrocloud-labs/validator-plugin-aws/main/config/samples/awsvalidator-iam-role-spectro-cloud-base.yaml --output-document validation.yaml
+wget https://raw.githubusercontent.com/validator-labs/validator-plugin-aws/main/config/samples/awsvalidator-iam-role-spectro-cloud-base.yaml --output-document validation.yaml
 ```
 
 Review the contents of the `validation.yaml` file. The `spec` section contains the configuration for the validation.  Change the `spec` section to match your requirements. For example, you can change the `defaultRegion` to match your prefered AWS region. 
@@ -317,8 +317,9 @@ We encourage you to explore the other plugins and create your own validations as
 
 Below are links to the documentation for the other plugins.
 
-- [AWS](https://github.com/spectrocloud-labs/validator-plugin-aws)
-- [Azure](https://github.com/spectrocloud-labs/validator-plugin-azure)
-- [Network](https://github.com/spectrocloud-labs/validator-plugin-network)
-- [OCI](https://github.com/spectrocloud-labs/validator-plugin-oci)
-- [vSphere](https://github.com/spectrocloud-labs/validator-plugin-vsphere)
+- [AWS](https://github.com/validator-labs/validator-plugin-aws)
+- [Azure](https://github.com/validator-labs/validator-plugin-azure)
+- [Network](https://github.com/validator-labs/validator-plugin-network)
+- [OCI](https://github.com/validator-labs/validator-plugin-oci)
+- [vSphere](https://github.com/validator-labs/validator-plugin-vsphere)
+- [Kubescape](https://github.com/validator-labs/validator-plugin-kubescape)

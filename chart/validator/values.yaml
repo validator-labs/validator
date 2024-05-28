@@ -30,8 +30,8 @@ controllerManager:
         drop:
         - ALL
     image:
-      repository: quay.io/spectrocloud-labs/validator
-      tag: v0.0.37  # x-release-please-version
+      repository: quay.io/validator-labs/validator
+      tag: v0.0.40  # x-release-please-version
     resources:
       limits:
         cpu: 500m
@@ -66,7 +66,7 @@ env: []
 proxy:
   enabled: false
   # The image used by the init container. Must include the update-ca-certificates command.
-  image: quay.io/spectrocloud-labs/validator-certs-init:latest
+  image: quay.io/validator-labs/validator-certs-init:latest
   # The name of a secret containing a proxy CA certificate.
   secretName: proxy-cert
   # If false (using an existing secret), the key whose value is the CA certificate must end with '.crt'.
@@ -107,8 +107,8 @@ cleanup:
 plugins:
 - chart:
     name: validator-plugin-aws
-    repository: "https://spectrocloud-labs.github.io/validator-plugin-aws"
-    version: v0.0.18
+    repository: "https://validator-labs.github.io/validator-plugin-aws"
+    version: v0.0.26
   values: |-
     controllerManager:
       kubeRbacProxy:
@@ -142,8 +142,8 @@ plugins:
             drop:
             - ALL
         image:
-          repository: quay.io/spectrocloud-labs/validator-plugin-aws
-          tag: v0.0.18
+          repository: quay.io/validator-labs/validator-plugin-aws
+          tag: v0.0.26
         resources:
           limits:
             cpu: 500m
@@ -172,12 +172,12 @@ plugins:
 
       # Override the service account used by AWS validator (optional, could be used for IMDSv2 on EKS)
       # WARNING: the chosen service account must include all RBAC privileges found in the AWS plugin template:
-      #          https://github.com/spectrocloud-labs/validator-plugin-aws/blob/main/chart/validator-plugin-aws/templates/manager-rbac.yaml
+      #          https://github.com/validator-labs/validator-plugin-aws/blob/main/chart/validator-plugin-aws/templates/manager-rbac.yaml
       serviceAccountName: ""
 - chart:
     name: validator-plugin-azure
-    repository: "https://spectrocloud-labs.github.io/validator-plugin-azure"
-    version: v0.0.2
+    repository: "https://validator-labs.github.io/validator-plugin-azure"
+    version: v0.0.11
   values: |-
     controllerManager:
       kubeRbacProxy:
@@ -211,8 +211,8 @@ plugins:
             drop:
             - ALL
         image:
-          repository: quay.io/spectrocloud-labs/validator-plugin-azure
-          tag: v0.0.2
+          repository: quay.io/validator-labs/validator-plugin-azure
+          tag: v0.0.11
         resources:
           limits:
             cpu: 500m
@@ -247,12 +247,12 @@ plugins:
 
       # Override the service account used by Azure validator (optional, could be used for WorkloadIdentityCredentials on AKS)
       # WARNING: the chosen service account must include all RBAC privileges found in the Azure plugin template:
-      #          https://github.com/spectrocloud-labs/validator-plugin-aws/blob/main/chart/validator-plugin-azure/templates/manager-rbac.yaml
+      #          https://github.com/validator-labs/validator-plugin-aws/blob/main/chart/validator-plugin-azure/templates/manager-rbac.yaml
       serviceAccountName: ""
 - chart:
     name: validator-plugin-vsphere
-    repository: "https://spectrocloud-labs.github.io/validator-plugin-vsphere"
-    version: v0.0.15
+    repository: "https://validator-labs.github.io/validator-plugin-vsphere"
+    version: v0.0.20
   values: |-
     controllerManager:
       kubeRbacProxy:
@@ -268,7 +268,7 @@ plugins:
             - ALL
         image:
           repository: gcr.io/kubebuilder/kube-rbac-proxy
-          tag: v0.14.1
+          tag: v0.15.0
         resources:
           limits:
             cpu: 500m
@@ -286,8 +286,8 @@ plugins:
             drop:
             - ALL
         image:
-          repository: quay.io/spectrocloud-labs/validator-plugin-vsphere
-          tag: v0.0.15
+          repository: quay.io/validator-labs/validator-plugin-vsphere
+          tag: v0.0.20
         resources:
           limits:
             cpu: 500m
@@ -312,8 +312,8 @@ plugins:
       secretName: vsphere-creds
 - chart:
     name: validator-plugin-network
-    repository: "https://spectrocloud-labs.github.io/validator-plugin-network"
-    version: v0.0.9
+    repository: "https://validator-labs.github.io/validator-plugin-network"
+    version: v0.0.16
   values: |-
     controllerManager:
       kubeRbacProxy:
@@ -349,8 +349,8 @@ plugins:
             drop:
             - ALL
         image:
-          repository: quay.io/spectrocloud-labs/validator-plugin-network
-          tag: v0.0.9
+          repository: quay.io/validator-labs/validator-plugin-network
+          tag: v0.0.16
         resources:
           limits:
             cpu: 500m
@@ -371,8 +371,8 @@ plugins:
       type: ClusterIP
 - chart:
     name: validator-plugin-oci
-    repository: "https://spectrocloud-labs.github.io/validator-plugin-oci"
-    version: v0.0.2
+    repository: "https://validator-labs.github.io/validator-plugin-oci"
+    version: v0.0.10
   values: |-
     controllerManager:
       kubeRbacProxy:
@@ -406,8 +406,65 @@ plugins:
             drop:
             - ALL
         image:
-          repository: quay.io/spectrocloud-labs/validator-plugin-oci
-          tag: v0.0.2
+          repository: quay.io/validator-labs/validator-plugin-oci
+          tag: v0.0.10
+        resources:
+          limits:
+            cpu: 500m
+            memory: 128Mi
+          requests:
+            cpu: 10m
+            memory: 64Mi
+      replicas: 1
+      serviceAccount:
+        annotations: {}
+    kubernetesClusterDomain: cluster.local
+    metricsService:
+      ports:
+      - name: https
+        port: 8443
+        protocol: TCP
+        targetPort: https
+      type: ClusterIP
+- chart:
+    name: validator-plugin-kubescape
+    repository: "https://validator-labs.github.io/validator-plugin-kubescape"
+    version: v0.0.3
+  values: |-
+    controllerManager:
+      kubeRbacProxy:
+        args:
+        - --secure-listen-address=0.0.0.0:8443
+        - --upstream=http://127.0.0.1:8080/
+        - --logtostderr=true
+        - --v=0
+        containerSecurityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+            - ALL
+        image:
+          repository: gcr.io/kubebuilder/kube-rbac-proxy
+          tag: v0.15.0
+        resources:
+          limits:
+            cpu: 500m
+            memory: 128Mi
+          requests:
+            cpu: 5m
+            memory: 64Mi
+      manager:
+        args:
+        - --health-probe-bind-address=:8081
+        - --leader-elect
+        containerSecurityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+            - ALL
+        image:
+          repository: quay.io/validator-labs/validator-plugin-kubescape
+          tag: v0.0.3
         resources:
           limits:
             cpu: 500m
@@ -477,12 +534,25 @@ pluginSecrets:
     # vcenterServer: ""
     # insecureSkipVerify: ""
 
-  # If installing the OCI plugin and validating against private registries, the below config is required unless the following applies:
-  # - The target cluster already contains secrets with the correct format for all private registries.
-  #   If specifying your own secret, refer to chart/validator/templates/plugin-secret-oci.yaml for
-  #   an example of the expected format and ensure that it exists in the same namespace as the Helm release.
-  #
-  oci: []  # Don't forget to delete these square brackets if you're specifying credentials here!
-    # - secretName: registry-creds # ensure this matches the secretName in the OciRegistryRule
-    #   username: username # for ECR Registries, store the AWS_ACCESS_KEY_ID here
-    #   password: pa$$w0rd # for ECR Registries, store the AWS_SECRET_ACCESS_KEY here
+  oci:
+    # If installing the OCI plugin and validating against private registries, the below config is required unless the following applies:
+    # - The target cluster already contains secrets with the correct format for all private registries.
+    #   If specifying your own secret, refer to chart/validator/templates/plugin-secret-oci-auth.yaml for
+    #   an example of the expected format and ensure that it exists in the same namespace as the Helm release.
+    #
+    auth: []  # Don't forget to delete these square brackets if you're specifying credentials here!
+      # - secretName: registry-creds # ensure this matches the credentials secretName in the OciRegistryRule
+      #   username: username # for ECR Registries, store the AWS_ACCESS_KEY_ID here
+      #   password: pa$$w0rd # for ECR Registries, store the AWS_SECRET_ACCESS_KEY here
+
+    # If installing the OCI plugin and enabling signature verification of artifacts, the below config is required unless the following applies:
+    # - The target cluster already contains secrets with the correct format for all public keys used for signing artifacts.
+    #   If specifying your own secret, refer to chart/validator/templates/plugin-secret-oci-pubkey.yaml for
+    #   an example of the expected format and ensure that it exists in the same namespace as the Helm release.
+    #
+    pubKeys: []  # Don't forget to delete these square brackets if you're specifying public keys here!
+      # - secretName: cosign-public-keys # ensure this matches the public key secretName in the OciRegistryRule
+      #   key1.pub: |  # multiple public keys can be added to your secret, ensure each key name ends in .pub
+      #    -----BEGIN PUBLIC KEY-----
+      #    <your public key content here>
+      #    -----END PUBLIC KEY-----

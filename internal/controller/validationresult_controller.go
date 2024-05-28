@@ -32,10 +32,10 @@ import (
 	ctrl "sigs.k8s.io/controller-runtime"
 	"sigs.k8s.io/controller-runtime/pkg/client"
 
-	v1alpha1 "github.com/spectrocloud-labs/validator/api/v1alpha1"
-	"github.com/spectrocloud-labs/validator/internal/sinks"
-	"github.com/spectrocloud-labs/validator/pkg/constants"
-	"github.com/spectrocloud-labs/validator/pkg/types"
+	v1alpha1 "github.com/validator-labs/validator/api/v1alpha1"
+	"github.com/validator-labs/validator/internal/sinks"
+	"github.com/validator-labs/validator/pkg/constants"
+	"github.com/validator-labs/validator/pkg/types"
 )
 
 // ValidationResultHash is used to determine whether to re-emit updates to a validation result sink.

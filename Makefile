@@ -1,7 +1,11 @@
+ifneq (,$(wildcard ./.env))
+	include .env
+	export
+endif
 
 # Image URL to use all building/pushing image targets
-IMG ?= quay.io/spectrocloud-labs/validator:latest
-CERTS_INIT_IMG ?= quay.io/spectrocloud-labs/validator-certs-init:latest
+IMG ?= quay.io/validator-labs/validator:latest
+CERTS_INIT_IMG ?= quay.io/validator-labs/validator-certs-init:latest
 
 GOARCH ?= $(shell go env GOARCH)
 
@@ -196,7 +200,7 @@ helm-build: helm helmify manifests kustomize
 helm-package: generate manifests
 	$(HELM) package --version $(CHART_VERSION) chart/validator/
 	mkdir -p charts && mv validator-*.tgz charts
-	$(HELM) repo index --url https://spectrocloud-labs.github.io/validator ./chart
+	$(HELM) repo index --url https://validator-labs.github.io/validator ./chart
 	mv charts/validator/index.yaml index.yaml
 
 .PHONY: frigate
