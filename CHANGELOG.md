@@ -1,5 +1,27 @@
 # Changelog
 
+## [0.0.41](https://github.com/validator-labs/validator/compare/v0.0.40...v0.0.41) (2024-05-28)
+
+
+### Bug Fixes
+
+* **deps:** update module buf.build/gen/go/spectrocloud/spectro-cleanup/protocolbuffers/go to v1.34.1-20240205164452-95dfd137cb54.1 ([#226](https://github.com/validator-labs/validator/issues/226)) ([a56978b](https://github.com/validator-labs/validator/commit/a56978bce5ed3dc4fe0a7948968db55c87e39158))
+* **deps:** update module sigs.k8s.io/cluster-api to v1.7.2 ([#239](https://github.com/validator-labs/validator/issues/239)) ([7cf4e39](https://github.com/validator-labs/validator/commit/7cf4e39f0b39ad76e6b62e20f637f97f9c39e045))
+* **deps:** update module sigs.k8s.io/controller-runtime to v0.18.2 ([#181](https://github.com/validator-labs/validator/issues/181)) ([748f08e](https://github.com/validator-labs/validator/commit/748f08e7b1dd5c34f3befb65e6e1e5f5f72d96fe))
+
+
+### Other
+
+* bump vsphere plugin version in helm chart ([#259](https://github.com/validator-labs/validator/issues/259)) ([71e9a93](https://github.com/validator-labs/validator/commit/71e9a93f11683f711680df15c0aa94e57451ddf8))
+* **deps:** bump google.golang.org/protobuf from 1.32.0 to 1.33.0 ([#241](https://github.com/validator-labs/validator/issues/241)) ([0dd0f91](https://github.com/validator-labs/validator/commit/0dd0f913575150597370c8ecad84ef8e9424f220))
+* **deps:** update actions/checkout digest to 0ad4b8f ([#247](https://github.com/validator-labs/validator/issues/247)) ([a91696d](https://github.com/validator-labs/validator/commit/a91696da67b5b184924f0c66d528dd3afe5defe8))
+* **deps:** update actions/setup-python digest to 82c7e63 ([#246](https://github.com/validator-labs/validator/issues/246)) ([22ad332](https://github.com/validator-labs/validator/commit/22ad3320e5fb61fd3173d15e1c82bbb8ac971777))
+* **deps:** update azure/setup-helm digest to fe7b79c ([#227](https://github.com/validator-labs/validator/issues/227)) ([d6f94c8](https://github.com/validator-labs/validator/commit/d6f94c85ba2ce313f58b4e4d1a4ace3d1ecee1d3))
+* **deps:** update docker/build-push-action digest to 2cdde99 ([#228](https://github.com/validator-labs/validator/issues/228)) ([f3558fd](https://github.com/validator-labs/validator/commit/f3558fdfdd4dfb7338ee6773cccc1267a7f2be54))
+* **deps:** update google-github-actions/release-please-action digest to e4dc86b ([#234](https://github.com/validator-labs/validator/issues/234)) ([9af8d09](https://github.com/validator-labs/validator/commit/9af8d09afcfdd1ae1eed8f3b4e3bd3f857d41da8))
+* **deps:** update helm/kind-action action to v1.10.0 ([#209](https://github.com/validator-labs/validator/issues/209)) ([1beea2d](https://github.com/validator-labs/validator/commit/1beea2d6e0242db6822708dec58e0d9b47ae3fe5))
+* **deps:** update softprops/action-gh-release action to v2 ([#229](https://github.com/validator-labs/validator/issues/229)) ([c273c84](https://github.com/validator-labs/validator/commit/c273c844994f623fa3611e4f44b71cd1c5d40548))
+
 ## [0.0.40](https://github.com/validator-labs/validator/compare/v0.0.39...v0.0.40) (2024-05-17)
 
 
