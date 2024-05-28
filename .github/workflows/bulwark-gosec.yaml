@@ -29,7 +29,7 @@ jobs:
         env:
           BRANCH: ${{ github.head_ref || github.ref_name }}
           GO111MODULE: on
-        run: /workspace/bulwark -name CodeSASTGoSec -verbose -organization spectrocloud-labs -target $REPO -tags "branch:$BRANCH"
+        run: /workspace/bulwark -name CodeSASTGoSec -verbose -organization validator-labs -target $REPO -tags "branch:$BRANCH"
 
       - name: check-result
         shell: sh

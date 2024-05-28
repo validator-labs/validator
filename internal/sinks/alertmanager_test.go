@@ -11,7 +11,7 @@ import (
 
 	corev1 "k8s.io/api/core/v1"
 
-	"github.com/spectrocloud-labs/validator/api/v1alpha1"
+	"github.com/validator-labs/validator/api/v1alpha1"
 )
 
 var sinkClient = NewClient(1 * time.Second)
