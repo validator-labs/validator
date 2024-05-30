@@ -8,12 +8,12 @@ require (
 	buf.build/gen/go/spectrocloud/spectro-cleanup/connectrpc/go v1.16.2-20240205164452-95dfd137cb54.1
 	buf.build/gen/go/spectrocloud/spectro-cleanup/protocolbuffers/go v1.34.1-20240205164452-95dfd137cb54.1
 	connectrpc.com/connect v1.16.2
-	github.com/go-logr/logr v1.4.1
+	github.com/go-logr/logr v1.4.2
 	github.com/onsi/ginkgo/v2 v2.19.0
 	github.com/onsi/gomega v1.33.1
 	github.com/pkg/errors v0.9.1
-	github.com/slack-go/slack v0.12.5
-	golang.org/x/exp v0.0.0-20240119083558-1b970713d09a
+	github.com/slack-go/slack v0.13.0
+	golang.org/x/exp v0.0.0-20240529005216-23cca8864a10
 	k8s.io/api v0.30.1
 	k8s.io/apimachinery v0.30.1
 	k8s.io/client-go v0.30.1
