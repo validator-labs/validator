@@ -1,9 +1,9 @@
-buf.build/gen/go/spectrocloud/spectro-cleanup/connectrpc/go v1.15.0-20240205164452-95dfd137cb54.1 h1:n1bM3xQM1d5qj4EeySnyWcKb+IYQH3uV1iXbWzepKd4=
-buf.build/gen/go/spectrocloud/spectro-cleanup/connectrpc/go v1.15.0-20240205164452-95dfd137cb54.1/go.mod h1:t00RH2QfPCWd4RsfKy1ApthiGYS9H27adGV+XGplZ9s=
+buf.build/gen/go/spectrocloud/spectro-cleanup/connectrpc/go v1.16.2-20240205164452-95dfd137cb54.1 h1:gxS3ZBKHaTWHjkq7iAGDJ7avDc3sdPk+9uUa608Bnbc=
+buf.build/gen/go/spectrocloud/spectro-cleanup/connectrpc/go v1.16.2-20240205164452-95dfd137cb54.1/go.mod h1:bqoQOw8W1G5zi7Kwiqw0Cov3HU9mv+Z8aFnFUhTEWFI=
 buf.build/gen/go/spectrocloud/spectro-cleanup/protocolbuffers/go v1.34.1-20240205164452-95dfd137cb54.1 h1:daPS45axklINwRkA2oKRpob+CqQkDNLS3N1TOxJ26Ro=
 buf.build/gen/go/spectrocloud/spectro-cleanup/protocolbuffers/go v1.34.1-20240205164452-95dfd137cb54.1/go.mod h1:+vKC7ITJD+9X40uYq4vHX3dpUKG0FvJJ+Avfgjy8Z04=
-connectrpc.com/connect v1.15.0 h1:lFdeCbZrVVDydAqwr4xGV2y+ULn+0Z73s5JBj2LikWo=
-connectrpc.com/connect v1.15.0/go.mod h1:bQmjpDY8xItMnttnurVgOkHUBMRT9cpsNi2O4AjKhmA=
+connectrpc.com/connect v1.16.2 h1:ybd6y+ls7GOlb7Bh5C8+ghA6SvCBajHwxssO2CGFjqE=
+connectrpc.com/connect v1.16.2/go.mod h1:n2kgwskMHXC+lVqb18wngEpF95ldBHXjZYJussz5FRc=
 github.com/MakeNowJust/heredoc v1.0.0 h1:cXCdzVdstXyiTqTvfqk9SDHpKNjxuom+DOlyEeQ4pzQ=
 github.com/MakeNowJust/heredoc v1.0.0/go.mod h1:mG5amYoWBHf8vpLOuehzbGGw0EHxpZZ6lCpQ4fNJ8LE=
 github.com/Masterminds/goutils v1.1.1 h1:5nUrii3FMTL5diU80unEVvNevw1nH4+ZV4DSLVJLSYI=
