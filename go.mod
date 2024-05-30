@@ -8,7 +8,7 @@ require (
 	buf.build/gen/go/spectrocloud/spectro-cleanup/connectrpc/go v1.15.0-20240205164452-95dfd137cb54.1
 	buf.build/gen/go/spectrocloud/spectro-cleanup/protocolbuffers/go v1.34.1-20240205164452-95dfd137cb54.1
 	connectrpc.com/connect v1.15.0
-	github.com/go-logr/logr v1.4.1
+	github.com/go-logr/logr v1.4.2
 	github.com/onsi/ginkgo/v2 v2.17.1
 	github.com/onsi/gomega v1.32.0
 	github.com/pkg/errors v0.9.1
