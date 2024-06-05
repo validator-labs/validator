@@ -22,6 +22,7 @@ jobs:
       - name: Set up Go
         uses: actions/setup-go@cdcb36043654635271a94b9a6d1392de5bb323a7 # v5
         with:
+          cache: false
           go-version-file: go.mod
       
       - name: run-gosec-scan
