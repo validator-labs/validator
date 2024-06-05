@@ -12,7 +12,7 @@ jobs:
   golicense-pr-scan:
     runs-on: [self-hosted, Linux, X64, validator]
     container:
-      image: gcr.io/spectro-images-public/golang:1.22.4-alpine3.18
+      image: gcr.io/spectro-images-public/golang:1.22-alpine
     steps:
       - name: checkout
         uses: actions/checkout@a5ac7e51b41094c92402da3b24376905380afc29 # v4
