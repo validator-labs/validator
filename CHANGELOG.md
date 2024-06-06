@@ -1,5 +1,34 @@
 # Changelog
 
+## [0.0.42](https://github.com/validator-labs/validator/compare/v0.0.41...v0.0.42) (2024-06-06)
+
+
+### Bug Fixes
+
+* **deps:** update golang.org/x/exp digest to 23cca88 ([#272](https://github.com/validator-labs/validator/issues/272)) ([3f8e821](https://github.com/validator-labs/validator/commit/3f8e821c72013de451f17eb46c928642434f5d1d))
+* **deps:** update golang.org/x/exp digest to 404ba88 ([#275](https://github.com/validator-labs/validator/issues/275)) ([523459f](https://github.com/validator-labs/validator/commit/523459ff9432081dfa275b29f11a59c962c9daf6))
+* **deps:** update golang.org/x/exp digest to fc45aab ([#277](https://github.com/validator-labs/validator/issues/277)) ([0f3e729](https://github.com/validator-labs/validator/commit/0f3e729430001cd9c75d0a281b5df4f5245ea759))
+* **deps:** update golang.org/x/exp digest to fd00a4e ([#276](https://github.com/validator-labs/validator/issues/276)) ([c61758e](https://github.com/validator-labs/validator/commit/c61758e9832c7e6f18586d76f8c6ef9f1e304f1d))
+* **deps:** update module buf.build/gen/go/spectrocloud/spectro-cleanup/connectrpc/go to v1.16.2-20240205164452-95dfd137cb54.1 ([#267](https://github.com/validator-labs/validator/issues/267)) ([be20ecb](https://github.com/validator-labs/validator/commit/be20ecbbcc75701db109a0913fdbe0040d13db6f))
+* **deps:** update module github.com/go-logr/logr to v1.4.2 ([#273](https://github.com/validator-labs/validator/issues/273)) ([123d0b9](https://github.com/validator-labs/validator/commit/123d0b942c67878babaca7357586e80331184ca6))
+* **deps:** update module github.com/onsi/ginkgo/v2 to v2.19.0 ([#269](https://github.com/validator-labs/validator/issues/269)) ([6dfe8fc](https://github.com/validator-labs/validator/commit/6dfe8fcf1d63ae8e2cc1bd072a3bcdf7c8cfdb56))
+* **deps:** update module github.com/onsi/gomega to v1.33.1 ([#270](https://github.com/validator-labs/validator/issues/270)) ([dd3e040](https://github.com/validator-labs/validator/commit/dd3e04087c20af8d147541cbaccf5c8e13d5be3e))
+* **deps:** update module github.com/slack-go/slack to v0.13.0 ([#271](https://github.com/validator-labs/validator/issues/271)) ([2e7cff8](https://github.com/validator-labs/validator/commit/2e7cff8309c33313130dd08efb29ab5d4c63fcb3))
+* **deps:** update module sigs.k8s.io/controller-runtime to v0.18.4 ([#281](https://github.com/validator-labs/validator/issues/281)) ([849a047](https://github.com/validator-labs/validator/commit/849a04759039bfad18b8003b7a22721c4bb5138f))
+
+
+### Other
+
+* **deps:** update actions/checkout digest to a5ac7e5 ([#260](https://github.com/validator-labs/validator/issues/260)) ([881714e](https://github.com/validator-labs/validator/commit/881714ec423c554e51cbdb0ce45c3486282e57e4))
+* **deps:** update actions/setup-go digest to cdcb360 ([#261](https://github.com/validator-labs/validator/issues/261)) ([66f32ff](https://github.com/validator-labs/validator/commit/66f32ff1ad3def4c8ad1f4d6cb69a8134c9d49b7))
+* **deps:** update anchore/sbom-action action to v0.16.0 ([#265](https://github.com/validator-labs/validator/issues/265)) ([637aeeb](https://github.com/validator-labs/validator/commit/637aeebc6b800a6dff54cd045d90082deea234be))
+* **deps:** update codecov/codecov-action digest to 125fc84 ([#262](https://github.com/validator-labs/validator/issues/262)) ([2e7e370](https://github.com/validator-labs/validator/commit/2e7e370a7b928d38591c322942ee2b2bad7a82bf))
+* **deps:** update dependency go to v1.22.4 ([#278](https://github.com/validator-labs/validator/issues/278)) ([e9a0dc9](https://github.com/validator-labs/validator/commit/e9a0dc9943d91e53e61fcae9cfd6ce84aebcdc5b))
+* **deps:** update docker/login-action digest to 0d4c9c5 ([#263](https://github.com/validator-labs/validator/issues/263)) ([c5de39c](https://github.com/validator-labs/validator/commit/c5de39c031c98d00ad9a28e9e359ec4504f98a19))
+* **deps:** update docker/setup-buildx-action digest to d70bba7 ([#264](https://github.com/validator-labs/validator/issues/264)) ([625691e](https://github.com/validator-labs/validator/commit/625691e19e1cbc8af399f7d513e65e8f5885b769))
+* **deps:** update gcr.io/kubebuilder/kube-rbac-proxy docker tag to v0.16.0 ([#266](https://github.com/validator-labs/validator/issues/266)) ([91a9ac3](https://github.com/validator-labs/validator/commit/91a9ac3057edd354218b8640c4059f42707827a3))
+* **deps:** update gcr.io/spectro-images-public/golang docker tag to v1.22.4 ([#279](https://github.com/validator-labs/validator/issues/279)) ([6759219](https://github.com/validator-labs/validator/commit/6759219f1316cba6ed66177b6b55d2d3455c1d77))
+
 ## [0.0.41](https://github.com/validator-labs/validator/compare/v0.0.40...v0.0.41) (2024-05-28)
 
 
