@@ -1,0 +1,9 @@
+name: GoVulnCheck
+
+on:
+  pull_request:
+
+jobs:
+  call-govulncheck:
+    uses: validator-labs/workflows/.github/workflows/govulncheck.yaml@main
+    secrets: inherit
