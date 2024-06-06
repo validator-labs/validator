@@ -1,0 +1,10 @@
+name: GoSec
+
+on:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  call-gosec:
+    uses: validator-labs/workflows/.github/workflows/gosec.yaml@main
+    secrets: inherit

@@ -1,0 +1,10 @@
+name: GoLicenses
+
+on:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  call-golicenses:
+    uses: validator-labs/workflows/.github/workflows/golicenses.yaml@main
+    secrets: inherit
