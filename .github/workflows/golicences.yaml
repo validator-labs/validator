@@ -2,6 +2,7 @@ name: GoLicenses
 
 on:
   pull_request:
+  workflow_dispatch:
 
 jobs:
   call-golicences:

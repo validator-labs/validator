@@ -2,6 +2,7 @@ name: GoVulnCheck
 
 on:
   pull_request:
+  workflow_dispatch:
 
 jobs:
   call-govulncheck:
