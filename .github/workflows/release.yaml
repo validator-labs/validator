@@ -9,4 +9,9 @@ on:
 jobs:
   call-release:
     uses: validator-labs/workflows/.github/workflows/release.yaml@main
+    permissions:
+      contents: write
+      id-token: write
+      packages: write
+      pull-requests: write
     secrets: inherit
