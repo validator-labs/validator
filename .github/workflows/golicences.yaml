@@ -5,6 +5,6 @@ on:
   workflow_dispatch:
 
 jobs:
-  call-golicences:
-    uses: validator-labs/workflows/.github/workflows/golicences.yaml@main
+  call-golicenses:
+    uses: validator-labs/workflows/.github/workflows/golicenses.yaml@main
     secrets: inherit
