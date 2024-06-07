@@ -1,73 +1,13 @@
-name: Run tests
+name: Test
 
 on:
   push:
     branches:
-      - 'main'
-      - '[0-9]+.[1-9][0-9]*.x'
+      - main
   pull_request:
-    branches:
-      - 'main'
-      - '[0-9]+.[1-9][0-9]*.x'
   workflow_dispatch:
 
-env:
-    GO_VERSION: "~1.20"
-
 jobs:
-  test-unit:
-    name: Run Unit Tests
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4
-
-      - name: Set up Go
-        uses: actions/setup-go@93397bea11091df50f3d7e59dc26a7711a8bcfbe # v4
-        with:
-          go-version: ${{ env.GO_VERSION }}
-
-      - name: Test
-        run: go test -v ./...
-
-  test-chart:
-    name: Run Helm Chart Tests
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4
-        with:
-          fetch-depth: 0
-
-      - name: Set up Helm
-        uses: azure/setup-helm@5119fcb9089d432beecbf79bb2c7915207344b78 # v3
-        with:
-          version: v3.11.2
-
-      - uses: actions/setup-python@65d7f2d534ac1bc67fcd62888c5f4f3d2cb2b236 # v4
-        with:
-          python-version: '3.9'
-          check-latest: true
-
-      - name: Set up chart-testing
-        uses: helm/chart-testing-action@e8788873172cb653a90ca2e819d79d65a66d4e76 # v2.4.0
-
-      - name: Run chart-testing (list-changed)
-        id: list-changed
-        run: |
-          changed=$(ct list-changed --chart-dirs chart --target-branch ${{ github.event.repository.default_branch }})
-          echo $changed
-          echo "Hallo"
-          if [[ -n "$changed" ]]; then
-            echo "changed=true" >> "$GITHUB_OUTPUT"
-          fi
-
-      - name: Run chart-testing (lint)
-        if: steps.list-changed.outputs.changed == 'true'
-        run: ct lint --validate-maintainers=false --check-version-increment=false --chart-dirs chart --target-branch ${{ github.event.repository.default_branch }}
-
-      - name: Create kind cluster
-        if: steps.list-changed.outputs.changed == 'true'
-        uses: helm/kind-action@dda0770415bac9fc20092cacbc54aa298604d140 # v1.8.0
-
-      - name: Run chart-testing (install)
-        if: steps.list-changed.outputs.changed == 'true'
-        run: ct install --chart-dirs chart  --target-branch ${{ github.event.repository.default_branch }}
+  call-test:
+    uses: validator-labs/workflows/.github/workflows/test.yaml@main
+    secrets: inherit
