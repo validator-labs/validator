@@ -2,6 +2,358 @@ apiVersion: v1
 entries:
   validator:
   - apiVersion: v2
+    appVersion: 0.0.27
+    created: "2024-06-07T03:51:29.973835195Z"
+    description: Monitor results created by validator plugins and upload them to a
+      configurable sink
+    digest: cc3f239770689d5bac25cefa38505b27d5d4c37662c90b9847265494683dd36e
+    name: validator
+    type: application
+    urls:
+    - https://validator-labs.github.io/validator/validator-0.0.42.tgz
+    version: 0.0.42
+  - apiVersion: v2
+    appVersion: 0.0.27
+    created: "2024-05-28T23:15:47.744298454Z"
+    description: Monitor results created by validator plugins and upload them to a
+      configurable sink
+    digest: 67cd93184395ba185ab2c08804b9f059f8aac3561ea40764828e9a56b27f8c4f
+    name: validator
+    type: application
+    urls:
+    - https://validator-labs.github.io/validator/validator-0.0.41.tgz
+    version: 0.0.41
+  - apiVersion: v2
+    appVersion: 0.0.27
+    created: "2024-05-17T21:03:29.029558857Z"
+    description: Monitor results created by validator plugins and upload them to a
+      configurable sink
+    digest: 960411e871489cdc1c69d44502da55ed4b33a06bb3535c68f283a33c2456daac
+    name: validator
+    type: application
+    urls:
+    - https://validator-labs.github.io/validator/validator-0.0.40.tgz
+    version: 0.0.40
+  - apiVersion: v2
+    appVersion: 0.0.27
+    created: "2024-05-17T00:16:30.128093606Z"
+    description: Monitor results created by validator plugins and upload them to a
+      configurable sink
+    digest: 2e5b7547e80bfcfc4524d2ae742d41c94d74be962f7ac35e996e1862146365ad
+    name: validator
+    type: application
+    urls:
+    - https://validator-labs.github.io/validator/validator-0.0.39.tgz
+    version: 0.0.39
+  - apiVersion: v2
+    appVersion: 0.0.27
+    created: "2024-03-14T21:09:30.828545225Z"
+    description: Monitor results created by validator plugins and upload them to a
+      configurable sink
+    digest: 34353e2adfa7eab8d637f5b78c90eb2a6e4eb74ed26bd0d90bdcedbc20ba0bb4
+    name: validator
+    type: application
+    urls:
+    - https://spectrocloud-labs.github.io/validator/validator-0.0.38.tgz
+    version: 0.0.38
+  - apiVersion: v2
+    appVersion: 0.0.27
+    created: "2024-03-12T15:26:43.823386859Z"
+    description: Monitor results created by validator plugins and upload them to a
+      configurable sink
+    digest: 73873c4f5cce91d1474c7071b3dbb7f25cb6a2588100cb7066fbffd0d39f309c
+    name: validator
+    type: application
+    urls:
+    - https://spectrocloud-labs.github.io/validator/validator-0.0.37.tgz
+    version: 0.0.37
+  - apiVersion: v2
+    appVersion: 0.0.27
+    created: "2024-03-08T23:50:01.802817175Z"
+    description: Monitor results created by validator plugins and upload them to a
+      configurable sink
+    digest: 76f33dda71924699a5419aafb64e3cffad2da2658796ff9b3366782f3d6b3ed8
+    name: validator
+    type: application
+    urls:
+    - https://spectrocloud-labs.github.io/validator/validator-0.0.36.tgz
+    version: 0.0.36
+  - apiVersion: v2
+    appVersion: 0.0.27
+    created: "2024-02-12T16:30:28.42083154Z"
+    description: Monitor results created by validator plugins and upload them to a
+      configurable sink
+    digest: 252cc16b901a976b8258b5f9d40fd61a3dbe252c7bf1b512ef69c5945757f837
+    name: validator
+    type: application
+    urls:
+    - https://spectrocloud-labs.github.io/validator/validator-0.0.35.tgz
+    version: 0.0.35
+  - apiVersion: v2
+    appVersion: 0.0.27
+    created: "2024-02-06T17:25:44.109256237Z"
+    description: Monitor results created by validator plugins and upload them to a
+      configurable sink
+    digest: 33b78da3b6a8fa2613c5b82ab1024f83335c1ff3b14f43ac6bc3dd9fb00d17f7
+    name: validator
+    type: application
+    urls:
+    - https://spectrocloud-labs.github.io/validator/validator-0.0.34.tgz
+    version: 0.0.34
+  - apiVersion: v2
+    appVersion: 0.0.27
+    created: "2024-02-05T17:20:26.458804222Z"
+    description: Monitor results created by validator plugins and upload them to a
+      configurable sink
+    digest: 5854fd90fd0578f531297d26eba822e492361895a43d3aea59e07d654b7748a9
+    name: validator
+    type: application
+    urls:
+    - https://spectrocloud-labs.github.io/validator/validator-0.0.33.tgz
+    version: 0.0.33
+  - apiVersion: v2
+    appVersion: 0.0.27
+    created: "2023-12-27T17:36:42.096762884Z"
+    description: Monitor results created by validator plugins and upload them to a
+      configurable sink
+    digest: 369f5378638d22a1453b7d003a034678f136b7029e5f5ee26aa6bd4d01181d1a
+    name: validator
+    type: application
+    urls:
+    - https://spectrocloud-labs.github.io/validator/validator-0.0.32.tgz
+    version: 0.0.32
+  - apiVersion: v2
+    appVersion: 0.0.27
+    created: "2023-12-26T15:35:06.118176745Z"
+    description: Monitor results created by validator plugins and upload them to a
+      configurable sink
+    digest: 8df2d224e4d45802c82cf15db47bcf2450da132628175d437d265200a1f2e6b8
+    name: validator
+    type: application
+    urls:
+    - https://spectrocloud-labs.github.io/validator/validator-0.0.31.tgz
+    version: 0.0.31
+  - apiVersion: v2
+    appVersion: 0.0.27
+    created: "2023-12-19T19:37:26.068280181Z"
+    description: Monitor results created by validator plugins and upload them to a
+      configurable sink
+    digest: 257ca793709f5c089920f421d635b6e58031b3c39abc4cac0399055c7644c650
+    name: validator
+    type: application
+    urls:
+    - https://spectrocloud-labs.github.io/validator/validator-0.0.30.tgz
+    version: 0.0.30
+  - apiVersion: v2
+    appVersion: 0.0.27
+    created: "2023-12-19T17:38:17.050888804Z"
+    description: Monitor results created by validator plugins and upload them to a
+      configurable sink
+    digest: f3eed40caf2f84172a6ca541870409817f86007274d1af04dce3b37038d304d8
+    name: validator
+    type: application
+    urls:
+    - https://spectrocloud-labs.github.io/validator/validator-0.0.29.tgz
+    version: 0.0.29
+  - apiVersion: v2
+    appVersion: 0.0.27
+    created: "2023-12-05T03:24:23.870011026Z"
+    description: Monitor results created by validator plugins and upload them to a
+      configurable sink
+    digest: 944f092d88a32cd3e103f09ca7336338c8518060ce6377852205f8bf6b1db5b2
+    name: validator
+    type: application
+    urls:
+    - https://spectrocloud-labs.github.io/validator/validator-0.0.28.tgz
+    version: 0.0.28
+  - apiVersion: v2
+    appVersion: 0.0.27
+    created: "2023-11-29T23:21:45.126651315Z"
+    description: Monitor results created by validator plugins and upload them to a
+      configurable sink
+    digest: f15f0de963413e45c70ae7a1108070d5e8897fabe22ecde7a7d24cb8869ba50c
+    name: validator
+    type: application
+    urls:
+    - https://spectrocloud-labs.github.io/validator/validator-0.0.27.tgz
+    version: 0.0.27
+  - apiVersion: v2
+    appVersion: 0.0.26
+    created: "2023-11-28T20:03:29.307847226Z"
+    description: Monitor results created by validator plugins and upload them to a
+      configurable sink
+    digest: 81319a61dc1721a18d2c3577f1d92e08810176a8cd8159ace6b98edfd167c78e
+    name: validator
+    type: application
+    urls:
+    - https://spectrocloud-labs.github.io/validator/validator-0.0.26.tgz
+    version: 0.0.26
+  - apiVersion: v2
+    appVersion: 0.0.25
+    created: "2023-11-17T23:30:59.256378338Z"
+    description: Monitor results created by validator plugins and upload them to a
+      configurable sink
+    digest: ba5de020f9cc2d7ef77094e9830f95d7a9653090e6d9279648433fb854f6b006
+    name: validator
+    type: application
+    urls:
+    - https://spectrocloud-labs.github.io/validator/validator-0.0.25.tgz
+    version: 0.0.25
+  - apiVersion: v2
+    appVersion: 0.0.24
+    created: "2023-11-17T22:37:20.1801077Z"
+    description: Monitor results created by validator plugins and upload them to a
+      configurable sink
+    digest: 06766fa4361b4b13c93af99123a8c97a7c06bba57fa1efe2eccf87b66cfcd776
+    name: validator
+    type: application
+    urls:
+    - https://spectrocloud-labs.github.io/validator/validator-0.0.24.tgz
+    version: 0.0.24
+  - apiVersion: v2
+    appVersion: 0.0.23
+    created: "2023-11-17T20:00:56.932415951Z"
+    description: Monitor results created by validator plugins and upload them to a
+      configurable sink
+    digest: 879528a72ab1d704f08495196f46bc4088c501feb976014be5c957448175d6ac
+    name: validator
+    type: application
+    urls:
+    - https://spectrocloud-labs.github.io/validator/validator-0.0.23.tgz
+    version: 0.0.23
+  - apiVersion: v2
+    appVersion: 0.0.22
+    created: "2023-11-17T18:14:47.38767079Z"
+    description: Monitor results created by validator plugins and upload them to a
+      configurable sink
+    digest: f5f305c075f5f98802b757352e70320a9b03bd4ddf36885e9314347e4600bb4c
+    name: validator
+    type: application
+    urls:
+    - https://spectrocloud-labs.github.io/validator/validator-0.0.22.tgz
+    version: 0.0.22
+  - apiVersion: v2
+    appVersion: 0.0.21
+    created: "2023-11-17T00:22:55.840522965Z"
+    description: Monitor results created by validator plugins and upload them to a
+      configurable sink
+    digest: b9313b99169d709f81431d5f99ee505d4b477e1e7c79ef277d8c12331e077002
+    name: validator
+    type: application
+    urls:
+    - https://spectrocloud-labs.github.io/validator/validator-0.0.21.tgz
+    version: 0.0.21
+  - apiVersion: v2
+    appVersion: 0.0.20
+    created: "2023-11-16T18:48:19.056504876Z"
+    description: Monitor results created by validator plugins and upload them to a
+      configurable sink
+    digest: b4262f18e5bb3f1c516e8c4683b1973b111e9e372554d7fd5e9615ceb0a5d684
+    name: validator
+    type: application
+    urls:
+    - https://spectrocloud-labs.github.io/validator/validator-0.0.20.tgz
+    version: 0.0.20
+  - apiVersion: v2
+    appVersion: 0.0.19
+    created: "2023-11-16T17:56:25.894784674Z"
+    description: Monitor results created by validator plugins and upload them to a
+      configurable sink
+    digest: c1a7232013405b9275a903ecb31b13744031b4e48eeb21c8ef9dd31cc766ef8b
+    name: validator
+    type: application
+    urls:
+    - https://spectrocloud-labs.github.io/validator/validator-0.0.19.tgz
+    version: 0.0.19
+  - apiVersion: v2
+    appVersion: 0.0.18
+    created: "2023-11-12T16:41:45.775936984Z"
+    description: Monitor results created by validator plugins and upload them to a
+      configurable sink
+    digest: a35163d19e807d5460d8ea1f393109e312f2bafc9a0af455831f176b88c284fe
+    name: validator
+    type: application
+    urls:
+    - https://spectrocloud-labs.github.io/validator/validator-0.0.18.tgz
+    version: 0.0.18
+  - apiVersion: v2
+    appVersion: 0.0.17
+    created: "2023-11-10T23:29:08.131386619Z"
+    description: Monitor results created by validator plugins and upload them to a
+      configurable sink
+    digest: 113354a054040e70c21b5abdf6b092e25735e15eba9ba91ecf3b8fdec7075e59
+    name: validator
+    type: application
+    urls:
+    - https://spectrocloud-labs.github.io/validator/validator-0.0.17.tgz
+    version: 0.0.17
+  - apiVersion: v2
+    appVersion: 0.0.16
+    created: "2023-11-10T22:44:23.420069303Z"
+    description: Monitor results created by validator plugins and upload them to a
+      configurable sink
+    digest: c810f125e469ffd69440d4cd2e7f5e27ad4d78f2cbc09e5df9c22237359260af
+    name: validator
+    type: application
+    urls:
+    - https://spectrocloud-labs.github.io/validator/validator-0.0.16.tgz
+    version: 0.0.16
+  - apiVersion: v2
+    appVersion: 0.0.15
+    created: "2023-11-10T04:58:26.767808982Z"
+    description: Monitor results created by validator plugins and upload them to a
+      configurable sink
+    digest: 9c0f50814fdfb14355afe43dab8053542ac38c28f66abc0c4f1947f41b88ab94
+    name: validator
+    type: application
+    urls:
+    - https://spectrocloud-labs.github.io/validator/validator-0.0.15.tgz
+    version: 0.0.15
+  - apiVersion: v2
+    appVersion: 0.0.14
+    created: "2023-11-10T03:59:31.200177878Z"
+    description: Monitor results created by validator plugins and upload them to a
+      configurable sink
+    digest: c3d689bd1236b673dd8ee96fc59033610173920b37c769d961cace94d740c35d
+    name: validator
+    type: application
+    urls:
+    - https://spectrocloud-labs.github.io/validator/validator-0.0.14.tgz
+    version: 0.0.14
+  - apiVersion: v2
+    appVersion: 0.0.13
+    created: "2023-11-10T00:13:49.14822431Z"
+    description: Monitor results created by validator plugins and upload them to a
+      configurable sink
+    digest: 9ac6a59d16887ccbe0d857a52ed1562c5d401d1831a6e66de308fb872bb7a5bc
+    name: validator
+    type: application
+    urls:
+    - https://spectrocloud-labs.github.io/validator/validator-0.0.13.tgz
+    version: 0.0.13
+  - apiVersion: v2
+    appVersion: 0.0.12
+    created: "2023-11-09T23:21:29.534859949Z"
+    description: Monitor results created by validator plugins and upload them to a
+      configurable sink
+    digest: a5008a4b291e87b82b54531b4d829f4e6444455c06beba6145553848e42bf0ad
+    name: validator
+    type: application
+    urls:
+    - https://spectrocloud-labs.github.io/validator/validator-0.0.12.tgz
+    version: 0.0.12
+  - apiVersion: v2
+    appVersion: 0.0.11
+    created: "2023-11-09T21:38:04.265308138Z"
+    description: Monitor results created by validator plugins and upload them to a
+      configurable sink
+    digest: caf7c9dc01f1c9dbc98c6e448ac14388c6afe322a2bc84a283a4c99329d339ed
+    name: validator
+    type: application
+    urls:
+    - https://spectrocloud-labs.github.io/validator/validator-0.0.11.tgz
+    version: 0.0.11
+  - apiVersion: v2
     appVersion: 0.0.10
     created: "2023-10-20T21:37:14.715414574Z"
     description: Monitor results created by validator plugins and upload them to a
@@ -121,4 +473,4 @@ entries:
     urls:
     - https://spectrocloud-labs.github.io/validator/validator-0.0.1.tgz
     version: 0.0.1
-generated: "2023-10-20T21:37:14.713569726Z"
+generated: "2024-06-07T03:51:29.960298366Z"
