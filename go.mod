@@ -6,7 +6,7 @@ toolchain go1.22.4
 
 require (
 	buf.build/gen/go/spectrocloud/spectro-cleanup/connectrpc/go v1.16.2-20240205164452-95dfd137cb54.1
-	buf.build/gen/go/spectrocloud/spectro-cleanup/protocolbuffers/go v1.34.1-20240205164452-95dfd137cb54.1
+	buf.build/gen/go/spectrocloud/spectro-cleanup/protocolbuffers/go v1.34.2-20240205164452-95dfd137cb54.2
 	connectrpc.com/connect v1.16.2
 	github.com/go-logr/logr v1.4.2
 	github.com/onsi/ginkgo/v2 v2.19.0
@@ -71,7 +71,7 @@ require (
 	golang.org/x/tools v0.22.0 // indirect
 	gomodules.xyz/jsonpatch/v2 v2.4.0 // indirect
 	google.golang.org/appengine v1.6.7 // indirect
-	google.golang.org/protobuf v1.34.1 // indirect
+	google.golang.org/protobuf v1.34.2 // indirect
 	gopkg.in/inf.v0 v0.9.1 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
