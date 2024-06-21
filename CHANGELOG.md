@@ -1,5 +1,23 @@
 # Changelog
 
+## [0.0.43](https://github.com/validator-labs/validator/compare/v0.0.42...v0.0.43) (2024-06-21)
+
+
+### Bug Fixes
+
+* **deps:** update golang.org/x/exp digest to 7f521ea ([#292](https://github.com/validator-labs/validator/issues/292)) ([6105c07](https://github.com/validator-labs/validator/commit/6105c072e37dfae5dc30172c439a6e3d816bba6b))
+* **deps:** update kubernetes packages to v0.30.2 ([#291](https://github.com/validator-labs/validator/issues/291)) ([25e6ba7](https://github.com/validator-labs/validator/commit/25e6ba73ef59f144882a94262ad80f6eb7dab2a1))
+* **deps:** update module buf.build/gen/go/spectrocloud/spectro-cleanup/protocolbuffers/go to v1.34.2-20240205164452-95dfd137cb54.2 ([#290](https://github.com/validator-labs/validator/issues/290)) ([ed5b4ee](https://github.com/validator-labs/validator/commit/ed5b4ee083df20b4fced0d5de026dbfc7e8a899b))
+* **deps:** update module k8s.io/klog/v2 to v2.130.0 ([#293](https://github.com/validator-labs/validator/issues/293)) ([86457a3](https://github.com/validator-labs/validator/commit/86457a3b47efbf05bb6380589b45c35e62fe70fa))
+* **deps:** update module k8s.io/klog/v2 to v2.130.1 ([#301](https://github.com/validator-labs/validator/issues/301)) ([89611d8](https://github.com/validator-labs/validator/commit/89611d83111045d191772ada0df766f254780aad))
+* **deps:** update module sigs.k8s.io/cluster-api to v1.7.3 ([#288](https://github.com/validator-labs/validator/issues/288)) ([aab6436](https://github.com/validator-labs/validator/commit/aab6436e146026820a90c652509a65dca2c35e8e))
+
+
+### Other
+
+* bump plugin versions and regenerate chart README ([#302](https://github.com/validator-labs/validator/issues/302)) ([fe0058a](https://github.com/validator-labs/validator/commit/fe0058a5913ac32b33f4078e43473f95feb53b2d))
+* bump vsphere plugin version to 0.0.23 ([#286](https://github.com/validator-labs/validator/issues/286)) ([3e9c252](https://github.com/validator-labs/validator/commit/3e9c2520d9cf7148b47e130f4273bba19d291dad))
+
 ## [0.0.42](https://github.com/validator-labs/validator/compare/v0.0.41...v0.0.42) (2024-06-07)
 
 
