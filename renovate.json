@@ -3,7 +3,8 @@
   "extends": [
     "config:base",
     "helpers:pinGitHubActionDigests",
-    ":gitSignOff"
+    ":gitSignOff",
+    ":semanticCommitTypeAll(deps)"
   ],
   "addLabels": ["dependencies"],
   "postUpdateOptions": [
@@ -32,11 +33,6 @@
       "automerge": true
     },
     {
-      "matchManagers": ["crossplane"],
-      "addLabels": ["crossplane"],
-      "automerge": true
-    },
-    {
       "matchManagers": ["dockerfile"],
       "addLabels": ["docker"],
       "automerge": true
@@ -48,7 +44,7 @@
     },
     {
       "matchManagers": ["helm-values"],
-      "addLabels": ["helm_values"],
+      "addLabels": ["helm"],
       "automerge": true
     }
   ],
