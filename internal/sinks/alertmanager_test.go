@@ -86,7 +86,7 @@ func TestAlertManagerEmit(t *testing.T) {
 				},
 			},
 			server: httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-				fmt.Fprintf(w, "ok")
+				_, _ = fmt.Fprintf(w, "ok")
 			})),
 			expected: nil,
 		},

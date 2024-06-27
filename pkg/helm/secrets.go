@@ -73,7 +73,7 @@ func (s *secretsClient) List(ctx context.Context, labels klabels.Selector, names
 	}
 
 	// iterate over the Helm secrets and decode each release
-	var releases []*Release
+	releases := make([]*Release, 0, len(list.Items))
 	for _, item := range list.Items {
 		cpy := item
 		rls, err := decodeRelease(&cpy, string(item.Data["release"]))

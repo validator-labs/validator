@@ -125,10 +125,7 @@ func (r *ValidatorConfigReconciler) Reconcile(ctx context.Context, req ctrl.Requ
 	}()
 
 	// deploy/redeploy plugins as required
-	if err := r.redeployIfNeeded(ctx, vc); err != nil {
-		r.Log.V(0).Error(err, "ValidatorConfig plugin deployment failed", "namespace", vc.Namespace, "name", vc.Name)
-		return ctrl.Result{}, err
-	}
+	r.redeployIfNeeded(ctx, vc)
 
 	// ensure cleanup finalizer
 	ensureFinalizer(vc, CleanupFinalizer)
@@ -145,7 +142,7 @@ func (r *ValidatorConfigReconciler) SetupWithManager(mgr ctrl.Manager) error {
 }
 
 // redeployIfNeeded deploys/redeploys each validator plugin in a ValidatorConfig and deletes plugins that have been removed
-func (r *ValidatorConfigReconciler) redeployIfNeeded(ctx context.Context, vc *v1alpha1.ValidatorConfig) error {
+func (r *ValidatorConfigReconciler) redeployIfNeeded(ctx context.Context, vc *v1alpha1.ValidatorConfig) {
 	specPlugins := make(map[string]bool)
 	conditions := make([]v1alpha1.ValidatorPluginCondition, len(vc.Spec.Plugins))
 
@@ -232,8 +229,6 @@ func (r *ValidatorConfigReconciler) redeployIfNeeded(ctx context.Context, vc *v1
 
 	// update plugin conditions
 	vc.Status.Conditions = conditions
-
-	return nil
 }
 
 func (r *ValidatorConfigReconciler) configureHelmOpts(ctx context.Context, nn types.NamespacedName, opts *helm.Options) error {

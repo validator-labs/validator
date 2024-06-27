@@ -54,7 +54,11 @@ func (c *helmClient) Delete(name, namespace string) error {
 		return err
 	}
 	if !preserveFiles {
-		defer os.Remove(kubeConfig)
+		defer func() {
+			if err := os.Remove(kubeConfig); err != nil {
+				klog.Errorf("failed to remove temp file %s: %v", kubeConfig, err)
+			}
+		}()
 	}
 
 	args := []string{"delete", name, "--namespace", namespace, "--kubeconfig", kubeConfig}
@@ -84,7 +88,11 @@ func (c *helmClient) run(name, namespace string, options Options, command string
 		return err
 	}
 	if !preserveFiles {
-		defer os.Remove(kubeConfig)
+		defer func() {
+			if err := os.Remove(kubeConfig); err != nil {
+				klog.Errorf("failed to remove temp file %s: %v", kubeConfig, err)
+			}
+		}()
 	}
 
 	args := []string{command, name}
@@ -129,7 +137,11 @@ func (c *helmClient) run(name, namespace string, options Options, command string
 			return errors.Wrap(err, "close temp file")
 		}
 		if !preserveFiles {
-			defer os.Remove(tempFile.Name())
+			defer func() {
+				if err := os.Remove(tempFile.Name()); err != nil {
+					klog.Errorf("failed to remove temp file %s: %v", tempFile.Name(), err)
+				}
+			}()
 		}
 
 		// Wait quickly so helm will find the file
