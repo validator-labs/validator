@@ -111,14 +111,14 @@ type ValidationResult struct {
 func (r *ValidationResult) Hash() string {
 	digester := crypto.MD5.New()
 
-	fmt.Fprint(digester, r.ObjectMeta.UID)
-	fmt.Fprint(digester, r.Spec)
-	fmt.Fprint(digester, r.Status.State)
+	_, _ = fmt.Fprint(digester, r.ObjectMeta.UID)
+	_, _ = fmt.Fprint(digester, r.Spec)
+	_, _ = fmt.Fprint(digester, r.Status.State)
 
 	for _, condition := range r.Status.ValidationConditions {
 		c := condition.DeepCopy()
 		c.LastValidationTime = metav1.Time{}
-		fmt.Fprint(digester, c)
+		_, _ = fmt.Fprint(digester, c)
 	}
 
 	hash := digester.Sum(nil)
