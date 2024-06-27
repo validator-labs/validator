@@ -3,6 +3,17 @@ ifneq (,$(wildcard ./.env))
 	export
 endif
 
+# Output
+TIME   = `date +%H:%M:%S`
+BLUE   := $(shell printf "\033[34m")
+YELLOW := $(shell printf "\033[33m")
+RED    := $(shell printf "\033[31m")
+GREEN  := $(shell printf "\033[32m")
+CNone  := $(shell printf "\033[0m")
+INFO = echo ${TIME} ${BLUE}[ INFO ]${CNone}
+OK   = echo ${TIME} ${GREEN}[ OK ]${CNone}
+ERR  = echo ${TIME} ${RED}[ ERR ]${CNone} "error:"
+
 # Image URL to use all building/pushing image targets
 IMG ?= quay.io/validator-labs/validator:latest
 CERTS_INIT_IMG ?= quay.io/validator-labs/validator-certs-init:latest
