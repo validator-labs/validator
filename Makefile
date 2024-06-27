@@ -49,7 +49,7 @@ help: ## Display this help.
 
 ##@ Development
 
-reviewable: manifests fmt vet lint helm-doc-gen ## Ensure code is ready for review
+reviewable: manifests fmt vet lint ## Ensure code is ready for review
 	go mod tidy
 
 check-diff: reviewable ## Execute auto-gen code commands and ensure branch is clean
