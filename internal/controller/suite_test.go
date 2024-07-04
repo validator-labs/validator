@@ -45,7 +45,7 @@ import (
 	"github.com/validator-labs/validator/internal/kube"
 	"github.com/validator-labs/validator/internal/sinks"
 	"github.com/validator-labs/validator/pkg/helm"
-	helmsecrets "github.com/validator-labs/validator/pkg/helm/secrets"
+	"github.com/validator-labs/validator/pkg/helm/release"
 	"github.com/validator-labs/validator/pkg/util"
 	//+kubebuilder:scaffold:imports
 )
@@ -146,7 +146,7 @@ var _ = BeforeSuite(func() {
 	err = (&ValidatorConfigReconciler{
 		Client:            k8sManager.GetClient(),
 		HelmClient:        helm.NewHelmClient(rawConfig),
-		HelmSecretsClient: helmsecrets.NewSecretsClient(k8sManager.GetClient()),
+		HelmReleaseClient: release.NewHelmReleaseClient(k8sManager.GetClient()),
 		Log:               ctrl.Log.WithName("controllers").WithName("ValidatorConfig"),
 		Scheme:            k8sManager.GetScheme(),
 	}).SetupWithManager(k8sManager)

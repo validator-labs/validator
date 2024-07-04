@@ -1,20 +1,5 @@
-/*
-Copyright The Helm Authors.
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-	http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-*/
-
-// Package secrets includes a client for fetching Helm releases from Kubernetes secrets.
-package secrets
+// Package release includes a client for fetching Helm releases from Kubernetes secrets.
+package release
 
 import (
 	"bytes"
@@ -41,20 +26,20 @@ type Client interface {
 	Get(context.Context, string, string) (*Release, error)
 }
 
-// HelmSecretsClient implements the Client interface.
-type HelmSecretsClient struct {
+// HelmReleaseClient implements the Client interface.
+type HelmReleaseClient struct {
 	kubeClient client.Client
 }
 
-// NewSecretsClient initializes a new HelmSecretsClient.
-func NewSecretsClient(client client.Client) *HelmSecretsClient {
-	return &HelmSecretsClient{
+// NewHelmReleaseClient initializes a new HelmReleaseClient.
+func NewHelmReleaseClient(client client.Client) *HelmReleaseClient {
+	return &HelmReleaseClient{
 		kubeClient: client,
 	}
 }
 
 // List fetches all Helm releases in a namespace, filtered by a label selector.
-func (s *HelmSecretsClient) List(ctx context.Context, labels klabels.Selector, namespace string) ([]*Release, error) {
+func (s *HelmReleaseClient) List(ctx context.Context, labels klabels.Selector, namespace string) ([]*Release, error) {
 	// ensure the label selector includes the 'owner: helm' label
 	req, err := klabels.NewRequirement("owner", selection.Equals, []string{"helm"})
 	if err != nil {
@@ -92,7 +77,7 @@ func (s *HelmSecretsClient) List(ctx context.Context, labels klabels.Selector, n
 }
 
 // Get fetches the latest Helm release by name and namespace.
-func (s *HelmSecretsClient) Get(ctx context.Context, name string, namespace string) (*Release, error) {
+func (s *HelmReleaseClient) Get(ctx context.Context, name string, namespace string) (*Release, error) {
 	ls := klabels.Set{}
 	ls["name"] = name
 	releaseList, err := s.List(ctx, ls.AsSelector(), namespace)

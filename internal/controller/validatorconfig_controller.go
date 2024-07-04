@@ -45,7 +45,7 @@ import (
 	cleanv1 "buf.build/gen/go/spectrocloud/spectro-cleanup/protocolbuffers/go/cleanup/v1"
 	v1alpha1 "github.com/validator-labs/validator/api/v1alpha1"
 	"github.com/validator-labs/validator/pkg/helm"
-	helmsecrets "github.com/validator-labs/validator/pkg/helm/secrets"
+	helmrelease "github.com/validator-labs/validator/pkg/helm/release"
 )
 
 const (
@@ -60,7 +60,7 @@ const (
 type ValidatorConfigReconciler struct {
 	client.Client
 	HelmClient        helm.Client
-	HelmSecretsClient helmsecrets.Client
+	HelmReleaseClient helmrelease.Client
 	Log               logr.Logger
 	Scheme            *runtime.Scheme
 }
@@ -293,7 +293,7 @@ func getPluginHashKey(pluginName string) string {
 func (r *ValidatorConfigReconciler) deletePlugins(ctx context.Context, vc *v1alpha1.ValidatorConfig) error {
 	var wg sync.WaitGroup
 	for _, p := range vc.Spec.Plugins {
-		release, err := r.HelmSecretsClient.Get(ctx, p.Chart.Name, vc.Namespace)
+		release, err := r.HelmReleaseClient.Get(ctx, p.Chart.Name, vc.Namespace)
 		if err != nil {
 			if !apierrs.IsNotFound(err) {
 				return err

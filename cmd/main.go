@@ -38,7 +38,7 @@ import (
 	"github.com/validator-labs/validator/internal/kube"
 	"github.com/validator-labs/validator/internal/sinks"
 	"github.com/validator-labs/validator/pkg/helm"
-	helmsecrets "github.com/validator-labs/validator/pkg/helm/secrets"
+	"github.com/validator-labs/validator/pkg/helm/release"
 	//+kubebuilder:scaffold:imports
 )
 
@@ -130,7 +130,7 @@ func main() {
 	if err = (&controller.ValidatorConfigReconciler{
 		Client:            mgr.GetClient(),
 		HelmClient:        helm.NewHelmClient(rawConfig),
-		HelmSecretsClient: helmsecrets.NewSecretsClient(mgr.GetClient()),
+		HelmReleaseClient: release.NewHelmReleaseClient(mgr.GetClient()),
 		Log:               ctrl.Log.WithName("controllers").WithName("ValidatorConfig"),
 		Scheme:            mgr.GetScheme(),
 	}).SetupWithManager(mgr); err != nil {

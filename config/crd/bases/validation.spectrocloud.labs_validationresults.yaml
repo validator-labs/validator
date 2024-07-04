@@ -30,7 +30,7 @@ spec:
     name: v1alpha1
     schema:
       openAPIV3Schema:
-        description: ValidationResult is the Schema for the validationresults API
+        description: ValidationResult is the Schema for the validationresults API.
         properties:
           apiVersion:
             description: |-
@@ -50,7 +50,7 @@ spec:
           metadata:
             type: object
           spec:
-            description: ValidationResultSpec defines the desired state of ValidationResult
+            description: ValidationResultSpec defines the desired state of ValidationResult.
             properties:
               expectedResults:
                 description: The number of rules in the validator plugin spec, hence
@@ -58,15 +58,19 @@ spec:
                 minimum: 1
                 type: integer
               plugin:
+                description: Plugin is the plugin code of the validator plugin that
+                  was executed.
                 type: string
             required:
             - expectedResults
             - plugin
             type: object
           status:
-            description: ValidationResultStatus defines the observed state of ValidationResult
+            description: ValidationResultStatus defines the observed state of ValidationResult.
             properties:
               conditions:
+                description: Conditions is a list of conditions that describe the
+                  current state of the ValidationResult.
                 items:
                   description: Condition defines an observation of a Cluster API resource
                     operational state.
@@ -111,9 +115,14 @@ spec:
                   type: object
                 type: array
               state:
+                description: State is the overall state of the validation result.
                 type: string
               validationConditions:
+                description: ValidationConditions is a list of conditions that describe
+                  the validation rules associated with the ValidationResult.
                 items:
+                  description: ValidationCondition describes the state of a validation
+                    rule.
                   properties:
                     details:
                       description: Human-readable messages indicating additional details

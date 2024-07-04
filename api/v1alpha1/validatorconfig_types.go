@@ -23,16 +23,20 @@ import (
 
 // ValidatorConfigSpec defines the desired state of ValidatorConfig.
 type ValidatorConfigSpec struct {
+	// Plugins defines the configuration for the validator plugins.
 	Plugins []HelmRelease `json:"plugins,omitempty" yaml:"plugins,omitempty"`
-	Sink    *Sink         `json:"sink,omitempty" yaml:"sink,omitempty"`
+
+	// Sink defines the configuration for the notification sink.
+	Sink *Sink `json:"sink,omitempty" yaml:"sink,omitempty"`
 }
 
 // Sink defines the configuration for a notification sink.
 type Sink struct {
+	// Type of the sink.
 	// +kubebuilder:validation:Enum=alertmanager;slack
 	Type string `json:"type" yaml:"type"`
 
-	// Name of a K8s secret containing configuration details for the sink
+	// SecretName is the name of a K8s secret containing configuration details for the sink.
 	SecretName string `json:"secretName" yaml:"secretName"`
 }
 

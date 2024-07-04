@@ -17,7 +17,7 @@ spec:
   - name: v1alpha1
     schema:
       openAPIV3Schema:
-        description: ValidatorConfig is the Schema for the validatorconfigs API
+        description: ValidatorConfig is the Schema for the validatorconfigs API.
         properties:
           apiVersion:
             description: |-
@@ -37,24 +37,33 @@ spec:
           metadata:
             type: object
           spec:
-            description: ValidatorConfigSpec defines the desired state of ValidatorConfig
+            description: ValidatorConfigSpec defines the desired state of ValidatorConfig.
             properties:
               plugins:
+                description: Plugins defines the configuration for the validator plugins.
                 items:
+                  description: HelmRelease defines the configuration for a Helm chart
+                    release.
                   properties:
                     chart:
+                      description: Chart defines the Helm chart to be installed.
                       properties:
                         authSecretName:
-                          type: string
-                        caFile:
+                          description: AuthSecretName is the name of the K8s secret
+                            containing the authentication details for the Helm repository.
                           type: string
                         insecureSkipVerify:
+                          description: InsecureSkipTLSVerify skips the verification
+                            of the server's certificate chain and host name.
                           type: boolean
                         name:
+                          description: Name of the Helm chart.
                           type: string
                         repository:
+                          description: Repository URL of the Helm chart.
                           type: string
                         version:
+                          description: Version of the Helm chart.
                           type: string
                       required:
                       - name
@@ -62,6 +71,8 @@ spec:
                       - version
                       type: object
                     values:
+                      description: Values defines the values to be passed to the Helm
+                        chart.
                       type: string
                   required:
                   - chart
@@ -69,12 +80,14 @@ spec:
                   type: object
                 type: array
               sink:
+                description: Sink defines the configuration for the notification sink.
                 properties:
                   secretName:
-                    description: Name of a K8s secret containing configuration details
-                      for the sink
+                    description: SecretName is the name of a K8s secret containing
+                      configuration details for the sink.
                     type: string
                   type:
+                    description: Type of the sink.
                     enum:
                     - alertmanager
                     - slack
@@ -89,6 +102,8 @@ spec:
             properties:
               conditions:
                 items:
+                  description: ValidatorPluginCondition describes the state of a Validator
+                    plugin.
                   properties:
                     lastUpdatedTime:
                       description: |-
