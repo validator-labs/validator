@@ -21,31 +21,50 @@ import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
-// ValidatorConfigSpec defines the desired state of ValidatorConfig
+// ValidatorConfigSpec defines the desired state of ValidatorConfig.
 type ValidatorConfigSpec struct {
+	// Plugins defines the configuration for the validator plugins.
 	Plugins []HelmRelease `json:"plugins,omitempty" yaml:"plugins,omitempty"`
-	Sink    *Sink         `json:"sink,omitempty" yaml:"sink,omitempty"`
+
+	// Sink defines the configuration for the notification sink.
+	Sink *Sink `json:"sink,omitempty" yaml:"sink,omitempty"`
 }
 
+// Sink defines the configuration for a notification sink.
 type Sink struct {
+	// Type of the sink.
 	// +kubebuilder:validation:Enum=alertmanager;slack
 	Type string `json:"type" yaml:"type"`
-	// Name of a K8s secret containing configuration details for the sink
+
+	// SecretName is the name of a K8s secret containing configuration details for the sink.
 	SecretName string `json:"secretName" yaml:"secretName"`
 }
 
+// HelmRelease defines the configuration for a Helm chart release.
 type HelmRelease struct {
-	Chart  HelmChart `json:"chart" yaml:"chart"`
-	Values string    `json:"values" yaml:"values"`
+	// Chart defines the Helm chart to be installed.
+	Chart HelmChart `json:"chart" yaml:"chart"`
+
+	// Values defines the values to be passed to the Helm chart.
+	Values string `json:"values" yaml:"values"`
 }
 
+// HelmChart defines the configuration for a Helm chart.
 type HelmChart struct {
-	Name                  string `json:"name" yaml:"name"`
-	Repository            string `json:"repository" yaml:"repository"`
-	Version               string `json:"version" yaml:"version"`
-	CaFile                string `json:"caFile,omitempty" yaml:"caFile,omitempty"`
-	InsecureSkipTlsVerify bool   `json:"insecureSkipVerify,omitempty" yaml:"insecureSkipVerify,omitempty"`
-	AuthSecretName        string `json:"authSecretName,omitempty" yaml:"authSecretName,omitempty"`
+	// Name of the Helm chart.
+	Name string `json:"name" yaml:"name"`
+
+	// Repository URL of the Helm chart.
+	Repository string `json:"repository" yaml:"repository"`
+
+	// Version of the Helm chart.
+	Version string `json:"version" yaml:"version"`
+
+	// InsecureSkipTLSVerify skips the verification of the server's certificate chain and host name.
+	InsecureSkipTLSVerify bool `json:"insecureSkipVerify,omitempty" yaml:"insecureSkipVerify,omitempty"`
+
+	// AuthSecretName is the name of the K8s secret containing the authentication details for the Helm repository.
+	AuthSecretName string `json:"authSecretName,omitempty" yaml:"authSecretName,omitempty"`
 }
 
 // ValidatorConfigStatus defines the observed state of ValidatorConfig
@@ -56,6 +75,7 @@ type ValidatorConfigStatus struct {
 	Conditions []ValidatorPluginCondition `json:"conditions,omitempty" patchStrategy:"merge" patchMergeKey:"type"`
 }
 
+// ValidatorPluginCondition describes the state of a Validator plugin.
 type ValidatorPluginCondition struct {
 	// Type of condition in CamelCase or in foo.example.com/CamelCase.
 	// Many .condition.type values are consistent across resources like Available, but because arbitrary conditions
@@ -92,7 +112,7 @@ const HelmChartDeployedCondition ConditionType = "HelmChartDeployed"
 //+kubebuilder:object:root=true
 //+kubebuilder:subresource:status
 
-// ValidatorConfig is the Schema for the validatorconfigs API
+// ValidatorConfig is the Schema for the validatorconfigs API.
 type ValidatorConfig struct {
 	metav1.TypeMeta   `json:",inline"`
 	metav1.ObjectMeta `json:"metadata,omitempty"`
@@ -103,7 +123,7 @@ type ValidatorConfig struct {
 
 //+kubebuilder:object:root=true
 
-// ValidatorConfigList contains a list of ValidatorConfig
+// ValidatorConfigList contains a list of ValidatorConfig.
 type ValidatorConfigList struct {
 	metav1.TypeMeta `json:",inline"`
 	metav1.ListMeta `json:"metadata,omitempty"`

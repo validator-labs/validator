@@ -7,6 +7,7 @@ import (
 	"github.com/validator-labs/validator/pkg/types"
 )
 
+// CheckTestCase checks the result of a validation rule against the expected result.
 func CheckTestCase(t *testing.T, res *types.ValidationRuleResult, expectedResult types.ValidationRuleResult, err, expectedError error) {
 	if !reflect.DeepEqual(res.State, expectedResult.State) {
 		t.Errorf("expected state (%+v), got (%+v)", expectedResult.State, res.State)

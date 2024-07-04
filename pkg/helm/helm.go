@@ -1,3 +1,4 @@
+// Package helm contains the helm CLI client interface and implementation.
 package helm
 
 import (
@@ -15,8 +16,11 @@ import (
 )
 
 var (
-	CommandPath   = "./helm"
-	preserveFiles = false // whether to preserve kubeconfig and Helm values files
+	// CommandPath is the location of the helm binary.
+	CommandPath = "./helm"
+
+	// preserveFiles controls whether to preserve kubeconfig and Helm values files.
+	preserveFiles = false
 )
 
 func init() {
@@ -25,14 +29,15 @@ func init() {
 	}
 }
 
-// HelmClient is an interface for interacting with Helm
-type HelmClient interface {
+// Client is an interface for interacting with the Helm CLI.
+type Client interface {
 	Delete(name, namespace string) error
 	Pull(options Options) error
 	Upgrade(name, namespace string, options Options) error
 }
 
-type helmClient struct {
+// CLIClient is a Helm client that interacts with the Helm CLI.
+type CLIClient struct {
 	config   *clientcmdapi.Config
 	helmPath string
 
@@ -41,14 +46,15 @@ type helmClient struct {
 }
 
 // NewHelmClient creates a new Helm client from the given config
-func NewHelmClient(config *clientcmdapi.Config) *helmClient {
-	return &helmClient{
+func NewHelmClient(config *clientcmdapi.Config) *CLIClient {
+	return &CLIClient{
 		config:   config,
 		helmPath: CommandPath,
 	}
 }
 
-func (c *helmClient) Delete(name, namespace string) error {
+// Delete deletes a Helm release.
+func (c *CLIClient) Delete(name, namespace string) error {
 	kubeConfig, err := writeKubeConfig(c.config)
 	if err != nil {
 		return err
@@ -65,7 +71,8 @@ func (c *helmClient) Delete(name, namespace string) error {
 	return c.exec(args)
 }
 
-func (c *helmClient) Pull(options Options) error {
+// Pull downloads a Helm chart.
+func (c *CLIClient) Pull(options Options) error {
 	if options.Repo == "" {
 		return fmt.Errorf("chart repo cannot be null")
 	}
@@ -77,12 +84,13 @@ func (c *helmClient) Pull(options Options) error {
 	return c.exec(args)
 }
 
-func (c *helmClient) Upgrade(name, namespace string, options Options) error {
+// Upgrade upgrades a Helm release.
+func (c *CLIClient) Upgrade(name, namespace string, options Options) error {
 	options.ExtraArgs = append(options.ExtraArgs, "--install")
 	return c.run(name, namespace, options, "upgrade", options.ExtraArgs)
 }
 
-func (c *helmClient) run(name, namespace string, options Options, command string, extraArgs []string) error {
+func (c *CLIClient) run(name, namespace string, options Options, command string, extraArgs []string) error {
 	kubeConfig, err := writeKubeConfig(c.config)
 	if err != nil {
 		return err
@@ -190,7 +198,7 @@ func (c *helmClient) run(name, namespace string, options Options, command string
 	return c.exec(args)
 }
 
-func (c *helmClient) exec(args []string) error {
+func (c *CLIClient) exec(args []string) error {
 	if len(args) == 0 {
 		return nil
 	}

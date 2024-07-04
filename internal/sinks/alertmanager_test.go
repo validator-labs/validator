@@ -36,7 +36,7 @@ func TestAlertmanagerConfigure(t *testing.T) {
 			name:     "Fail (no endpoint)",
 			sink:     AlertmanagerSink{},
 			config:   map[string][]byte{},
-			expected: EndpointRequired,
+			expected: ErrEndpointRequired,
 		},
 		{
 			name: "Fail (invalid endpoint)",
@@ -44,7 +44,7 @@ func TestAlertmanagerConfigure(t *testing.T) {
 			config: map[string][]byte{
 				"endpoint": []byte("_not_an_endpoint_"),
 			},
-			expected: InvalidEndpoint,
+			expected: ErrInvalidEndpoint,
 		},
 		{
 			name: "Fail (invalid insecureSkipVerify)",
@@ -97,7 +97,7 @@ func TestAlertManagerEmit(t *testing.T) {
 			server: httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 				http.Error(w, "invalid auth", http.StatusUnauthorized)
 			})),
-			expected: SinkEmissionFailed,
+			expected: ErrSinkEmissionFailed,
 		},
 	}
 	for _, c := range cs {
