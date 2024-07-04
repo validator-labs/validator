@@ -103,7 +103,7 @@ var _ = BeforeSuite(func() {
 	}
 
 	// monkey-patch binary paths
-	helm.CommandPath = filepath.Join("..", "..", "bin", fmt.Sprintf("%s-%s", runtime.GOOS, runtime.GOARCH), "helm")
+	helm.CommandPath = filepath.Join("..", "..", "bin", "helm")
 
 	var err error
 	cfg, err = testEnv.Start()
