@@ -1,3 +1,4 @@
+// Package validationresult contains functions for handling ValidationResult objects.
 package validationresult
 
 import (
@@ -19,6 +20,7 @@ import (
 
 const validationErrorMsg = "Validation failed with an unexpected error"
 
+// Patcher is an interface for patching objects.
 type Patcher interface {
 	Patch(ctx context.Context, obj client.Object, opts ...patch.Option) error
 }
@@ -28,11 +30,9 @@ func HandleExistingValidationResult(vr *v1alpha1.ValidationResult, l logr.Logger
 	l = l.WithValues("name", vr.Name, "namespace", vr.Namespace, "state", vr.Status.State)
 
 	switch vr.Status.State {
-
 	case v1alpha1.ValidationInProgress:
 		// validations are only left in progress if an unexpected error occurred
 		l.V(0).Info("Previous validation failed with unexpected error")
-
 	case v1alpha1.ValidationFailed:
 		// log validation failure, but continue and retry
 		cs := getInvalidConditions(vr.Status.ValidationConditions)
@@ -43,7 +43,6 @@ func HandleExistingValidationResult(vr *v1alpha1.ValidationResult, l logr.Logger
 				)
 			}
 		}
-
 	case v1alpha1.ValidationSucceeded:
 		// log validation success, continue to re-validate
 		l.V(0).Info("Previous validation succeeded. Re-validating.")
@@ -104,7 +103,7 @@ func SafeUpdateValidationResult(ctx context.Context, p Patcher, vr *v1alpha1.Val
 	return nil
 }
 
-// updateValidationResultStatus updates a ValidationResult's status with the result of a single validation rule
+// updateValidationResultStatus updates a ValidationResult's status with the result of a single validation rule.
 func updateValidationResultStatus(vr *v1alpha1.ValidationResult, vrr *types.ValidationRuleResult, vrrErr error, l logr.Logger) {
 
 	// Finalize result State and Condition in the event of an unexpected error
@@ -143,7 +142,7 @@ func updateValidationResultStatus(vr *v1alpha1.ValidationResult, vrr *types.Vali
 	)
 }
 
-// getInvalidConditions filters a ValidationCondition array and returns all conditions corresponding to a failed validation
+// getInvalidConditions filters a ValidationCondition array and returns all conditions corresponding to a failed validation.
 func getInvalidConditions(conditions []v1alpha1.ValidationCondition) []v1alpha1.ValidationCondition {
 	invalidConditions := make([]v1alpha1.ValidationCondition, 0)
 	for _, c := range conditions {
@@ -154,7 +153,7 @@ func getInvalidConditions(conditions []v1alpha1.ValidationCondition) []v1alpha1.
 	return invalidConditions
 }
 
-// getConditionIndexByValidationRule retrieves the index of a condition from a ValidationCondition array matching a specific reason
+// getConditionIndexByValidationRule retrieves the index of a condition from a ValidationCondition array matching a specific reason.
 func getConditionIndexByValidationRule(conditions []v1alpha1.ValidationCondition, validationRule string) int {
 	for i, c := range conditions {
 		if c.ValidationRule == validationRule {

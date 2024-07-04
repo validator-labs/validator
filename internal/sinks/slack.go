@@ -12,28 +12,31 @@ import (
 	"github.com/validator-labs/validator/api/v1alpha1"
 )
 
+// SlackSink is a sink for sending validation results to Slack.
 type SlackSink struct {
 	apiToken  string
-	channelId string
+	channelID string
 	client    Client
 	log       logr.Logger
 }
 
+// Configure configures the SlackSink with the provided configuration.
 func (s *SlackSink) Configure(c Client, config map[string][]byte) error {
 	apiToken, ok := config["apiToken"]
 	if !ok {
 		return errors.New("invalid Slack configuration: apiToken required")
 	}
-	channelId, ok := config["channelId"]
+	channelID, ok := config["channelId"]
 	if !ok {
 		return errors.New("invalid Slack configuration: channelId required")
 	}
 	s.apiToken = string(apiToken)
-	s.channelId = string(channelId)
+	s.channelID = string(channelID)
 	s.client = c
 	return nil
 }
 
+// Emit sends a ValidationResult to Slack.
 func (s *SlackSink) Emit(r v1alpha1.ValidationResult) error {
 	api := slack.New(
 		s.apiToken,
@@ -46,16 +49,16 @@ func (s *SlackSink) Emit(r v1alpha1.ValidationResult) error {
 	}
 
 	_, timestamp, err := api.PostMessage(
-		s.channelId,
+		s.channelID,
 		slack.MsgOptionBlocks(s.buildSlackBlocks(r)...),
 		slack.MsgOptionUsername("Validator Bot"),
 		slack.MsgOptionAsUser(true),
 	)
 	if err != nil {
-		s.log.Error(err, "failed to post message", "channelId", s.channelId, "timestamp", timestamp)
+		s.log.Error(err, "failed to post message", "channelId", s.channelID, "timestamp", timestamp)
 		return err
 	}
-	s.log.V(0).Info("Successfully posted message to channel", "channelId", s.channelId, "timestamp", timestamp)
+	s.log.V(0).Info("Successfully posted message to channel", "channelId", s.channelID, "timestamp", timestamp)
 
 	return nil
 }

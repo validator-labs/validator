@@ -14,6 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+// Package main initializes the ValidationConfig and ValidationResult controllers.
 package main
 
 import (
@@ -37,6 +38,7 @@ import (
 	"github.com/validator-labs/validator/internal/kube"
 	"github.com/validator-labs/validator/internal/sinks"
 	"github.com/validator-labs/validator/pkg/helm"
+	helmsecrets "github.com/validator-labs/validator/pkg/helm/secrets"
 	//+kubebuilder:scaffold:imports
 )
 
@@ -128,7 +130,7 @@ func main() {
 	if err = (&controller.ValidatorConfigReconciler{
 		Client:            mgr.GetClient(),
 		HelmClient:        helm.NewHelmClient(rawConfig),
-		HelmSecretsClient: helm.NewSecretsClient(mgr.GetClient()),
+		HelmSecretsClient: helmsecrets.NewSecretsClient(mgr.GetClient()),
 		Log:               ctrl.Log.WithName("controllers").WithName("ValidatorConfig"),
 		Scheme:            mgr.GetScheme(),
 	}).SetupWithManager(mgr); err != nil {

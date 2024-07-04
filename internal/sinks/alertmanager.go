@@ -18,6 +18,7 @@ import (
 	"github.com/validator-labs/validator/api/v1alpha1"
 )
 
+// AlertmanagerSink is a sink for sending validation results to Alertmanager.
 type AlertmanagerSink struct {
 	client Client
 	log    logr.Logger
@@ -27,28 +28,36 @@ type AlertmanagerSink struct {
 	password string
 }
 
+// Alert is an Alertmanager alert.
 type Alert struct {
+	// Annotations are arbitrary key-value pairs.
 	Annotations map[string]string `json:"annotations"`
-	Labels      map[string]string `json:"labels"`
+
+	// Labels are key-value pairs that can be used to group and filter alerts.
+	Labels map[string]string `json:"labels"`
 }
 
 var (
-	InvalidEndpoint  = errors.New("invalid Alertmanager config: endpoint scheme and host are required")
-	EndpointRequired = errors.New("invalid Alertmanager config: endpoint required")
+	// ErrInvalidEndpoint is returned when an Alertmanager endpoint is invalid.
+	ErrInvalidEndpoint = errors.New("invalid Alertmanager config: endpoint scheme and host are required")
+
+	// ErrEndpointRequired is returned when the Alertmanager endpoint is not provided.
+	ErrEndpointRequired = errors.New("invalid Alertmanager config: endpoint required")
 )
 
+// Configure configures the AlertmanagerSink with the provided configuration.
 func (s *AlertmanagerSink) Configure(c Client, config map[string][]byte) error {
 	// endpoint
 	endpoint, ok := config["endpoint"]
 	if !ok {
-		return EndpointRequired
+		return ErrEndpointRequired
 	}
 	u, err := url.Parse(string(endpoint))
 	if err != nil {
 		return errors.Wrap(err, "invalid Alertmanager config: failed to parse endpoint")
 	}
 	if u.Scheme == "" || u.Host == "" {
-		return InvalidEndpoint
+		return ErrInvalidEndpoint
 	}
 	if u.Path != "" {
 		s.log.V(1).Info("stripping path from Alertmanager endpoint", "path", u.Path)
@@ -91,6 +100,7 @@ func (s *AlertmanagerSink) Configure(c Client, config map[string][]byte) error {
 	return nil
 }
 
+// Emit sends a ValidationResult to Alertmanager.
 func (s *AlertmanagerSink) Emit(r v1alpha1.ValidationResult) error {
 	alerts := make([]Alert, 0, len(r.Status.ValidationConditions))
 
@@ -145,7 +155,7 @@ func (s *AlertmanagerSink) Emit(r v1alpha1.ValidationResult) error {
 	}
 	if resp.StatusCode != 200 {
 		s.log.V(0).Info("failed to post alert", "endpoint", s.endpoint, "status", resp.Status, "code", resp.StatusCode)
-		return SinkEmissionFailed
+		return ErrSinkEmissionFailed
 	}
 
 	s.log.V(0).Info("Successfully posted alert to Alertmanager", "endpoint", s.endpoint, "status", resp.Status, "code", resp.StatusCode)

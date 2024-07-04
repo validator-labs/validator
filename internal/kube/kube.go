@@ -1,3 +1,4 @@
+// Package kube contains Kubernetes utilities.
 package kube
 
 import (
@@ -6,6 +7,7 @@ import (
 	clientcmdapi "k8s.io/client-go/tools/clientcmd/api"
 )
 
+// ConvertRestConfigToRawConfig converts a rest.Config to a clientcmdapi.Config.
 func ConvertRestConfigToRawConfig(config *rest.Config) (*clientcmdapi.Config, error) {
 	raw, err := convertRestConfigToClientConfig(config).RawConfig()
 	return &raw, err

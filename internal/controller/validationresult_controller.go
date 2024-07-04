@@ -54,6 +54,7 @@ type ValidationResultReconciler struct {
 //+kubebuilder:rbac:groups=validation.spectrocloud.labs,resources=validationresults/status,verbs=get;update;patch
 //+kubebuilder:rbac:groups=validation.spectrocloud.labs,resources=validationresults/finalizers,verbs=update
 
+// Reconcile reconciles a ValidationResult.
 func (r *ValidationResultReconciler) Reconcile(ctx context.Context, req ctrl.Request) (_ ctrl.Result, reterr error) {
 	r.Log.V(0).Info("Reconciling ValidationResult", "name", req.Name, "namespace", req.Namespace)
 

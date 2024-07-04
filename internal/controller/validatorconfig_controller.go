@@ -45,21 +45,22 @@ import (
 	cleanv1 "buf.build/gen/go/spectrocloud/spectro-cleanup/protocolbuffers/go/cleanup/v1"
 	v1alpha1 "github.com/validator-labs/validator/api/v1alpha1"
 	"github.com/validator-labs/validator/pkg/helm"
+	helmsecrets "github.com/validator-labs/validator/pkg/helm/secrets"
 )
 
 const (
-	// A finalizer added to a ValidatorConfig to ensure that plugin Helm releases are properly garbage collected
+	// CleanupFinalizer ensures that plugin Helm releases are properly garbage collected.
 	CleanupFinalizer = "validator/cleanup"
 
-	// An annotation added to a ValidatorConfig to determine whether or not to update a plugin's Helm release
+	// PluginValuesHash is an annotation key added to a ValidatorConfig to determine whether to update a plugin's Helm release.
 	PluginValuesHash = "validator/plugin-values"
 )
 
 // ValidatorConfigReconciler reconciles a ValidatorConfig object
 type ValidatorConfigReconciler struct {
 	client.Client
-	HelmClient        helm.HelmClient
-	HelmSecretsClient helm.SecretsClient
+	HelmClient        helm.Client
+	HelmSecretsClient helmsecrets.Client
 	Log               logr.Logger
 	Scheme            *runtime.Scheme
 }
@@ -68,6 +69,7 @@ type ValidatorConfigReconciler struct {
 //+kubebuilder:rbac:groups=validation.spectrocloud.labs,resources=validatorconfigs/status,verbs=get;update;patch
 //+kubebuilder:rbac:groups=validation.spectrocloud.labs,resources=validatorconfigs/finalizers,verbs=update
 
+// Reconcile reconciles a ValidatorConfig.
 func (r *ValidatorConfigReconciler) Reconcile(ctx context.Context, req ctrl.Request) (_ ctrl.Result, reterr error) {
 	r.Log.V(0).Info("Reconciling ValidatorConfig", "name", req.Name, "namespace", req.Namespace)
 
@@ -165,7 +167,7 @@ func (r *ValidatorConfigReconciler) redeployIfNeeded(ctx context.Context, vc *v1
 			Repo:                  p.Chart.Repository,
 			Version:               p.Chart.Version,
 			Values:                p.Values,
-			InsecureSkipTlsVerify: p.Chart.InsecureSkipTlsVerify,
+			InsecureSkipTLSVerify: p.Chart.InsecureSkipTLSVerify,
 		}
 
 		if p.Chart.AuthSecretName != "" {

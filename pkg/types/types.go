@@ -1,3 +1,4 @@
+// Package types contains structs used by to construct ValidationResults.
 package types
 
 import "github.com/validator-labs/validator/api/v1alpha1"
@@ -20,9 +21,13 @@ func (v *ValidationResponse) AddResult(vrr *ValidationRuleResult, err error) {
 	v.ValidationRuleErrors = append(v.ValidationRuleErrors, err)
 }
 
+// SinkType is the type of sink to which a notification should be sent.
 type SinkType string
 
 const (
+	// SinkTypeAlertmanager is an Alertmanager sink.
 	SinkTypeAlertmanager SinkType = "alertmanager"
-	SinkTypeSlack        SinkType = "slack"
+
+	// SinkTypeSlack is a Slack sink.
+	SinkTypeSlack SinkType = "slack"
 )

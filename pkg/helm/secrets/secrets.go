@@ -12,7 +12,9 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-package helm
+
+// Package secrets includes a client for fetching Helm releases from Kubernetes secrets.
+package secrets
 
 import (
 	"bytes"
@@ -33,26 +35,26 @@ import (
 
 var magicGzip = []byte{0x1f, 0x8b, 0x08}
 
-// SecretsClient is a subset of the kubernetes SecretsInterface, geared towards handling Helm secrets.
-type SecretsClient interface {
+// Client is a subset of the kubernetes SecretsInterface, geared towards handling Helm secrets.
+type Client interface {
 	List(context.Context, klabels.Selector, string) ([]*Release, error)
 	Get(context.Context, string, string) (*Release, error)
 }
 
-// secretsClient implements the SecretsClient interface.
-type secretsClient struct {
+// HelmSecretsClient implements the Client interface.
+type HelmSecretsClient struct {
 	kubeClient client.Client
 }
 
-// NewSecretsClient initializes a new secretsClient
-func NewSecretsClient(client client.Client) *secretsClient {
-	return &secretsClient{
+// NewSecretsClient initializes a new HelmSecretsClient.
+func NewSecretsClient(client client.Client) *HelmSecretsClient {
+	return &HelmSecretsClient{
 		kubeClient: client,
 	}
 }
 
-// List fetches all Helm releases in a namespace, filtered by a label selector
-func (s *secretsClient) List(ctx context.Context, labels klabels.Selector, namespace string) ([]*Release, error) {
+// List fetches all Helm releases in a namespace, filtered by a label selector.
+func (s *HelmSecretsClient) List(ctx context.Context, labels klabels.Selector, namespace string) ([]*Release, error) {
 	// ensure the label selector includes the 'owner: helm' label
 	req, err := klabels.NewRequirement("owner", selection.Equals, []string{"helm"})
 	if err != nil {
@@ -89,8 +91,8 @@ func (s *secretsClient) List(ctx context.Context, labels klabels.Selector, names
 	return releases, nil
 }
 
-// Get fetches the latest Helm release by name and namespace
-func (s *secretsClient) Get(ctx context.Context, name string, namespace string) (*Release, error) {
+// Get fetches the latest Helm release by name and namespace.
+func (s *HelmSecretsClient) Get(ctx context.Context, name string, namespace string) (*Release, error) {
 	ls := klabels.Set{}
 	ls["name"] = name
 	releaseList, err := s.List(ctx, ls.AsSelector(), namespace)
@@ -109,7 +111,7 @@ func (s *secretsClient) Get(ctx context.Context, name string, namespace string) 
 	return latest, nil
 }
 
-// decodeRelease decodes secret data into a Helm release
+// decodeRelease decodes secret data into a Helm release.
 func decodeRelease(secret *corev1.Secret, data string) (*Release, error) {
 	b, err := base64.StdEncoding.DecodeString(data)
 	if err != nil {
