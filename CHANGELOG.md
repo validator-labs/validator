@@ -1,5 +1,25 @@
 # Changelog
 
+## [0.0.44](https://github.com/validator-labs/validator/compare/v0.0.43...v0.0.44) (2024-07-10)
+
+
+### Other
+
+* bump AWS and Azure plugins ([#309](https://github.com/validator-labs/validator/issues/309)) ([359f450](https://github.com/validator-labs/validator/commit/359f450d9c6a0d4e5e5d9405e1e28ec823369237))
+* remove get-os.sh ([7c7865e](https://github.com/validator-labs/validator/commit/7c7865eedde12478d8d3ff49e07c077cc5fb61af))
+
+
+### Dependency Updates
+
+* **deps:** update dependency go to v1.22.5 ([#306](https://github.com/validator-labs/validator/issues/306)) ([be8084f](https://github.com/validator-labs/validator/commit/be8084fd28f49789ea97d6fe141961f4fe85c2bf))
+* **deps:** update golang.org/x/exp digest to 46b0784 ([#308](https://github.com/validator-labs/validator/issues/308)) ([42f308c](https://github.com/validator-labs/validator/commit/42f308c6acea38e1a75e324496bcf1ede6a225b2))
+* **deps:** update module sigs.k8s.io/cluster-api to v1.7.4 ([#310](https://github.com/validator-labs/validator/issues/310)) ([b3e64a6](https://github.com/validator-labs/validator/commit/b3e64a65d9e287a1ae93071317d699bd3ac61c4c))
+
+
+### Refactoring
+
+* enable revive & resolve all lints ([#307](https://github.com/validator-labs/validator/issues/307)) ([7877f71](https://github.com/validator-labs/validator/commit/7877f7129634bb75582c3ff6e0e969ec9369247e))
+
 ## [0.0.43](https://github.com/validator-labs/validator/compare/v0.0.42...v0.0.43) (2024-06-21)
 
 
