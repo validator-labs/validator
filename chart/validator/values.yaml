@@ -177,7 +177,7 @@ plugins:
 - chart:
     name: validator-plugin-azure
     repository: "https://validator-labs.github.io/validator-plugin-azure"
-    version: v0.0.11
+    version: v0.0.12
   values: |-
     controllerManager:
       kubeRbacProxy:
@@ -212,7 +212,7 @@ plugins:
             - ALL
         image:
           repository: quay.io/validator-labs/validator-plugin-azure
-          tag: v0.0.11
+          tag: v0.0.12
         resources:
           limits:
             cpu: 500m
