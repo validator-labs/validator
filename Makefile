@@ -19,11 +19,12 @@ haul: hauler ## Generate Hauls for latest release
 		$(eval GOOS=$(word 1,$(subst /, ,$(platform)))) \
 		$(eval GOARCH=$(word 2,$(subst /, ,$(platform)))) \
 		echo "Building Haul for $(GOOS)/$(GOARCH)..."; \
-		hauler store sync -s store-$(GOOS)-$(GOARCH) -f hauler-manifest.yaml -p $(platform); \
-		hauler store save -s store-$(GOOS)-$(GOARCH) -f validator-haul-$(GOOS)-$(GOARCH).tar.zst; \
-		rm -rf store-$(GOOS)-$(GOARCH);
+		$(HAULER) store sync -s store-$(GOOS)-$(GOARCH) -f hauler-manifest.yaml -p $(platform); \
+		$(HAULER) store save -s store-$(GOOS)-$(GOARCH) -f validator-haul-$(GOOS)-$(GOARCH).tar.zst; \
+		rm -rf store-$(GOOS)-$(GOARCH);)
 
 HAULER_VERSION ?= 1.0.4
 .PHONY: hauler
 hauler: ## Install hauler
 	curl -sfL https://get.hauler.dev | HAULER_VERSION=$(HAULER_VERSION) bash
+HAULER = /usr/local/bin/hauler
