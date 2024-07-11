@@ -32,4 +32,4 @@ jobs:
         uses: softprops/action-gh-release@a74c6b72af54cfa997e81df42d94703d6313a2d0 # v2
         with:
           tag_name: ${{ needs.call-release.outputs.tag_name }}
-          files: ./validator-haul-linux-amd64.tar.zst,./validator-haul-darwin-arm64.tar.zst
+          files: ./validator-haul-linux-amd64.tar.zst,./validator-haul-linux-arm64.tar.zst
