@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.0.45](https://github.com/validator-labs/validator/compare/v0.0.44...v0.0.45) (2024-07-11)
+
+
+### Other
+
+* release 0.0.45 ([fcf1bc7](https://github.com/validator-labs/validator/commit/fcf1bc7b55ece9dd7956715dc980bf9f19bf3ff4))
+
+
+### Dependency Updates
+
+* **deps:** update softprops/action-gh-release digest to a74c6b7 ([#313](https://github.com/validator-labs/validator/issues/313)) ([79c67e9](https://github.com/validator-labs/validator/commit/79c67e900d6cf75278602e88dc1a4902c3a916be))
+
 ## [0.0.44](https://github.com/validator-labs/validator/compare/v0.0.43...v0.0.44) (2024-07-10)
 
 
