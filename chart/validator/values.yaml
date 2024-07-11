@@ -66,7 +66,7 @@ env: []
 proxy:
   enabled: false
   # The image used by the init container. Must include the update-ca-certificates command.
-  image: quay.io/validator-labs/validator-certs-init:latest
+  image: quay.io/validator-labs/validator-certs-init:1.0.0
   # The name of a secret containing a proxy CA certificate.
   secretName: proxy-cert
   # If false (using an existing secret), the key whose value is the CA certificate must end with '.crt'.

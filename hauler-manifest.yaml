@@ -1,0 +1,60 @@
+apiVersion: content.hauler.cattle.io/v1alpha1
+kind: Images
+metadata:
+  name: validator-images
+spec:
+  images:
+    - name: quay.io/validator-labs/validator:v0.0.44
+    - name: quay.io/validator-labs/validator-plugin-aws:v0.1.1
+    - name: quay.io/validator-labs/validator-plugin-azure:v0.0.12
+    - name: quay.io/validator-labs/validator-plugin-kubescape:v0.0.3
+    - name: quay.io/validator-labs/validator-plugin-maas:v0.0.4
+    - name: quay.io/validator-labs/validator-plugin-network:v0.0.17
+    - name: quay.io/validator-labs/validator-plugin-oci:v0.0.10
+    - name: quay.io/validator-labs/validator-plugin-vsphere:v0.0.26
+    - name: quay.io/validator-labs/validator-certs-init:1.0.0
+    - name: gcr.io/spectro-images-public/release/spectro-cleanup:1.2.0
+    - name: kindest/node:v1.30.2
+    # TODO: align on a single kube-rbac-proxy image
+    - name: gcr.io/kubebuilder/kube-rbac-proxy:v0.15.0
+    - name: gcr.io/kubebuilder/kube-rbac-proxy:v0.16.0
+---
+apiVersion: content.hauler.cattle.io/v1alpha1
+kind: Charts
+metadata:
+  name: validator-charts
+spec:
+  charts:
+    - name: validator
+      repoURL: https://validator-labs.github.io/validator
+      version: 0.0.44
+    - name: validator-plugin-aws
+      repoURL: https://validator-labs.github.io/validator-plugin-aws
+      version: 0.1.1
+    - name: validator-plugin-azure
+      repoURL: https://validator-labs.github.io/validator-plugin-azure
+      version: 0.0.12
+    - name: validator-plugin-kubescape
+      repoURL: https://validator-labs.github.io/validator-plugin-kubescape
+      version: 0.0.3
+    - name: validator-plugin-maas
+      repoURL: https://validator-labs.github.io/validator-plugin-maas
+      version: 0.0.4
+    - name: validator-plugin-network
+      repoURL: https://validator-labs.github.io/validator-plugin-network
+      version: 0.0.17
+    - name: validator-plugin-oci
+      repoURL: https://validator-labs.github.io/validator-plugin-oci
+      version: 0.0.10
+    - name: validator-plugin-vsphere
+      repoURL: https://validator-labs.github.io/validator-plugin-vsphere
+      version: 0.0.26
+---
+apiVersion: content.hauler.cattle.io/v1alpha1
+kind: Files
+metadata:
+  name: validator-files
+spec:
+  files:
+    - name: validatorctl
+      path: https://github.com/validator-labs/validatorctl/releases/download/v0.0.3/validator-linux-amd64
