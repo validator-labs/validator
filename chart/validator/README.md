@@ -37,7 +37,7 @@ The following table lists the configurable parameters of the Validator chart and
 | `metricsService.type` |  | `"ClusterIP"` |
 | `env` |  | `[]` |
 | `proxy.enabled` |  | `false` |
-| `proxy.image` |  | `"quay.io/validator-labs/validator-certs-init:latest"` |
+| `proxy.image` |  | `"quay.io/validator-labs/validator-certs-init:1.0.0"` |
 | `proxy.secretName` |  | `"proxy-cert"` |
 | `proxy.createSecret` |  | `false` |
 | `proxy.caCert` |  | `"-----BEGIN CERTIFICATE-----\n<your certificate content here>\n-----END CERTIFICATE-----\n"` |
