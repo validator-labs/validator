@@ -12,10 +12,10 @@ CHART_NAME=validator
 docker-build-certs-init: ## Build validator-certs-init docker image.
 	$(CONTAINER_TOOL) build -f hack/validator-certs-init.Dockerfile -t ${CERTS_INIT_IMG} . --platform linux/$(GOARCH)
 
-PLATFORMS ?= linux/amd64 darwin/arm64
+HAUL_PLATFORMS ?= linux/amd64 darwin/arm64
 .PHONY: haul
 haul: hauler ## Generate Hauls for latest release
-	$(foreach platform,$(PLATFORMS),\
+	$(foreach platform,$(HAUL_PLATFORMS),\
 		$(eval GOOS=$(word 1,$(subst /, ,$(platform)))) \
 		$(eval GOARCH=$(word 2,$(subst /, ,$(platform)))) \
 		echo "Building Haul for $(GOOS)/$(GOARCH)..."; \

@@ -10,7 +10,8 @@
       "extra-files": [
         "chart/validator/Chart.yaml",
         "chart/validator/README.md",
-        "chart/validator/values.yaml"
+        "chart/validator/values.yaml",
+        "hauler-manifest.yaml"
       ],
       "changelog-sections": [
         {
