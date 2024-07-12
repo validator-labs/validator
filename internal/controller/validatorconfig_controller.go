@@ -201,6 +201,7 @@ func (r *ValidatorConfigReconciler) redeployIfNeeded(ctx context.Context, vc *v1
 			}
 
 			r.Log.V(0).Info("Reconfiguring Helm options to deploy local chart", "name", p.Chart.Name)
+			opts.Path = fmt.Sprintf("%s/%s.tgz", opts.Path, opts.Chart)
 			opts.Chart = ""
 			cleanupLocalChart = true
 		}
