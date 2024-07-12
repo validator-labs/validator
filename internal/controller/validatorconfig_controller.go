@@ -181,7 +181,7 @@ func (r *ValidatorConfigReconciler) redeployIfNeeded(ctx context.Context, vc *v1
 		}
 
 		var cleanupLocalChart bool
-		if strings.HasPrefix(p.Chart.Repository, "oci://") {
+		if strings.HasPrefix(p.Chart.Repository, oci.Scheme) {
 			r.Log.V(0).Info("Pulling plugin Helm chart", "name", p.Chart.Name)
 
 			opts.Path = fmt.Sprintf("/charts/%s", opts.Chart)
@@ -190,7 +190,7 @@ func (r *ValidatorConfigReconciler) redeployIfNeeded(ctx context.Context, vc *v1
 			// use OCI client instead of Helm client due to https://github.com/helm/helm/issues/12810
 			ociClient := oci.NewOCIClient(oci.WithMultiAuth())
 			ociOpts := oci.ImageOptions{
-				Ref:     fmt.Sprintf("%s/%s:%s", opts.Repo, opts.Chart, opts.Version),
+				Ref:     fmt.Sprintf("%s/%s:%s", strings.TrimPrefix(opts.Repo, oci.Scheme), opts.Chart, opts.Version),
 				OutDir:  opts.Path,
 				OutFile: opts.Chart,
 			}

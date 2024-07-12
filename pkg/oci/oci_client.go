@@ -18,6 +18,9 @@ import (
 	klog "k8s.io/klog/v2"
 )
 
+// Scheme is the URI scheme for an OCI registry.
+const Scheme = "oci://"
+
 // Client is an interface for interacting with an OCI registry.
 type Client struct {
 	auth authn.Keychain
