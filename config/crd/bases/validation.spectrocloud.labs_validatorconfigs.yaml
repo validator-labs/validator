@@ -52,6 +52,10 @@ spec:
                           description: AuthSecretName is the name of the K8s secret
                             containing the authentication details for the Helm repository.
                           type: string
+                        caFile:
+                          description: CAFile is the path to the CA certificate for
+                            the Helm repository.
+                          type: string
                         insecureSkipVerify:
                           description: InsecureSkipTLSVerify skips the verification
                             of the server's certificate chain and host name.

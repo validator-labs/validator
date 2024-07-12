@@ -60,6 +60,9 @@ type HelmChart struct {
 	// Version of the Helm chart.
 	Version string `json:"version" yaml:"version"`
 
+	// CAFile is the path to the CA certificate for the Helm repository.
+	CAFile string `json:"caFile,omitempty" yaml:"caFile,omitempty"`
+
 	// InsecureSkipTLSVerify skips the verification of the server's certificate chain and host name.
 	InsecureSkipTLSVerify bool `json:"insecureSkipVerify,omitempty" yaml:"insecureSkipVerify,omitempty"`
 

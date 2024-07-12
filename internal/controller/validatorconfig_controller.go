@@ -46,6 +46,7 @@ import (
 	v1alpha1 "github.com/validator-labs/validator/api/v1alpha1"
 	"github.com/validator-labs/validator/pkg/helm"
 	helmrelease "github.com/validator-labs/validator/pkg/helm/release"
+	"github.com/validator-labs/validator/pkg/oci"
 )
 
 const (
@@ -180,21 +181,30 @@ func (r *ValidatorConfigReconciler) redeployIfNeeded(ctx context.Context, vc *v1
 		}
 
 		var cleanupLocalChart bool
-		if strings.HasPrefix(p.Chart.Repository, "oci://") {
+		if strings.HasPrefix(p.Chart.Repository, oci.Scheme) {
 			r.Log.V(0).Info("Pulling plugin Helm chart", "name", p.Chart.Name)
 
-			opts.Untar = true
-			opts.UntarDir = "/charts"
+			opts.Path = fmt.Sprintf("/charts/%s", opts.Chart)
 			opts.Version = strings.TrimPrefix(opts.Version, "v")
 
-			if err := r.HelmClient.Pull(*opts); err != nil {
-				r.Log.V(0).Error(err, "failed to pull Helm chart from OCI repository")
+			// use OCI client instead of Helm client due to https://github.com/helm/helm/issues/12810
+			ociClient := oci.NewOCIClient(
+				oci.WithMultiAuth(),
+				oci.WithTLSConfig(opts.InsecureSkipTLSVerify, opts.CaFile),
+			)
+			ociOpts := oci.ImageOptions{
+				Ref:     fmt.Sprintf("%s/%s:%s", strings.TrimPrefix(opts.Repo, oci.Scheme), opts.Chart, opts.Version),
+				OutDir:  opts.Path,
+				OutFile: opts.Chart,
+			}
+			if err := ociClient.PullChart(ociOpts); err != nil {
+				r.Log.V(0).Error(err, "failed to pull Helm chart from OCI registry")
 				conditions[i] = r.buildHelmChartCondition(p.Chart.Name, err)
 				continue
 			}
 
 			r.Log.V(0).Info("Reconfiguring Helm options to deploy local chart", "name", p.Chart.Name)
-			opts.Path = fmt.Sprintf("/charts/%s", opts.Chart)
+			opts.Path = fmt.Sprintf("%s/%s.tgz", opts.Path, opts.Chart)
 			opts.Chart = ""
 			cleanupLocalChart = true
 		}
