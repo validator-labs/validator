@@ -15,6 +15,7 @@ import (
 	v1 "github.com/google/go-containerregistry/pkg/v1"
 	"github.com/google/go-containerregistry/pkg/v1/google"
 	"github.com/google/go-containerregistry/pkg/v1/remote"
+	"github.com/validator-labs/validator/pkg/util"
 	klog "k8s.io/klog/v2"
 )
 
@@ -63,12 +64,19 @@ func (c Client) PullChart(opts ImageOptions) error {
 	if err != nil {
 		return fmt.Errorf("failed to parse chart reference: %w", err)
 	}
+
+	path := filepath.Join(opts.OutDir, opts.OutFile)
+
 	// Assume the chart is in the first layer & extract it
 	layers, err := c.PullImage(ref)
 	if err != nil {
 		return fmt.Errorf("failed to pull chart: %w", err)
 	}
-	return c.WriteLayer(opts, layers[0])
+	if err := c.WriteLayer(opts, layers[0], path); err != nil {
+		return fmt.Errorf("failed to write chart layer: %w", err)
+	}
+
+	return util.Gzip(path, fmt.Sprintf("%s.tgz", path))
 }
 
 // PullImage pulls an image from the given name.Reference.
@@ -81,7 +89,7 @@ func (c Client) PullImage(ref name.Reference) ([]v1.Layer, error) {
 }
 
 // WriteLayer writes a layer to the filesystem.
-func (c Client) WriteLayer(opts ImageOptions, layer v1.Layer) error {
+func (c Client) WriteLayer(opts ImageOptions, layer v1.Layer, path string) error {
 	r, err := layer.Uncompressed()
 	if err != nil {
 		return fmt.Errorf("failed to uncompress layer: %w", err)
@@ -99,13 +107,9 @@ func (c Client) WriteLayer(opts ImageOptions, layer v1.Layer) error {
 	if err != nil {
 		return fmt.Errorf("failed to read layer content: %w", err)
 	}
-
 	if err := os.MkdirAll(opts.OutDir, os.ModePerm); err != nil {
 		return fmt.Errorf("failed to create output directory: %w", err)
 	}
-
-	path := filepath.Join(opts.OutDir, fmt.Sprintf("%s.tgz", opts.OutFile))
-
 	if err := os.WriteFile(path, content, os.ModePerm); err != nil {
 		return fmt.Errorf("failed to write layer file: %w", err)
 	}
