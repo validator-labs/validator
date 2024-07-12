@@ -11,8 +11,7 @@ import (
 
 // Gzip compresses a file using gzip and writes the result to disk
 func Gzip(input, output string) error {
-	// Open input file
-	inputFile, err := os.Open(input)
+	inputFile, err := os.Open(input) // #nosec G304
 	if err != nil {
 		return fmt.Errorf("failed to open input file: %w", err)
 	}
@@ -25,8 +24,7 @@ func Gzip(input, output string) error {
 		}
 	}()
 
-	// Create the output .tgz file
-	outputFile, err := os.Create(output)
+	outputFile, err := os.Create(output) // #nosec G304
 	if err != nil {
 		return fmt.Errorf("failed to create output file: %w", err)
 	}
@@ -39,7 +37,6 @@ func Gzip(input, output string) error {
 		}
 	}()
 
-	// Do the gzip
 	gzipWriter := gzip.NewWriter(outputFile)
 	defer func() {
 		closeErr := gzipWriter.Close()

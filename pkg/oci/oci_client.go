@@ -140,7 +140,9 @@ func (c Client) WriteLayer(layer v1.Layer, path string, opts ImageOptions) error
 
 func (c Client) transport() (*http.Transport, error) {
 	transport := remote.DefaultTransport.(*http.Transport)
-	transport.TLSClientConfig = &tls.Config{}
+	transport.TLSClientConfig = &tls.Config{
+		MinVersion: tls.VersionTLS12,
+	}
 
 	caCertPool, err := x509.SystemCertPool()
 	if err != nil {
