@@ -188,7 +188,10 @@ func (r *ValidatorConfigReconciler) redeployIfNeeded(ctx context.Context, vc *v1
 			opts.Version = strings.TrimPrefix(opts.Version, "v")
 
 			// use OCI client instead of Helm client due to https://github.com/helm/helm/issues/12810
-			ociClient := oci.NewOCIClient(oci.WithMultiAuth())
+			ociClient := oci.NewOCIClient(
+				oci.WithMultiAuth(),
+				oci.WithTLSConfig(opts.InsecureSkipTLSVerify, opts.CaFile),
+			)
 			ociOpts := oci.ImageOptions{
 				Ref:     fmt.Sprintf("%s/%s:%s", strings.TrimPrefix(opts.Repo, oci.Scheme), opts.Chart, opts.Version),
 				OutDir:  opts.Path,

@@ -2,8 +2,11 @@
 package oci
 
 import (
+	"crypto/tls"
+	"crypto/x509"
 	"fmt"
 	"io"
+	"net/http"
 	"os"
 	"path/filepath"
 
@@ -24,7 +27,9 @@ const Scheme = "oci://"
 
 // Client is an interface for interacting with an OCI registry.
 type Client struct {
-	auth authn.Keychain
+	auth                  authn.Keychain
+	caFile                string
+	insecureSkipTLSVerify bool
 }
 
 // ImageOptions defines the options for pulling an image.
@@ -44,6 +49,14 @@ func NewOCIClient(opts ...Option) *Client {
 		o(c)
 	}
 	return c
+}
+
+// WithTLSConfig configures the OCI client with the given TLS options.
+func WithTLSConfig(insecureSkipTLSVerify bool, caFile string) Option {
+	return func(c *Client) {
+		c.caFile = caFile
+		c.insecureSkipTLSVerify = insecureSkipTLSVerify
+	}
 }
 
 // WithMultiAuth configures the OCI client with multiple authentication keychains.
@@ -72,7 +85,7 @@ func (c Client) PullChart(opts ImageOptions) error {
 	if err != nil {
 		return fmt.Errorf("failed to pull chart: %w", err)
 	}
-	if err := c.WriteLayer(opts, layers[0], path); err != nil {
+	if err := c.WriteLayer(layers[0], path, opts); err != nil {
 		return fmt.Errorf("failed to write chart layer: %w", err)
 	}
 
@@ -81,7 +94,14 @@ func (c Client) PullChart(opts ImageOptions) error {
 
 // PullImage pulls an image from the given name.Reference.
 func (c Client) PullImage(ref name.Reference) ([]v1.Layer, error) {
-	img, err := remote.Image(ref, remote.WithAuthFromKeychain(c.auth))
+	transport, err := c.transport()
+	if err != nil {
+		return nil, err
+	}
+	img, err := remote.Image(ref,
+		remote.WithAuthFromKeychain(c.auth),
+		remote.WithTransport(transport),
+	)
 	if err != nil {
 		return nil, fmt.Errorf("failed to fetch image from registry: %w", err)
 	}
@@ -89,7 +109,7 @@ func (c Client) PullImage(ref name.Reference) ([]v1.Layer, error) {
 }
 
 // WriteLayer writes a layer to the filesystem.
-func (c Client) WriteLayer(opts ImageOptions, layer v1.Layer, path string) error {
+func (c Client) WriteLayer(layer v1.Layer, path string, opts ImageOptions) error {
 	r, err := layer.Uncompressed()
 	if err != nil {
 		return fmt.Errorf("failed to uncompress layer: %w", err)
@@ -116,4 +136,31 @@ func (c Client) WriteLayer(opts ImageOptions, layer v1.Layer, path string) error
 
 	klog.Infof("Layer saved successfully to %s\n", path)
 	return nil
+}
+
+func (c Client) transport() (*http.Transport, error) {
+	transport := remote.DefaultTransport.(*http.Transport)
+	transport.TLSClientConfig = &tls.Config{}
+
+	caCertPool, err := x509.SystemCertPool()
+	if err != nil {
+		return nil, fmt.Errorf("failed to load system cert pool: %w", err)
+	}
+	if c.caFile != "" {
+		bs, err := os.ReadFile(c.caFile)
+		if err != nil {
+			return nil, fmt.Errorf("failed to read CA cert file: %w", err)
+		}
+		if ok := caCertPool.AppendCertsFromPEM(bs); !ok {
+			return nil, fmt.Errorf("failed to append CA cert from %s", c.caFile)
+		}
+	}
+
+	if c.insecureSkipTLSVerify {
+		transport.TLSClientConfig.InsecureSkipVerify = true
+	}
+
+	transport.TLSClientConfig.RootCAs = caCertPool
+
+	return transport, nil
 }
