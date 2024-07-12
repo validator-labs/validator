@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.0.46](https://github.com/validator-labs/validator/compare/v0.0.45...v0.0.46) (2024-07-12)
+
+
+### Features
+
+* air-gapped support with Hauler ([#322](https://github.com/validator-labs/validator/issues/322)) ([4cd726d](https://github.com/validator-labs/validator/commit/4cd726d06d1de615e75117fcbcccc98b9142f782))
+
 ## [0.0.45](https://github.com/validator-labs/validator/compare/v0.0.44...v0.0.45) (2024-07-11)
 
 
