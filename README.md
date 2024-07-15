@@ -22,6 +22,17 @@ Plugins:
 
 ## Installation
 
+### Connected
+For connected installations, two options are supported: the validator CLI, `validatorctl`, and Helm. Using validatorctl is **recommended**, as it provides a text-based user interface (TUI) for configuring validator.
+
+#### Validator CLI
+1. Download the latest release of validatorctl from https://github.com/validator-labs/validatorctl/releases
+2. Execute validatorctl
+   ```bash
+   validatorctl install
+   ```
+
+#### Helm
 Install Validator by pulling the latest Helm chart and installing it in your cluster. Use the following commands to install the latest version of the chart.
 
 ```bash
@@ -30,7 +41,48 @@ helm repo update
 helm install validator validator/validator -n validator --create-namespace
 ```
 
-Check out the [Install Guide](./docs/install.md) for a step-by-step guide for installing and using Validator.
+Check out the [Helm install guide](./docs/install.md) for a step-by-step guide for installing and using Validator.
+
+### Air-gapped
+For air-gapped installations, the recommended approach is to use [Hauler](https://github.com/rancherfederal/hauler). Hauls containing all validator artifacts (container images, Helm charts, and the validator CLI) are generated for multiple platforms (linux/amd64 and linux/arm64) during each validator release.
+
+Prerequisites:
+* A Linux-based air-gapped workstation
+* Install the Hauler CLI on the air-gapped workstation
+
+Once the prerequisites are met, the following steps document the air-gapped installation procedure:
+
+1. Download the Hauler Store (then somehow get it across the air-gap)
+   ```bash
+   # Download the Haul for your chosen release and platform, e.g.:
+   curl -L https://github.com/validator-labs/validator/releases/download/v0.0.46/validator-haul-linux-amd64.tar.zst -o validator-haul-linux-amd64.tar.zst
+   ```
+2. Load the Hauler Store (on the air-gapped workstation)
+   ```bash
+   # Load the air-gapped content to your local hauler store.
+   hauler store load validator-haul-linux-amd64.tar.zst
+   ```
+3. Extract validatorctl from the Hauler Store
+   ```bash
+   # Extract the validator CLI binary, validatorctl, from the hauler store.
+   # It's always tagged as "latest" within the store, despite being versioned.
+   # This is a hauler defect. The version can be verified via `validatorctl version`.
+   hauler store extract -s store hauler/validatorctl:latest
+   chmod +x validatorctl && mv validatorctl /usr/local/bin
+   ```
+4. Serve the Hauler Store
+   ```bash
+   # Serve the content as a registry from the hauler store.
+   # (Defaults to <FQDN or IP>:5000).
+   nohup hauler store serve registry | tee -a hauler.log &
+   
+   # Optionally tail the hauler registry logs
+   tail -f hauler.log
+   ```
+5. Execute validatorctl
+   ```bash
+   validatorctl install
+   ```
 
 ## Sinks
 Validator can be configured to emit updates to various event sinks whenever a `ValidationResult` is created or updated. See configuration details below for each supported sink.
