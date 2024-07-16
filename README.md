@@ -47,8 +47,11 @@ Check out the [Helm install guide](./docs/install.md) for a step-by-step guide f
 For air-gapped installations, the recommended approach is to use [Hauler](https://github.com/rancherfederal/hauler). Hauls containing all validator artifacts (container images, Helm charts, and the validator CLI) are generated for multiple platforms (linux/amd64 and linux/arm64) during each validator release.
 
 Prerequisites:
-* A Linux-based air-gapped workstation
-* Install the Hauler CLI on the air-gapped workstation
+* A Linux-based air-gapped workstation with:
+  * A container runtime, e.g., [containerd](https://containerd.io/docs/getting-started/), [Docker Engine](https://docs.docker.com/engine/), etc.
+  * If using a container runtime other than Docker Engine, [podman](https://podman.io/docs/installation) must be installed and [Docker CLI emulation](https://podman-desktop.io/docs/migrating-from-docker/emulating-docker-cli-with-podman) configured
+  * [kind](https://github.com/kubernetes-sigs/kind/releases) installed and on your PATH
+  * [hauler](https://github.com/hauler-dev/hauler/releases) installed and on your PATH
 
 Once the prerequisites are met, the following steps document the air-gapped installation procedure:
 
