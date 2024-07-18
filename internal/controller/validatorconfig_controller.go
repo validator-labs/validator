@@ -43,10 +43,11 @@ import (
 
 	"buf.build/gen/go/spectrocloud/spectro-cleanup/connectrpc/go/cleanup/v1/cleanupv1connect"
 	cleanv1 "buf.build/gen/go/spectrocloud/spectro-cleanup/protocolbuffers/go/cleanup/v1"
+	"github.com/validator-labs/validator-plugin-oci/pkg/oci"
+
 	v1alpha1 "github.com/validator-labs/validator/api/v1alpha1"
 	"github.com/validator-labs/validator/pkg/helm"
 	helmrelease "github.com/validator-labs/validator/pkg/helm/release"
-	"github.com/validator-labs/validator/pkg/oci"
 )
 
 const (
