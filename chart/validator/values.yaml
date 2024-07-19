@@ -262,7 +262,6 @@ plugins:
       # Override the service account used by Azure validator (optional, could be used for WorkloadIdentityCredentials on AKS)
       # WARNING: the chosen service account must include all RBAC privileges found in templates/manager-rbac.yaml
       serviceAccountName: ""
-
 - chart:
     name: validator-plugin-oci
     repository: "https://validator-labs.github.io/validator-plugin-oci"
@@ -320,7 +319,6 @@ plugins:
           protocol: TCP
           targetPort: https
       type: ClusterIP
-
 - chart:
     name: validator-plugin-kubescape
     repository: "https://validator-labs.github.io/validator-plugin-kubescape"
@@ -386,7 +384,6 @@ plugins:
           protocol: TCP
           targetPort: https
       type: ClusterIP
-
 - chart:
     name: validator-plugin-aws
     repository: "https://validator-labs.github.io/validator-plugin-aws"
@@ -454,7 +451,6 @@ plugins:
       # Override the service account used by AWS validator (optional, could be used for IAM roles for Service Accounts)
       # WARNING: the chosen service account must have the same RBAC privileges as seen in templates/manager-rbac.yaml
       serviceAccountName: ""
-
 - chart:
     name: validator-plugin-network
     repository: "https://validator-labs.github.io/validator-plugin-network"
@@ -514,7 +510,6 @@ plugins:
           protocol: TCP
           targetPort: https
       type: ClusterIP
-
 - chart:
     name: validator-plugin-maas
     repository: "https://validator-labs.github.io/validator-plugin-maas"
@@ -572,7 +567,6 @@ plugins:
           protocol: TCP
           targetPort: https
       type: ClusterIP
-
 - chart:
     name: validator-plugin-vsphere
     repository: "https://validator-labs.github.io/validator-plugin-vsphere"
@@ -635,4 +629,3 @@ plugins:
       # Specify the name of a secret in your cluster that contains vSphere credentials.
       # E.g.: https://github.com/validator-labs/validator/blob/main/chart/validator/templates/plugin-secret-vsphere.yaml
       secretName: vsphere-credentials
-
