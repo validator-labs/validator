@@ -11,6 +11,7 @@ CHART_NAME=validator
 reviewable-ext:
 	@$(INFO) Checking for plugin version updates...
 	bash hack/update-versions.sh
+	make frigate
 
 .PHONY: docker-build-certs-init
 docker-build-certs-init: ## Build validator-certs-init docker image.
