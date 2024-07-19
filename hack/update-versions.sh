@@ -43,7 +43,6 @@ function updateValues {
     truncate -s-1 chart/validator/values.yaml
     echo "Updated values.yaml for validator-plugin-$plugin @ v$version."
   done
-  truncate -s-1 chart/validator/values.yaml
 }
 
 export AWS_VERSION=$(latestRelease validator-labs/validator-plugin-aws)
