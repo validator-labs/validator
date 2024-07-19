@@ -11,7 +11,7 @@ require (
 	github.com/awslabs/amazon-ecr-credential-helper/ecr-login v0.0.0-20240708141356-efa334f881fc
 	github.com/chrismellard/docker-credential-acr-env v0.0.0-20230304212654-82a0ddb27589
 	github.com/go-logr/logr v1.4.2
-	github.com/google/go-containerregistry v0.20.0
+	github.com/google/go-containerregistry v0.20.1
 	github.com/onsi/ginkgo/v2 v2.19.0
 	github.com/onsi/gomega v1.33.1
 	github.com/pkg/errors v0.9.1
