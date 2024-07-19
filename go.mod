@@ -9,15 +9,16 @@ require (
 	buf.build/gen/go/spectrocloud/spectro-cleanup/protocolbuffers/go v1.34.2-20240205164452-95dfd137cb54.2
 	connectrpc.com/connect v1.16.2
 	github.com/go-logr/logr v1.4.2
+	github.com/google/go-containerregistry v0.20.1
 	github.com/onsi/ginkgo/v2 v2.19.0
 	github.com/onsi/gomega v1.33.1
 	github.com/pkg/errors v0.9.1
 	github.com/slack-go/slack v0.13.1
 	github.com/validator-labs/validator-plugin-oci v0.0.11-0.20240718182557-d052315edc8a
 	golang.org/x/exp v0.0.0-20240716175740-e3f259677ff7
-	k8s.io/api v0.30.2
-	k8s.io/apimachinery v0.30.2
-	k8s.io/client-go v0.30.2
+	k8s.io/api v0.30.3
+	k8s.io/apimachinery v0.30.3
+	k8s.io/client-go v0.30.3
 	k8s.io/klog/v2 v2.130.1
 	sigs.k8s.io/cluster-api v1.7.4
 	sigs.k8s.io/controller-runtime v0.18.4
