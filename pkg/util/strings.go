@@ -1,5 +1,5 @@
-// Package strings contains utility functions for working with strings.
-package strings
+// Package util contains utility functions for working with strings.
+package util
 
 import "strings"
 
