@@ -1,5 +1,36 @@
 # Changelog
 
+## [0.0.47](https://github.com/validator-labs/validator/compare/v0.0.46...v0.0.47) (2024-07-20)
+
+
+### Bug Fixes
+
+* handle basic auth for OCI client ([#333](https://github.com/validator-labs/validator/issues/333)) ([5041c4f](https://github.com/validator-labs/validator/commit/5041c4f30d87489929f0800ae21a1a7ea0c73cfa))
+* make string utils avail externally ([#335](https://github.com/validator-labs/validator/issues/335)) ([81d7d46](https://github.com/validator-labs/validator/commit/81d7d46177c8c1c9e5958c86fa6a6876b8b699d4))
+
+
+### Other
+
+* move string utils to central location ([#334](https://github.com/validator-labs/validator/issues/334)) ([44c09ab](https://github.com/validator-labs/validator/commit/44c09abfe9fa35a63f7afe4ac777247826984465))
+
+
+### Docs
+
+* recommend validatorctl; document Hauler ([#326](https://github.com/validator-labs/validator/issues/326)) ([18a8fef](https://github.com/validator-labs/validator/commit/18a8fef6da2bcf53d9bc6073f0eb0a6e4e8e6bbd))
+* Update air-gapped prereqs in README.md ([de015d9](https://github.com/validator-labs/validator/commit/de015d9112ba59a61bffe2d5e5c00914441fea31))
+
+
+### Dependency Updates
+
+* **deps:** update golang.org/x/exp digest to 8a7402a ([#336](https://github.com/validator-labs/validator/issues/336)) ([8f94947](https://github.com/validator-labs/validator/commit/8f9494753245bcddf224a2540c9b4b8a037edc7c))
+* **deps:** update golang.org/x/exp digest to 8a7402a ([#338](https://github.com/validator-labs/validator/issues/338)) ([e012a4e](https://github.com/validator-labs/validator/commit/e012a4e4cc66ab6250d9c7a6eb253df55bd0cc98))
+* **deps:** update golang.org/x/exp digest to e3f2596 ([#329](https://github.com/validator-labs/validator/issues/329)) ([3419300](https://github.com/validator-labs/validator/commit/34193001faf79259d195ba5ad904074988d50b47))
+* **deps:** update kubernetes packages to v0.30.3 ([#332](https://github.com/validator-labs/validator/issues/332)) ([5d4486c](https://github.com/validator-labs/validator/commit/5d4486ce195a6a254c39096548f5d5b97372c275))
+* **deps:** update module github.com/google/go-containerregistry to v0.20.1 ([#330](https://github.com/validator-labs/validator/issues/330)) ([81fd1cf](https://github.com/validator-labs/validator/commit/81fd1cf17a046d9383984f83e8ef63a4bc5a7572))
+* **deps:** update module github.com/slack-go/slack to v0.13.1 ([#328](https://github.com/validator-labs/validator/issues/328)) ([089d25d](https://github.com/validator-labs/validator/commit/089d25d9f81f179067a69743579bd94e4bfa2454))
+* **deps:** update module github.com/validator-labs/validator-plugin-oci to v0.0.11 ([#339](https://github.com/validator-labs/validator/issues/339)) ([70a26e1](https://github.com/validator-labs/validator/commit/70a26e15f0833c621b80ad1c2c86a4eb82e56042))
+* **deps:** update softprops/action-gh-release digest to c062e08 ([#331](https://github.com/validator-labs/validator/issues/331)) ([c797383](https://github.com/validator-labs/validator/commit/c7973838e3bf690784c46eb25f77b54061732a55))
+
 ## [0.0.46](https://github.com/validator-labs/validator/compare/v0.0.45...v0.0.46) (2024-07-12)
 
 
