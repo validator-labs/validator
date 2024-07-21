@@ -11,7 +11,9 @@
         "chart/validator/Chart.yaml",
         "chart/validator/README.md",
         "chart/validator/values.yaml",
-        "hauler-manifest.yaml"
+        "hauler-manifest.yaml",
+        "hack/hauler-manifest-template.yaml",
+        "hack/chart/values-base.yaml"
       ],
       "changelog-sections": [
         {

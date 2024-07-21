@@ -21,6 +21,8 @@ function addChartValues {
       indentedValues="${indentedValues}    $line"$'\n'
   done <<< "$values"
 
+  indentedValues=$(sed 's/ # x-release-please-version//g' <<<"$indentedValues")
+
   # Append the plugin's values to chart/validator/values.yaml
   cat <<EOF >> chart/validator/values.yaml
 - chart:
@@ -40,7 +42,6 @@ function updateValues {
   for plugin in "${!versions[@]}"; do
     version=${versions[$plugin]}
     addChartValues validator-plugin-$plugin $version
-    truncate -s-1 chart/validator/values.yaml
     echo "Updated values.yaml for validator-plugin-$plugin @ v$version."
   done
 }
