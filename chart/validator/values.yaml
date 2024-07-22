@@ -31,7 +31,7 @@ controllerManager:
         - ALL
     image:
       repository: quay.io/validator-labs/validator
-      tag: v0.0.46  # x-release-please-version
+      tag: v0.0.47  # x-release-please-version
     resources:
       limits:
         cpu: 500m
@@ -225,7 +225,7 @@ plugins:
               - ALL
         image:
           repository: quay.io/validator-labs/validator-plugin-azure
-          tag: v0.0.13 # x-release-please-version
+          tag: v0.0.13
         resources:
           limits:
             cpu: 500m
@@ -300,7 +300,7 @@ plugins:
               - ALL
         image:
           repository: quay.io/validator-labs/validator-plugin-oci
-          tag: v0.0.11 # x-release-please-version
+          tag: v0.0.11
         resources:
           limits:
             cpu: 500m
@@ -357,7 +357,7 @@ plugins:
               - ALL
         image:
           repository: quay.io/validator-labs/validator-plugin-kubescape
-          tag: v0.0.3 # x-release-please-version
+          tag: v0.0.3
         resources:
           limits:
             cpu: 500m
@@ -422,7 +422,7 @@ plugins:
               - ALL
         image:
           repository: quay.io/validator-labs/validator-plugin-aws
-          tag: v0.1.1 # x-release-please-version
+          tag: v0.1.1
         resources:
           limits:
             cpu: 500m
@@ -491,7 +491,7 @@ plugins:
               - ALL
         image:
           repository: quay.io/validator-labs/validator-plugin-network
-          tag: v0.0.18 # x-release-please-version
+          tag: v0.0.18
         resources:
           limits:
             cpu: 500m
@@ -548,7 +548,7 @@ plugins:
               - ALL
         image:
           repository: quay.io/validator-labs/validator-plugin-maas
-          tag: v0.0.4 # x-release-please-version
+          tag: v0.0.4
         resources:
           limits:
             cpu: 500m
@@ -606,7 +606,7 @@ plugins:
               - ALL
         image:
           repository: quay.io/validator-labs/validator-plugin-vsphere
-          tag: v0.0.27 # x-release-please-version
+          tag: v0.0.27
         resources:
           limits:
             cpu: 500m
