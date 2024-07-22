@@ -84,7 +84,8 @@ func (s *AlertmanagerSink) Configure(c Client, config map[string][]byte) error {
 	if ok {
 		caCertPool, err = x509.SystemCertPool()
 		if err != nil {
-			return errors.Wrap(err, "invalid Alertmanager config: failed to get system cert pool")
+			s.log.Error(err, "failed to get system cert pool; using empty pool")
+			caCertPool = x509.NewCertPool()
 		}
 		caCertPool.AppendCertsFromPEM(caCert)
 	}
