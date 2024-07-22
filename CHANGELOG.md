@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.0.48](https://github.com/validator-labs/validator/compare/v0.0.47...v0.0.48) (2024-07-22)
+
+
+### Bug Fixes
+
+* sink HTTP clients to read proxy config from environment ([#341](https://github.com/validator-labs/validator/issues/341)) ([ffa327e](https://github.com/validator-labs/validator/commit/ffa327e97898b29526fc7ed0abf8d7dddfe4142f))
+
+
+### Other
+
+* **deps:** bump github.com/hashicorp/go-retryablehttp from 0.7.5 to 0.7.7 ([#337](https://github.com/validator-labs/validator/issues/337)) ([c36994d](https://github.com/validator-labs/validator/commit/c36994de7ff1d253240824a6d90485d7b1eda207))
+
 ## [0.0.47](https://github.com/validator-labs/validator/compare/v0.0.46...v0.0.47) (2024-07-20)
 
 
