@@ -40,9 +40,8 @@ type Client struct {
 
 // NewClient returns a new Client with the provided timeout.
 func NewClient(timeout time.Duration) *Client {
-	client := &http.Client{
-		Timeout: timeout,
-	}
+	client := http.DefaultClient // inherit http.ProxyFromEnvironment
+	client.Timeout = timeout
 	return &Client{
 		hclient: client,
 	}
