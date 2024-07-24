@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.0.49](https://github.com/validator-labs/validator/compare/v0.0.48...v0.0.49) (2024-07-23)
+
+
+### Bug Fixes
+
+* ensure vsphere password is quoted ([#342](https://github.com/validator-labs/validator/issues/342)) ([3f297de](https://github.com/validator-labs/validator/commit/3f297de178c0e34d062ae1fbffed3452146d7e4e))
+
 ## [0.0.48](https://github.com/validator-labs/validator/compare/v0.0.47...v0.0.48) (2024-07-22)
 
 
