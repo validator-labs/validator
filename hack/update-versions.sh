@@ -25,10 +25,8 @@ function addChartValues {
 
   # Append the plugin's values to chart/validator/values.yaml
   cat <<EOF >> chart/validator/values.yaml
-- chart:
-    name: $1
-    repository: "https://validator-labs.github.io/$1"
-    version: v$2
+- name: $1
+  version: v$2
   values: |-
 $indentedValues
 EOF

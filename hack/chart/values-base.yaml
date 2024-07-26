@@ -185,5 +185,8 @@ pluginSecrets:
       #    <your public key content here>
       #    -----END PUBLIC KEY-----
 
+helmConfig:
+  repository: "https://validator-labs.github.io"
+
 # Validation plugin charts
 plugins:

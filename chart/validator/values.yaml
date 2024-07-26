@@ -185,12 +185,13 @@ pluginSecrets:
       #    <your public key content here>
       #    -----END PUBLIC KEY-----
 
+helmConfig:
+  repository: "https://validator-labs.github.io"
+
 # Validation plugin charts
 plugins:
-- chart:
-    name: validator-plugin-azure
-    repository: "https://validator-labs.github.io/validator-plugin-azure"
-    version: v0.0.13
+- name: validator-plugin-azure
+  version: v0.0.13
   values: |-
     controllerManager:
       kubeRbacProxy:
@@ -262,10 +263,8 @@ plugins:
       # Override the service account used by Azure validator (optional, could be used for WorkloadIdentityCredentials on AKS)
       # WARNING: the chosen service account must include all RBAC privileges found in templates/manager-rbac.yaml
       serviceAccountName: ""
-- chart:
-    name: validator-plugin-oci
-    repository: "https://validator-labs.github.io/validator-plugin-oci"
-    version: v0.0.11
+- name: validator-plugin-oci
+  version: v0.0.11
   values: |-
     controllerManager:
       kubeRbacProxy:
@@ -319,10 +318,8 @@ plugins:
           protocol: TCP
           targetPort: https
       type: ClusterIP
-- chart:
-    name: validator-plugin-kubescape
-    repository: "https://validator-labs.github.io/validator-plugin-kubescape"
-    version: v0.0.3
+- name: validator-plugin-kubescape
+  version: v0.0.3
   values: |-
     controllerManager:
       kubeRbacProxy:
@@ -384,10 +381,8 @@ plugins:
           protocol: TCP
           targetPort: https
       type: ClusterIP
-- chart:
-    name: validator-plugin-aws
-    repository: "https://validator-labs.github.io/validator-plugin-aws"
-    version: v0.1.1
+- name: validator-plugin-aws
+  version: v0.1.1
   values: |-
     controllerManager:
       kubeRbacProxy:
@@ -451,10 +446,8 @@ plugins:
       # Override the service account used by AWS validator (optional, could be used for IAM roles for Service Accounts)
       # WARNING: the chosen service account must have the same RBAC privileges as seen in templates/manager-rbac.yaml
       serviceAccountName: ""
-- chart:
-    name: validator-plugin-network
-    repository: "https://validator-labs.github.io/validator-plugin-network"
-    version: v0.0.19
+- name: validator-plugin-network
+  version: v0.0.19
   values: |-
     controllerManager:
       kubeRbacProxy:
@@ -510,10 +503,8 @@ plugins:
           protocol: TCP
           targetPort: https
       type: ClusterIP
-- chart:
-    name: validator-plugin-maas
-    repository: "https://validator-labs.github.io/validator-plugin-maas"
-    version: v0.0.4
+- name: validator-plugin-maas
+  version: v0.0.4
   values: |-
     controllerManager:
       kubeRbacProxy:
@@ -567,10 +558,8 @@ plugins:
           protocol: TCP
           targetPort: https
       type: ClusterIP
-- chart:
-    name: validator-plugin-vsphere
-    repository: "https://validator-labs.github.io/validator-plugin-vsphere"
-    version: v0.0.27
+- name: validator-plugin-vsphere
+  version: v0.0.27
   values: |-
     controllerManager:
       kubeRbacProxy:
