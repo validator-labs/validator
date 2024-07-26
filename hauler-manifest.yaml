@@ -5,13 +5,13 @@ metadata:
 spec:
   images:
     - name: quay.io/validator-labs/validator:v0.0.50 # x-release-please-version
-    - name: quay.io/validator-labs/validator-plugin-aws:v0.1.1
-    - name: quay.io/validator-labs/validator-plugin-azure:v0.0.13
-    - name: quay.io/validator-labs/validator-plugin-kubescape:v0.0.3
-    - name: quay.io/validator-labs/validator-plugin-maas:v0.0.4
+    - name: quay.io/validator-labs/validator-plugin-aws:v0.1.2
+    - name: quay.io/validator-labs/validator-plugin-azure:v0.0.14
+    - name: quay.io/validator-labs/validator-plugin-kubescape:v0.0.4
+    - name: quay.io/validator-labs/validator-plugin-maas:v0.0.5
     - name: quay.io/validator-labs/validator-plugin-network:v0.0.20
-    - name: quay.io/validator-labs/validator-plugin-oci:v0.0.11
-    - name: quay.io/validator-labs/validator-plugin-vsphere:v0.0.27
+    - name: quay.io/validator-labs/validator-plugin-oci:v0.0.12
+    - name: quay.io/validator-labs/validator-plugin-vsphere:v0.0.28
     - name: quay.io/validator-labs/validator-certs-init:1.0.0
     - name: gcr.io/spectro-images-public/release/spectro-cleanup:1.2.0
     - name: kindest/node:v1.30.2
@@ -30,25 +30,25 @@ spec:
       version: 0.0.50 # x-release-please-version
     - name: validator-plugin-aws
       repoURL: https://validator-labs.github.io/validator-plugin-aws
-      version: 0.1.1
+      version: 0.1.2
     - name: validator-plugin-azure
       repoURL: https://validator-labs.github.io/validator-plugin-azure
-      version: 0.0.13
+      version: 0.0.14
     - name: validator-plugin-kubescape
       repoURL: https://validator-labs.github.io/validator-plugin-kubescape
-      version: 0.0.3
+      version: 0.0.4
     - name: validator-plugin-maas
       repoURL: https://validator-labs.github.io/validator-plugin-maas
-      version: 0.0.4
+      version: 0.0.5
     - name: validator-plugin-network
       repoURL: https://validator-labs.github.io/validator-plugin-network
       version: 0.0.20
     - name: validator-plugin-oci
       repoURL: https://validator-labs.github.io/validator-plugin-oci
-      version: 0.0.11
+      version: 0.0.12
     - name: validator-plugin-vsphere
       repoURL: https://validator-labs.github.io/validator-plugin-vsphere
-      version: 0.0.27
+      version: 0.0.28
 ---
 apiVersion: content.hauler.cattle.io/v1alpha1
 kind: Files
