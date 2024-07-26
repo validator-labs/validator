@@ -103,7 +103,7 @@ var _ = Describe("ValidatorConfig controller", Ordered, func() {
 			if err := k8sClient.Get(ctx, vcKey, vc); err != nil {
 				return false
 			}
-			vc.Spec.Plugins[0].Chart.Version = networkPluginVersionPost
+			vc.Spec.Plugins[0].Version = networkPluginVersionPost
 			vc.Spec.Plugins[0].Values = strings.ReplaceAll(
 				vc.Spec.Plugins[0].Values, networkPluginVersionPre, networkPluginVersionPost,
 			)
@@ -147,13 +147,14 @@ var _ = Describe("ValidatorConfig controller", Ordered, func() {
 				Namespace: validatorNamespace,
 			},
 			Spec: v1alpha1.ValidatorConfigSpec{
+
+				HelmConfig: v1alpha1.HelmConfig{
+					Repository:     "bar",
+					AuthSecretName: "chart-secret",
+				},
 				Plugins: []v1alpha1.HelmRelease{
 					{
-						Chart: v1alpha1.HelmChart{
-							Name:           "foo",
-							Repository:     "bar",
-							AuthSecretName: "chart-secret",
-						},
+						Name: "foo",
 					},
 				},
 			},
