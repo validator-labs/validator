@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.0.50](https://github.com/validator-labs/validator/compare/v0.0.49...v0.0.50) (2024-07-26)
+
+
+### Other
+
+* bump network plugin versions ([#346](https://github.com/validator-labs/validator/issues/346)) ([6ece95b](https://github.com/validator-labs/validator/commit/6ece95bd79ab4861ee26197fe54b8d8a5931a07c))
+
 ## [0.0.49](https://github.com/validator-labs/validator/compare/v0.0.48...v0.0.49) (2024-07-23)
 
 
