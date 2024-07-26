@@ -167,7 +167,7 @@ func (r *ValidatorConfigReconciler) redeployIfNeeded(ctx context.Context, vc *v1
 
 		opts := &helm.Options{
 			Chart:                 p.Name,
-			Repo:                  helmConfig.Repository,
+			Repo:                  fmt.Sprintf("%s/%s", helmConfig.Repository, p.Name),
 			Version:               p.Version,
 			Values:                p.Values,
 			InsecureSkipTLSVerify: helmConfig.InsecureSkipTLSVerify,
