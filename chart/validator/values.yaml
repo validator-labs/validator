@@ -191,7 +191,7 @@ helmConfig:
 # Validation plugin charts
 plugins:
 - name: validator-plugin-azure
-  version: v0.0.13
+  version: v0.0.14
   values: |-
     controllerManager:
       kubeRbacProxy:
@@ -226,7 +226,7 @@ plugins:
               - ALL
         image:
           repository: quay.io/validator-labs/validator-plugin-azure
-          tag: v0.0.13
+          tag: v0.0.14
         resources:
           limits:
             cpu: 500m
@@ -264,7 +264,7 @@ plugins:
       # WARNING: the chosen service account must include all RBAC privileges found in templates/manager-rbac.yaml
       serviceAccountName: ""
 - name: validator-plugin-oci
-  version: v0.0.11
+  version: v0.0.12
   values: |-
     controllerManager:
       kubeRbacProxy:
@@ -299,7 +299,7 @@ plugins:
               - ALL
         image:
           repository: quay.io/validator-labs/validator-plugin-oci
-          tag: v0.0.11
+          tag: v0.0.12
         resources:
           limits:
             cpu: 500m
@@ -319,7 +319,7 @@ plugins:
           targetPort: https
       type: ClusterIP
 - name: validator-plugin-kubescape
-  version: v0.0.3
+  version: v0.0.4
   values: |-
     controllerManager:
       kubeRbacProxy:
@@ -354,7 +354,7 @@ plugins:
               - ALL
         image:
           repository: quay.io/validator-labs/validator-plugin-kubescape
-          tag: v0.0.3
+          tag: v0.0.4
         resources:
           limits:
             cpu: 500m
@@ -382,7 +382,7 @@ plugins:
           targetPort: https
       type: ClusterIP
 - name: validator-plugin-aws
-  version: v0.1.1
+  version: v0.1.2
   values: |-
     controllerManager:
       kubeRbacProxy:
@@ -417,7 +417,7 @@ plugins:
               - ALL
         image:
           repository: quay.io/validator-labs/validator-plugin-aws
-          tag: v0.1.1
+          tag: v0.1.2
         resources:
           limits:
             cpu: 500m
@@ -447,7 +447,7 @@ plugins:
       # WARNING: the chosen service account must have the same RBAC privileges as seen in templates/manager-rbac.yaml
       serviceAccountName: ""
 - name: validator-plugin-network
-  version: v0.0.19
+  version: v0.0.20
   values: |-
     controllerManager:
       kubeRbacProxy:
@@ -484,7 +484,7 @@ plugins:
               - ALL
         image:
           repository: quay.io/validator-labs/validator-plugin-network
-          tag: v0.0.19
+          tag: v0.0.20
         resources:
           limits:
             cpu: 500m
@@ -504,7 +504,7 @@ plugins:
           targetPort: https
       type: ClusterIP
 - name: validator-plugin-maas
-  version: v0.0.4
+  version: v0.0.5
   values: |-
     controllerManager:
       kubeRbacProxy:
@@ -539,7 +539,7 @@ plugins:
               - ALL
         image:
           repository: quay.io/validator-labs/validator-plugin-maas
-          tag: v0.0.4
+          tag: v0.0.5
         resources:
           limits:
             cpu: 500m
@@ -559,7 +559,7 @@ plugins:
           targetPort: https
       type: ClusterIP
 - name: validator-plugin-vsphere
-  version: v0.0.27
+  version: v0.0.28
   values: |-
     controllerManager:
       kubeRbacProxy:
@@ -595,7 +595,7 @@ plugins:
               - ALL
         image:
           repository: quay.io/validator-labs/validator-plugin-vsphere
-          tag: v0.0.27
+          tag: v0.0.28
         resources:
           limits:
             cpu: 500m
