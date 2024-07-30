@@ -23,6 +23,9 @@ import (
 
 // ValidatorConfigSpec defines the desired state of ValidatorConfig.
 type ValidatorConfigSpec struct {
+	// HelmConfig defines the configuration for the Helm repository.
+	HelmConfig HelmConfig `json:"helmConfig" yaml:"helmConfig"`
+
 	// Plugins defines the configuration for the validator plugins.
 	Plugins []HelmRelease `json:"plugins,omitempty" yaml:"plugins,omitempty"`
 
@@ -54,11 +57,17 @@ type HelmChart struct {
 	// Name of the Helm chart.
 	Name string `json:"name" yaml:"name"`
 
-	// Repository URL of the Helm chart.
+	// Repository of the Helm chart.
 	Repository string `json:"repository" yaml:"repository"`
 
 	// Version of the Helm chart.
 	Version string `json:"version" yaml:"version"`
+}
+
+// HelmConfig defines the configuration for the Helm registry.
+type HelmConfig struct {
+	// Registry is the URL of the Helm registry.
+	Registry string `json:"registry" yaml:"registry"`
 
 	// CAFile is the path to the CA certificate for the Helm repository.
 	CAFile string `json:"caFile,omitempty" yaml:"caFile,omitempty"`

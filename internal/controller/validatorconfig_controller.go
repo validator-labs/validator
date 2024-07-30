@@ -150,6 +150,7 @@ func (r *ValidatorConfigReconciler) redeployIfNeeded(ctx context.Context, vc *v1
 	specPlugins := make(map[string]bool)
 	conditions := make([]v1alpha1.ValidatorPluginCondition, len(vc.Spec.Plugins))
 
+	helmConfig := vc.Spec.HelmConfig
 	for i, p := range vc.Spec.Plugins {
 		specPlugins[p.Chart.Name] = true
 
@@ -166,14 +167,14 @@ func (r *ValidatorConfigReconciler) redeployIfNeeded(ctx context.Context, vc *v1
 
 		opts := &helm.Options{
 			Chart:                 p.Chart.Name,
-			Repo:                  p.Chart.Repository,
+			Repo:                  fmt.Sprintf("%s/%s", helmConfig.Registry, p.Chart.Repository),
 			Version:               p.Chart.Version,
 			Values:                p.Values,
-			InsecureSkipTLSVerify: p.Chart.InsecureSkipTLSVerify,
+			InsecureSkipTLSVerify: helmConfig.InsecureSkipTLSVerify,
 		}
 
-		if p.Chart.AuthSecretName != "" {
-			nn := types.NamespacedName{Name: p.Chart.AuthSecretName, Namespace: vc.Namespace}
+		if helmConfig.AuthSecretName != "" {
+			nn := types.NamespacedName{Name: helmConfig.AuthSecretName, Namespace: vc.Namespace}
 			if err := r.configureHelmOpts(ctx, nn, opts); err != nil {
 				r.Log.V(0).Error(err, "failed to configure basic auth for Helm upgrade")
 				conditions[i] = r.buildHelmChartCondition(p.Chart.Name, err)
@@ -182,7 +183,7 @@ func (r *ValidatorConfigReconciler) redeployIfNeeded(ctx context.Context, vc *v1
 		}
 
 		var cleanupLocalChart bool
-		if strings.HasPrefix(p.Chart.Repository, oci.Scheme) {
+		if strings.HasPrefix(helmConfig.Registry, oci.Scheme) {
 			r.Log.V(0).Info("Pulling plugin Helm chart", "name", p.Chart.Name)
 
 			opts.Path = fmt.Sprintf("/charts/%s", opts.Chart)
