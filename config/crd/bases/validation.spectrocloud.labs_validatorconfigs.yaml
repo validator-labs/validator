@@ -39,6 +39,27 @@ spec:
           spec:
             description: ValidatorConfigSpec defines the desired state of ValidatorConfig.
             properties:
+              helmConfig:
+                description: HelmConfig defines the configuration for the Helm registry.
+                properties:
+                  authSecretName:
+                    description: AuthSecretName is the name of the K8s secret containing
+                      the authentication details for the Helm repository.
+                    type: string
+                  caFile:
+                    description: CAFile is the path to the CA certificate for the
+                      Helm repository.
+                    type: string
+                  insecureSkipVerify:
+                    description: InsecureSkipTLSVerify skips the verification of the
+                      server's certificate chain and host name.
+                    type: boolean
+                  registry:
+                    description: Registry is the URL of the Helm registry.
+                    type: string
+                required:
+                - registry
+                type: object
               plugins:
                 description: Plugins defines the configuration for the validator plugins.
                 items:
@@ -48,23 +69,11 @@ spec:
                     chart:
                       description: Chart defines the Helm chart to be installed.
                       properties:
-                        authSecretName:
-                          description: AuthSecretName is the name of the K8s secret
-                            containing the authentication details for the Helm repository.
-                          type: string
-                        caFile:
-                          description: CAFile is the path to the CA certificate for
-                            the Helm repository.
-                          type: string
-                        insecureSkipVerify:
-                          description: InsecureSkipTLSVerify skips the verification
-                            of the server's certificate chain and host name.
-                          type: boolean
                         name:
                           description: Name of the Helm chart.
                           type: string
                         repository:
-                          description: Repository URL of the Helm chart.
+                          description: Repository of the Helm chart.
                           type: string
                         version:
                           description: Version of the Helm chart.
@@ -100,6 +109,8 @@ spec:
                 - secretName
                 - type
                 type: object
+            required:
+            - helmConfig
             type: object
           status:
             description: ValidatorConfigStatus defines the observed state of ValidatorConfig

@@ -8,9 +8,15 @@ CERTS_INIT_IMG ?= quay.io/validator-labs/validator-certs-init:latest
 # Helm vars
 CHART_NAME=validator
 
+VALIDATION_RESULTS_CRD = chart/validator/crds/validation.spectrocloud.labs_validationresults.yaml
+VALIDATOR_CONFIGS_CRD = chart/validator/crds/validation.spectrocloud.labs_validatorconfigs.yaml
+
 reviewable-ext:
 	@$(INFO) Checking for plugin version updates...
 	bash hack/update-versions.sh
+	rm $(VALIDATION_RESULTS_CRD) $(VALIDATOR_CONFIGS_CRD)
+	cp config/crd/bases/validation.spectrocloud.labs_validationresults.yaml $(VALIDATION_RESULTS_CRD)
+	cp config/crd/bases/validation.spectrocloud.labs_validatorconfigs.yaml $(VALIDATOR_CONFIGS_CRD)
 
 .PHONY: docker-build-certs-init
 docker-build-certs-init: ## Build validator-certs-init docker image.

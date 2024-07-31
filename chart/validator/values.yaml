@@ -185,11 +185,14 @@ pluginSecrets:
       #    <your public key content here>
       #    -----END PUBLIC KEY-----
 
+helmConfig:
+  registry: "https://validator-labs.github.io"
+
 # Validation plugin charts
 plugins:
 - chart:
     name: validator-plugin-azure
-    repository: "https://validator-labs.github.io/validator-plugin-azure"
+    repository: validator-plugin-azure
     version: v0.0.14
   values: |-
     controllerManager:
@@ -264,7 +267,7 @@ plugins:
       serviceAccountName: ""
 - chart:
     name: validator-plugin-oci
-    repository: "https://validator-labs.github.io/validator-plugin-oci"
+    repository: validator-plugin-oci
     version: v0.0.12
   values: |-
     controllerManager:
@@ -321,7 +324,7 @@ plugins:
       type: ClusterIP
 - chart:
     name: validator-plugin-kubescape
-    repository: "https://validator-labs.github.io/validator-plugin-kubescape"
+    repository: validator-plugin-kubescape
     version: v0.0.4
   values: |-
     controllerManager:
@@ -386,7 +389,7 @@ plugins:
       type: ClusterIP
 - chart:
     name: validator-plugin-aws
-    repository: "https://validator-labs.github.io/validator-plugin-aws"
+    repository: validator-plugin-aws
     version: v0.1.2
   values: |-
     controllerManager:
@@ -453,7 +456,7 @@ plugins:
       serviceAccountName: ""
 - chart:
     name: validator-plugin-network
-    repository: "https://validator-labs.github.io/validator-plugin-network"
+    repository: validator-plugin-network
     version: v0.0.20
   values: |-
     controllerManager:
@@ -512,7 +515,7 @@ plugins:
       type: ClusterIP
 - chart:
     name: validator-plugin-maas
-    repository: "https://validator-labs.github.io/validator-plugin-maas"
+    repository: validator-plugin-maas
     version: v0.0.5
   values: |-
     controllerManager:
@@ -569,7 +572,7 @@ plugins:
       type: ClusterIP
 - chart:
     name: validator-plugin-vsphere
-    repository: "https://validator-labs.github.io/validator-plugin-vsphere"
+    repository: validator-plugin-vsphere
     version: v0.0.28
   values: |-
     controllerManager:

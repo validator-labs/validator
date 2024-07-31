@@ -9,11 +9,13 @@ metadata:
   name: validator-config-test
   namespace: validator
 spec:
+  helmConfig:
+    registry: https://validator-labs.github.io
+    authSecretName: validator-plugin-network-chart-secret
   plugins:
   - chart:
       name: validator-plugin-network
-      repository: https://validator-labs.github.io/validator-plugin-network
-      authSecretName: validator-plugin-network-chart-secret
+      repository: validator-plugin-network
       version: v0.0.15
     values: |-
       controllerManager:
