@@ -167,7 +167,8 @@ func (r *ValidatorConfigReconciler) redeployIfNeeded(ctx context.Context, vc *v1
 
 		opts := &helm.Options{
 			Chart:                 p.Chart.Name,
-			Repo:                  fmt.Sprintf("%s/%s", helmConfig.Registry, p.Chart.Repository),
+			Repo:                  p.Chart.Repository,
+			Registry:              helmConfig.Registry,
 			Version:               p.Chart.Version,
 			Values:                p.Values,
 			InsecureSkipTLSVerify: helmConfig.InsecureSkipTLSVerify,
@@ -201,7 +202,7 @@ func (r *ValidatorConfigReconciler) redeployIfNeeded(ctx context.Context, vc *v1
 				continue
 			}
 			ociOpts := oci.ImageOptions{
-				Ref:     fmt.Sprintf("%s/%s:%s", strings.TrimPrefix(opts.Repo, oci.Scheme), opts.Chart, opts.Version),
+				Ref:     fmt.Sprintf("%s/%s/%s:%s", strings.TrimPrefix(opts.Registry, oci.Scheme), opts.Repo, opts.Chart, opts.Version),
 				OutDir:  opts.Path,
 				OutFile: opts.Chart,
 			}
