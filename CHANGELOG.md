@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.0.51](https://github.com/validator-labs/validator/compare/v0.0.50...v0.0.51) (2024-07-31)
+
+
+### Refactoring
+
+* create root level HelmConfig struct which applies to all HelmReleases ([#356](https://github.com/validator-labs/validator/issues/356)) ([8eadfe1](https://github.com/validator-labs/validator/commit/8eadfe1f3a94ee91570f095efeb82406eee187c4))
+
 ## [0.0.50](https://github.com/validator-labs/validator/compare/v0.0.49...v0.0.50) (2024-07-26)
 
 
