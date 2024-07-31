@@ -1,10 +1,13 @@
 package helm
 
+import "fmt"
+
 // Options holds all the options for installing/pulling/upgrading a chart.
 type Options struct {
 	Chart string
 	Path  string
 
+	Registry        string
 	Repo            string
 	Version         string
 	Values          string
@@ -29,7 +32,7 @@ type Options struct {
 
 // ConfigureRepo adds the repo flag to the command.
 func (o Options) ConfigureRepo(args []string) []string {
-	args = append(args, "--repo", o.Repo)
+	args = append(args, "--repo", fmt.Sprintf("%s/%s", o.Registry, o.Repo))
 	return args
 }
 

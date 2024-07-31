@@ -108,6 +108,9 @@ func (c *CLIClient) run(name, namespace string, options Options, command string,
 		args = append(args, options.Path)
 	} else if options.Chart != "" {
 		args = append(args, options.Chart)
+		if options.Registry == "" {
+			return fmt.Errorf("chart registry cannot be null")
+		}
 		if options.Repo == "" {
 			return fmt.Errorf("chart repo cannot be null")
 		}

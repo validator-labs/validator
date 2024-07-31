@@ -5,6 +5,11 @@ kind: ValidatorConfig
 metadata:
   name: validator-config
 spec:
+  helmConfig:
+    registry: {{ required ".Values.helmConfig.registry is required!" .Values.helmConfig.registry }}
+    caFile: {{ .Values.helmConfig.caFile }}
+    insecureSkipVerify: {{ .Values.helmConfig.insecureSkipVerify }}
+    authSecretName: {{ .Values.helmConfig.authSecretName }}
   plugins:
 {{- range .Values.plugins }}
   -

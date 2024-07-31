@@ -147,12 +147,15 @@ var _ = Describe("ValidatorConfig controller", Ordered, func() {
 				Namespace: validatorNamespace,
 			},
 			Spec: v1alpha1.ValidatorConfigSpec{
+				HelmConfig: v1alpha1.HelmConfig{
+					Registry:       "foo",
+					AuthSecretName: "chart-secret",
+				},
 				Plugins: []v1alpha1.HelmRelease{
 					{
 						Chart: v1alpha1.HelmChart{
-							Name:           "foo",
-							Repository:     "bar",
-							AuthSecretName: "chart-secret",
+							Repository: "bar",
+							Name:       "bar",
 						},
 					},
 				},
@@ -167,7 +170,7 @@ var _ = Describe("ValidatorConfig controller", Ordered, func() {
 			if err := k8sClient.Get(ctx, vcKey, vc); err != nil {
 				return false
 			}
-			condition, ok := isConditionTrue(vc, "foo", v1alpha1.HelmChartDeployedCondition)
+			condition, ok := isConditionTrue(vc, "bar", v1alpha1.HelmChartDeployedCondition)
 			return condition.Status == corev1.ConditionFalse && !ok
 		}, timeout, interval).Should(BeTrue(), "failed to deploy validator-plugin-network")
 	})

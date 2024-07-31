@@ -27,7 +27,7 @@ function addChartValues {
   cat <<EOF >> chart/validator/values.yaml
 - chart:
     name: $1
-    repository: "https://validator-labs.github.io/$1"
+    repository: $1
     version: v$2
   values: |-
 $indentedValues
