@@ -23,7 +23,7 @@ import (
 
 // ValidatorConfigSpec defines the desired state of ValidatorConfig.
 type ValidatorConfigSpec struct {
-	// HelmConfig defines the configuration for the Helm repository.
+	// HelmConfig defines the configuration for the Helm registry.
 	HelmConfig HelmConfig `json:"helmConfig" yaml:"helmConfig"`
 
 	// Plugins defines the configuration for the validator plugins.

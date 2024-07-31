@@ -40,7 +40,7 @@ spec:
             description: ValidatorConfigSpec defines the desired state of ValidatorConfig.
             properties:
               helmConfig:
-                description: HelmConfig defines the configuration for the Helm repository.
+                description: HelmConfig defines the configuration for the Helm registry.
                 properties:
                   authSecretName:
                     description: AuthSecretName is the name of the K8s secret containing

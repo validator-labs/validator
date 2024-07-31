@@ -7,15 +7,9 @@ metadata:
 spec:
   helmConfig:
     registry: {{ required ".Values.helmConfig.registry is required!" .Values.helmConfig.registry }}
-    {{- if .Values.helmConfig.caFile }}
     caFile: {{ .Values.helmConfig.caFile }}
-    {{- end }}
-    {{- if .Values.helmConfig.insecureSkipVerify }}
     insecureSkipVerify: {{ .Values.helmConfig.insecureSkipVerify }}
-    {{- end }}
-    {{- if .Values.helmConfig.authSecretName }}
     authSecretName: {{ .Values.helmConfig.authSecretName }}
-    {{- end }}
   plugins:
 {{- range .Values.plugins }}
   -
