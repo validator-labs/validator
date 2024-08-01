@@ -16,11 +16,6 @@
 
 * set oci.ImageOptions.Ref to the correct value to ensure plugin charts are installed ([#359](https://github.com/validator-labs/validator/issues/359)) ([effd172](https://github.com/validator-labs/validator/commit/effd1729cd218ef2739c33f013747e4b610aeae1))
 
-
-### Other
-
-* release 0.1.0 ([9512414](https://github.com/validator-labs/validator/commit/95124144c582c07d6b9079766e7177177f92fed6))
-
 ## [0.0.50](https://github.com/validator-labs/validator/compare/v0.0.49...v0.0.50) (2024-07-26)
 
 
