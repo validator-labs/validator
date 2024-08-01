@@ -8,8 +8,8 @@ spec:
     - name: quay.io/validator-labs/validator-plugin-aws:v0.1.2
     - name: quay.io/validator-labs/validator-plugin-azure:v0.0.14
     - name: quay.io/validator-labs/validator-plugin-kubescape:v0.0.4
-    - name: quay.io/validator-labs/validator-plugin-maas:v0.0.5
-    - name: quay.io/validator-labs/validator-plugin-network:v0.0.20
+    - name: quay.io/validator-labs/validator-plugin-maas:v0.0.6
+    - name: quay.io/validator-labs/validator-plugin-network:v0.0.21
     - name: quay.io/validator-labs/validator-plugin-oci:v0.0.12
     - name: quay.io/validator-labs/validator-plugin-vsphere:v0.0.28
     - name: quay.io/validator-labs/validator-certs-init:1.0.0
@@ -39,10 +39,10 @@ spec:
       version: 0.0.4
     - name: validator-plugin-maas
       repoURL: https://validator-labs.github.io/validator-plugin-maas
-      version: 0.0.5
+      version: 0.0.6
     - name: validator-plugin-network
       repoURL: https://validator-labs.github.io/validator-plugin-network
-      version: 0.0.20
+      version: 0.0.21
     - name: validator-plugin-oci
       repoURL: https://validator-labs.github.io/validator-plugin-oci
       version: 0.0.12

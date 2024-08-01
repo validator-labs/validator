@@ -202,7 +202,7 @@ func (r *ValidatorConfigReconciler) redeployIfNeeded(ctx context.Context, vc *v1
 				continue
 			}
 			ociOpts := oci.ImageOptions{
-				Ref:     fmt.Sprintf("%s/%s/%s:%s", strings.TrimPrefix(opts.Registry, oci.Scheme), opts.Repo, opts.Chart, opts.Version),
+				Ref:     fmt.Sprintf("%s/%s:%s", strings.TrimPrefix(opts.Registry, oci.Scheme), opts.Repo, opts.Version),
 				OutDir:  opts.Path,
 				OutFile: opts.Chart,
 			}
