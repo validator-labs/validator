@@ -1,5 +1,26 @@
 # Changelog
 
+## [0.0.51](https://github.com/validator-labs/validator/compare/v0.0.50...v0.0.51) (2024-08-01)
+
+
+### ⚠ BREAKING CHANGES
+
+* create root level HelmConfig struct which applies to all HelmReleases ([#356](https://github.com/validator-labs/validator/issues/356))
+
+### Features
+
+* create root level HelmConfig struct which applies to all HelmReleases ([#356](https://github.com/validator-labs/validator/issues/356)) ([6fe04ba](https://github.com/validator-labs/validator/commit/6fe04baedcc3484015ca019bcd4558a9765df097))
+
+
+### Bug Fixes
+
+* set oci.ImageOptions.Ref to the correct value to ensure plugin charts are installed ([#359](https://github.com/validator-labs/validator/issues/359)) ([effd172](https://github.com/validator-labs/validator/commit/effd1729cd218ef2739c33f013747e4b610aeae1))
+
+
+### Other
+
+* release 0.0.51 ([9801b15](https://github.com/validator-labs/validator/commit/9801b15335a8bccf9068dbc23f56dfecb5cb8b57))
+
 ## [0.0.50](https://github.com/validator-labs/validator/compare/v0.0.49...v0.0.50) (2024-07-26)
 
 
