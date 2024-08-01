@@ -19,7 +19,6 @@
 
 ### Other
 
-* release 0.0.51 ([9801b15](https://github.com/validator-labs/validator/commit/9801b15335a8bccf9068dbc23f56dfecb5cb8b57))
 * release 0.1.0 ([9512414](https://github.com/validator-labs/validator/commit/95124144c582c07d6b9079766e7177177f92fed6))
 
 ## [0.0.50](https://github.com/validator-labs/validator/compare/v0.0.49...v0.0.50) (2024-07-26)
