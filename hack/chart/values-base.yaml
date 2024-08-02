@@ -184,6 +184,17 @@ pluginSecrets:
       #    -----BEGIN PUBLIC KEY-----
       #    <your public key content here>
       #    -----END PUBLIC KEY-----
+  
+  # If installing the MAAS plugin, the below config is required unless the following applies:
+  # - The target cluster already contains a secret with the correct format and you've specified its name above.
+  #   If specifying your own secret, refer to chart/validator/templates/plugin-secret-maas.yaml for
+  #   an example of the expected format and ensure that it exists in the same namespace as the Helm release.
+  #
+  maas: {}  # Don't forget to delete these curly braces if you're specifying credentials here!
+    # secretName: maas-creds  # ensure this matches the MAAS plugin values above
+    # maasApiToken: ""
+    # tokenKey: MAAS_API_KEY
+
 
 helmConfig:
   registry: "https://validator-labs.github.io"
