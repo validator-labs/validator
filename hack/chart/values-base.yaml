@@ -192,7 +192,8 @@ pluginSecrets:
   #
   maas: {}  # Don't forget to delete these curly braces if you're specifying credentials here!
     # secretName: maas-creds  # ensure this matches the MAAS plugin values above
-    # maasApiKey: ""
+    # maasApiToken: ""
+    # tokenKey: MAAS_API_KEY
 
 
 helmConfig:
