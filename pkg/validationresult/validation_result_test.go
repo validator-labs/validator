@@ -69,7 +69,7 @@ func TestHandleExistingValidationResult(t *testing.T) {
 	}
 	for _, c := range cs {
 		t.Log(c.name)
-		HandleExistingValidationResult(c.vr, logr.Logger{})
+		HandleExisting(c.vr, logr.Logger{})
 	}
 }
 
@@ -133,7 +133,7 @@ func TestHandleNewValidationResult(t *testing.T) {
 	}
 	for _, c := range cs {
 		t.Log(c.name)
-		err = HandleNewValidationResult(context.Background(), c.client, c.patcher, c.vr, logr.Logger{})
+		err = HandleNew(context.Background(), c.client, c.patcher, c.vr, logr.Logger{})
 		if err != nil && !reflect.DeepEqual(c.expected.Error(), err.Error()) {
 			t.Errorf("expected (%v), got (%v)", c.expected, err)
 		}
@@ -221,7 +221,7 @@ func TestSafeUpdateValidationResult(t *testing.T) {
 	}
 	for _, c := range cs {
 		t.Log(c.name)
-		SafeUpdateValidationResult(context.Background(), c.patcher, c.vr, c.vrr, logr.Logger{})
+		SafeUpdate(context.Background(), c.patcher, c.vr, c.vrr, logr.Logger{})
 	}
 }
 
@@ -299,7 +299,7 @@ func TestUpdateValidationResultStatus(t *testing.T) {
 	}
 	for _, c := range cs {
 		t.Log(c.name)
-		updateValidationResultStatus(c.vrCurr, c.vrr, c.vrrErr, logr.Logger{})
+		updateStatus(c.vrCurr, c.vrr, c.vrrErr, logr.Logger{})
 		if !reflect.DeepEqual(c.vrCurr.Hash(), c.vrExpected.Hash()) {
 			t.Errorf("expected (%+v), got (%+v)", c.vrExpected, c.vrCurr)
 		}
