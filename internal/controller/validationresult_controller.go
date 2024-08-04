@@ -33,8 +33,8 @@ import (
 	"sigs.k8s.io/controller-runtime/pkg/client"
 
 	v1alpha1 "github.com/validator-labs/validator/api/v1alpha1"
-	"github.com/validator-labs/validator/internal/sinks"
 	"github.com/validator-labs/validator/pkg/constants"
+	"github.com/validator-labs/validator/pkg/sinks"
 	"github.com/validator-labs/validator/pkg/types"
 )
 

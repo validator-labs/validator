@@ -35,10 +35,10 @@ import (
 
 	validationv1alpha1 "github.com/validator-labs/validator/api/v1alpha1"
 	"github.com/validator-labs/validator/internal/controller"
-	"github.com/validator-labs/validator/internal/kube"
-	"github.com/validator-labs/validator/internal/sinks"
 	"github.com/validator-labs/validator/pkg/helm"
 	"github.com/validator-labs/validator/pkg/helm/release"
+	"github.com/validator-labs/validator/pkg/kube"
+	"github.com/validator-labs/validator/pkg/sinks"
 	//+kubebuilder:scaffold:imports
 )
 

@@ -75,11 +75,26 @@ func HandleNewValidationResult(ctx context.Context, c client.Client, p Patcher, 
 	return nil
 }
 
-// SafeUpdateValidationResult updates a ValidationResult, ensuring
-// that the overall validation status remains failed if a single rule fails.
+// SafeUpdateValidationResult processes and patches a ValidationResult with retry logic.
 func SafeUpdateValidationResult(ctx context.Context, p Patcher, vr *v1alpha1.ValidationResult, vrr types.ValidationResponse, l logr.Logger) error {
 	l = l.WithValues("name", vr.Name, "namespace", vr.Namespace)
 
+	if err := FinalizeValidationResult(vr, vrr, l); err != nil {
+		l.Error(err, "failed to finalize ValidationResult")
+		return err
+	}
+	if err := patchValidationResult(ctx, p, vr); err != nil {
+		l.Error(err, "failed to patch ValidationResult")
+		return err
+	}
+
+	l.V(0).Info("Successfully patched ValidationResult", "state", vr.Status.State)
+	return nil
+}
+
+// FinalizeValidationResult finalizes a ValidationResult, ensuring
+// that the overall validation status remains failed if a single rule fails.
+func FinalizeValidationResult(vr *v1alpha1.ValidationResult, vrr types.ValidationResponse, l logr.Logger) error {
 	for i, r := range vrr.ValidationRuleResults {
 		// Handle nil ValidationRuleResult
 		if r == nil {
@@ -92,14 +107,6 @@ func SafeUpdateValidationResult(ctx context.Context, p Patcher, vr *v1alpha1.Val
 		// Update overall ValidationResult status
 		updateValidationResultStatus(vr, r, vrr.ValidationRuleErrors[i], l)
 	}
-
-	l.V(0).Info("Preparing to patch ValidationResult")
-	if err := patchValidationResult(ctx, p, vr); err != nil {
-		l.Error(err, "failed to patch ValidationResult")
-		return err
-	}
-
-	l.V(0).Info("Successfully patched ValidationResult", "state", vr.Status.State)
 	return nil
 }
 

@@ -10,8 +10,8 @@ import (
 	corev1 "k8s.io/api/core/v1"
 
 	"github.com/validator-labs/validator/api/v1alpha1"
-	"github.com/validator-labs/validator/internal/test"
 	"github.com/validator-labs/validator/pkg/constants"
+	"github.com/validator-labs/validator/pkg/test"
 	"github.com/validator-labs/validator/pkg/types"
 	"github.com/validator-labs/validator/pkg/util"
 )
