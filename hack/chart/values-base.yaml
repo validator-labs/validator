@@ -105,14 +105,14 @@ cleanup:
 
 pluginSecrets:
   # If installing the AWS plugin, the below config is required unless one of the following applies:
-  # - The target cluster already contains a secret with the correct format and you've specified its name above.
+  # - The target cluster already contains a secret with the correct format and you've specified its name below.
   #   If specifying your own secret, refer to chart/validator/templates/plugin-secret-aws.yaml for
   #   an example of the expected format and ensure that it exists in the same namespace as the Helm release.
   # - You're deploying to a K8s cluster in AWS and relying on an node instance IAM role
   # - You're deploying to a K8s cluster in AWS and relying on IMDSv2, plus you've specified auth.serviceAccountName
   #
   aws: {}  # Don't forget to delete these curly braces if you're specifying credentials here!
-    # secretName: aws-creds  # ensure this matches the AWS plugin values above
+    # secretName: aws-creds  # ensure this matches the AWS plugin values below
     #
     # Any valid combination of AWS credential environment variables, per the options defined in:
     # https://aws.github.io/aws-sdk-go-v2/docs/configuring-sdk/#environment-variables.
@@ -122,13 +122,13 @@ pluginSecrets:
     #   AWS_SESSION_TOKEN: ""
 
   # If installing the Azure plugin, the below config is required unless one of the following applies:
-  # - The target cluster already contains a secret with the correct format and you've specified its name above.
+  # - The target cluster already contains a secret with the correct format and you've specified its name below.
   #   If specifying your own secret, refer to chart/validator/templates/plugin-secret-azure.yaml for
   #   an example of the expected format and ensure that it exists in the same namespace as the Helm release.
   # - You're deploying to a K8s cluster in AKS and relying on WorkloadIdentityCredentials, plus you've specified auth.serviceAccountName
   #
   azure: {}  # Don't forget to delete these curly braces if you're specifying credentials here!
-    # secretName: azure-creds  # ensure this matches the Azure plugin values above
+    # secretName: azure-creds  # ensure this matches the Azure plugin values below
     #
     # Any valid combination of Azure credential environment variables, per the options defined in:
     # https://pkg.go.dev/github.com/Azure/azure-sdk-for-go/sdk/azidentity#readme-environment-variables.
@@ -141,27 +141,51 @@ pluginSecrets:
     #   AZURE_USERNAME: ""
     #   AZURE_PASSWORD: ""
 
-  # If installing the vSphere plugin, the below config is required unless the following applies:
-  # - The target cluster already contains a secret with the correct format and you've specified its name above.
-  #   If specifying your own secret, refer to chart/validator/templates/plugin-secret-vsphere.yaml for
+  # If installing the MAAS plugin, the below config is required unless the following applies:
+  # - The target cluster already contains a secret with the correct format and you've specified its name below.
+  #   If specifying your own secret, refer to chart/validator/templates/plugin-secret-maas.yaml for
   #   an example of the expected format and ensure that it exists in the same namespace as the Helm release.
   #
-  vSphere: {}  # Don't forget to delete these curly braces if you're specifying credentials here!
-    # secretName: vsphere-creds  # ensure this matches the vSphere plugin values above
-    # username: ""
-    # password: ""
-    # vcenterServer: ""
-    # insecureSkipVerify: ""
+  maas: {}  # Don't forget to delete these curly braces if you're specifying credentials here!
+    # secretName: maas-creds  # ensure this matches the MAAS plugin values below
+    # maasApiToken: ""
+    # tokenKey: MAAS_API_KEY
 
-  oci:
-    # If installing the OCI plugin and validating against private registries, the below config is required unless the following applies:
-    # - The target cluster already contains secrets with the correct format for all private registries.
-    #   If specifying your own secret, refer to chart/validator/templates/plugin-secret-oci-auth.yaml for
-    #   an example of the expected format and ensure that it exists in the same namespace as the Helm release.
+  network:
+    # If installing the Network plugin, auth config is required unless the following applies:
+    # - The target cluster already contains secret(s) with the correct format for all HTTPFile rules whose
+    #   hosts require HTTP basic authentication.
+    #   If specifying your own secret(s), refer to chart/validator/templates/plugin-secret-network-auth.yaml for
+    #   an example of the expected format and ensure they exist in the same namespace as the Helm release.
     #
     auth: []  # Don't forget to delete these square brackets if you're specifying credentials here!
       # Basic auth example:
-      # - secretName: registry-creds # ensure this matches the credentials secretName in the OciRegistryRule
+      # - secretName: http-host-1 # ensure this matches authSecretRef.name in the HTTPFile rule
+      #   username: username
+      #   password: pa$$w0rd
+
+    # If installing the Network plugin cert config is required unless the following applies:
+    # - The target cluster already contains secret(s) with the correct format for all CA certificates
+    #   you'd like to add to the system CA pool used when evaluating HTTPFile and TCPConn rules.
+    #   If specifying your own secret, refer to chart/validator/templates/plugin-secret-network-certs.yaml for
+    #   an example of the expected format and ensure that it exists in the same namespace as the Helm release.
+    #
+    caCerts: []  # Don't forget to delete these square brackets if you're specifying public keys here!
+      # - secretName: acme-custom-ca # ensure this matches caCerts.secretRefs[i].name in the NetworkValidator
+      #   caCert: |
+      #    -----BEGIN CA CERTIFICATE-----
+      #    <your CA certificate here>
+      #    -----END CA CERTIFICATE-----
+
+  oci:
+    # If installing the OCI plugin and validating against private registries, the below config is required unless the following applies:
+    # - The target cluster already contains secret(s) with the correct format for all private registries.
+    #   If specifying your own secret(s), refer to chart/validator/templates/plugin-secret-oci-auth.yaml for
+    #   an example of the expected format and ensure that they exist in the same namespace as the Helm release.
+    #
+    auth: []  # Don't forget to delete these square brackets if you're specifying credentials here!
+      # Basic auth example:
+      # - secretName: registry-creds # ensure this matches auth.secretName in the OciRegistryRule
       #   env:
       #     username: username
       #     password: pa$$w0rd
@@ -174,27 +198,28 @@ pluginSecrets:
       #     AWS_SESSION_TOKEN: ""
 
     # If installing the OCI plugin and enabling signature verification of artifacts, the below config is required unless the following applies:
-    # - The target cluster already contains secrets with the correct format for all public keys used for signing artifacts.
+    # - The target cluster already contains secret(s) with the correct format for all public keys used for signing artifacts.
     #   If specifying your own secret, refer to chart/validator/templates/plugin-secret-oci-pubkey.yaml for
     #   an example of the expected format and ensure that it exists in the same namespace as the Helm release.
     #
     pubKeys: []  # Don't forget to delete these square brackets if you're specifying public keys here!
-      # - secretName: cosign-public-keys # ensure this matches the public key secretName in the OciRegistryRule
+      # - secretName: cosign-public-keys # ensure this matches signatureVerification.secretName in the OciRegistryRule
       #   key1.pub: |  # multiple public keys can be added to your secret, ensure each key name ends in .pub
       #    -----BEGIN PUBLIC KEY-----
-      #    <your public key content here>
+      #    <your public key here>
       #    -----END PUBLIC KEY-----
-  
-  # If installing the MAAS plugin, the below config is required unless the following applies:
-  # - The target cluster already contains a secret with the correct format and you've specified its name above.
-  #   If specifying your own secret, refer to chart/validator/templates/plugin-secret-maas.yaml for
+
+  # If installing the vSphere plugin, the below config is required unless the following applies:
+  # - The target cluster already contains a secret with the correct format and you've specified its name below.
+  #   If specifying your own secret, refer to chart/validator/templates/plugin-secret-vsphere.yaml for
   #   an example of the expected format and ensure that it exists in the same namespace as the Helm release.
   #
-  maas: {}  # Don't forget to delete these curly braces if you're specifying credentials here!
-    # secretName: maas-creds  # ensure this matches the MAAS plugin values above
-    # maasApiToken: ""
-    # tokenKey: MAAS_API_KEY
-
+  vSphere: {}  # Don't forget to delete these curly braces if you're specifying credentials here!
+    # secretName: vsphere-creds  # ensure this matches the vSphere plugin values below
+    # username: ""
+    # password: ""
+    # vcenterServer: ""
+    # insecureSkipVerify: ""
 
 helmConfig:
   registry: "https://validator-labs.github.io"
