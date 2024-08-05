@@ -1,5 +1,23 @@
 # Changelog
 
+## [0.1.1](https://github.com/validator-labs/validator/compare/v0.1.0...v0.1.1) (2024-08-05)
+
+
+### Features
+
+* add values for maas plugin ([#364](https://github.com/validator-labs/validator/issues/364)) ([7c09687](https://github.com/validator-labs/validator/commit/7c0968751ea5d3be9e6cc0561f4aad9138b7a9f0))
+* HTTP basic authentication secrets for network plugin ([#367](https://github.com/validator-labs/validator/issues/367)) ([128041b](https://github.com/validator-labs/validator/commit/128041bc82951e5150a3d828c60318af9814d8c3))
+
+
+### Dependency Updates
+
+* **deps:** update module github.com/onsi/gomega to v1.34.1 ([#344](https://github.com/validator-labs/validator/issues/344)) ([5144078](https://github.com/validator-labs/validator/commit/514407894cdf658d817d00d1b1d32836e076d5e3))
+
+
+### Refactoring
+
+* expose sinks pkg for direct rule evaluation; add ValidationResult creation & finalization helpers ([#366](https://github.com/validator-labs/validator/issues/366)) ([056ee62](https://github.com/validator-labs/validator/commit/056ee62b788ec3b7763be0706d4643b7e104e4a4))
+
 ## [0.1.0](https://github.com/validator-labs/validator/compare/v0.0.50...v0.1.0) (2024-08-01)
 
 
