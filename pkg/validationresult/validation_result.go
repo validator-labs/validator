@@ -3,6 +3,7 @@ package validationresult
 
 import (
 	"context"
+	"fmt"
 	"strings"
 	"time"
 
@@ -25,8 +26,44 @@ type Patcher interface {
 	Patch(ctx context.Context, obj client.Object, opts ...patch.Option) error
 }
 
-// HandleExistingValidationResult processes a preexisting validation result for the active validator.
-func HandleExistingValidationResult(vr *v1alpha1.ValidationResult, l logr.Logger) {
+// ValidationRule is an interface for validation rules.
+type ValidationRule interface {
+	client.Object
+	PluginCode() string
+	ResultCount() int
+}
+
+// Build creates a new ValidationResult for a specific ValidationRule.
+func Build(r ValidationRule) *v1alpha1.ValidationResult {
+	return &v1alpha1.ValidationResult{
+		ObjectMeta: metav1.ObjectMeta{
+			Name:      Name(r),
+			Namespace: r.GetNamespace(),
+			OwnerReferences: []metav1.OwnerReference{
+				{
+					APIVersion: r.GetObjectKind().GroupVersionKind().Version,
+					Kind:       r.GetObjectKind().GroupVersionKind().Kind,
+					Name:       r.GetName(),
+					UID:        r.GetUID(),
+					Controller: util.Ptr(true),
+				},
+			},
+		},
+		Spec: v1alpha1.ValidationResultSpec{
+			Plugin:          r.PluginCode(),
+			ExpectedResults: r.ResultCount(),
+		},
+	}
+}
+
+// Name returns the name of a ValidationResult for a specific ValidationRule.
+func Name(r ValidationRule) string {
+	name := fmt.Sprintf("validator-plugin-%s-%s", r.PluginCode(), r.GetName())
+	return util.Sanitize(name)
+}
+
+// HandleExisting processes a preexisting validation result for the active validator.
+func HandleExisting(vr *v1alpha1.ValidationResult, l logr.Logger) {
 	l = l.WithValues("name", vr.Name, "namespace", vr.Namespace, "state", vr.Status.State)
 
 	switch vr.Status.State {
@@ -49,8 +86,8 @@ func HandleExistingValidationResult(vr *v1alpha1.ValidationResult, l logr.Logger
 	}
 }
 
-// HandleNewValidationResult creates a new validation result for the active validator.
-func HandleNewValidationResult(ctx context.Context, c client.Client, p Patcher, vr *v1alpha1.ValidationResult, l logr.Logger) error {
+// HandleNew creates a new validation result for the active validator.
+func HandleNew(ctx context.Context, c client.Client, p Patcher, vr *v1alpha1.ValidationResult, l logr.Logger) error {
 	l = l.WithValues("name", vr.Name, "namespace", vr.Namespace)
 
 	// Create the ValidationResult
@@ -75,11 +112,26 @@ func HandleNewValidationResult(ctx context.Context, c client.Client, p Patcher, 
 	return nil
 }
 
-// SafeUpdateValidationResult updates a ValidationResult, ensuring
-// that the overall validation status remains failed if a single rule fails.
-func SafeUpdateValidationResult(ctx context.Context, p Patcher, vr *v1alpha1.ValidationResult, vrr types.ValidationResponse, l logr.Logger) error {
+// SafeUpdate processes and patches a ValidationResult with retry logic.
+func SafeUpdate(ctx context.Context, p Patcher, vr *v1alpha1.ValidationResult, vrr types.ValidationResponse, l logr.Logger) error {
 	l = l.WithValues("name", vr.Name, "namespace", vr.Namespace)
 
+	if err := Finalize(vr, vrr, l); err != nil {
+		l.Error(err, "failed to finalize ValidationResult")
+		return err
+	}
+	if err := patchValidationResult(ctx, p, vr); err != nil {
+		l.Error(err, "failed to patch ValidationResult")
+		return err
+	}
+
+	l.V(0).Info("Successfully patched ValidationResult", "state", vr.Status.State)
+	return nil
+}
+
+// Finalize finalizes a ValidationResult, ensuring
+// that the overall validation status remains failed if a single rule fails.
+func Finalize(vr *v1alpha1.ValidationResult, vrr types.ValidationResponse, l logr.Logger) error {
 	for i, r := range vrr.ValidationRuleResults {
 		// Handle nil ValidationRuleResult
 		if r == nil {
@@ -90,21 +142,13 @@ func SafeUpdateValidationResult(ctx context.Context, p Patcher, vr *v1alpha1.Val
 			}
 		}
 		// Update overall ValidationResult status
-		updateValidationResultStatus(vr, r, vrr.ValidationRuleErrors[i], l)
+		updateStatus(vr, r, vrr.ValidationRuleErrors[i], l)
 	}
-
-	l.V(0).Info("Preparing to patch ValidationResult")
-	if err := patchValidationResult(ctx, p, vr); err != nil {
-		l.Error(err, "failed to patch ValidationResult")
-		return err
-	}
-
-	l.V(0).Info("Successfully patched ValidationResult", "state", vr.Status.State)
 	return nil
 }
 
-// updateValidationResultStatus updates a ValidationResult's status with the result of a single validation rule.
-func updateValidationResultStatus(vr *v1alpha1.ValidationResult, vrr *types.ValidationRuleResult, vrrErr error, l logr.Logger) {
+// updateStatus updates a ValidationResult's status with the result of a single validation rule.
+func updateStatus(vr *v1alpha1.ValidationResult, vrr *types.ValidationRuleResult, vrrErr error, l logr.Logger) {
 
 	// Finalize result State and Condition in the event of an unexpected error
 	if vrrErr != nil {

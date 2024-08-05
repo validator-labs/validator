@@ -21,8 +21,8 @@ import (
 	kyaml "sigs.k8s.io/yaml"
 
 	"github.com/validator-labs/validator/api/v1alpha1"
-	"github.com/validator-labs/validator/internal/test"
 	"github.com/validator-labs/validator/pkg/helm"
+	"github.com/validator-labs/validator/pkg/test"
 	//+kubebuilder:scaffold:imports
 )
 

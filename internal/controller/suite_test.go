@@ -42,10 +42,10 @@ import (
 	"sigs.k8s.io/controller-runtime/pkg/log/zap"
 
 	"github.com/validator-labs/validator/api/v1alpha1"
-	"github.com/validator-labs/validator/internal/kube"
-	"github.com/validator-labs/validator/internal/sinks"
 	"github.com/validator-labs/validator/pkg/helm"
 	"github.com/validator-labs/validator/pkg/helm/release"
+	"github.com/validator-labs/validator/pkg/kube"
+	"github.com/validator-labs/validator/pkg/sinks"
 	"github.com/validator-labs/validator/pkg/util"
 	//+kubebuilder:scaffold:imports
 )
