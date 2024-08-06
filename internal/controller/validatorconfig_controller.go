@@ -43,7 +43,8 @@ import (
 
 	"buf.build/gen/go/spectrocloud/spectro-cleanup/connectrpc/go/cleanup/v1/cleanupv1connect"
 	cleanv1 "buf.build/gen/go/spectrocloud/spectro-cleanup/protocolbuffers/go/cleanup/v1"
-	"github.com/validator-labs/validator-plugin-oci/pkg/oci"
+	ociauth "github.com/validator-labs/validator-plugin-oci/pkg/auth"
+	ocic "github.com/validator-labs/validator-plugin-oci/pkg/ociclient"
 
 	v1alpha1 "github.com/validator-labs/validator/api/v1alpha1"
 	"github.com/validator-labs/validator/pkg/helm"
@@ -184,25 +185,25 @@ func (r *ValidatorConfigReconciler) redeployIfNeeded(ctx context.Context, vc *v1
 		}
 
 		var cleanupLocalChart bool
-		if strings.HasPrefix(helmConfig.Registry, oci.Scheme) {
+		if strings.HasPrefix(helmConfig.Registry, ocic.Scheme) {
 			r.Log.V(0).Info("Pulling plugin Helm chart", "name", p.Chart.Name)
 
 			opts.Path = fmt.Sprintf("/charts/%s", opts.Chart)
 			opts.Version = strings.TrimPrefix(opts.Version, "v")
 
 			// use OCI client instead of Helm client due to https://github.com/helm/helm/issues/12810
-			ociClient, err := oci.NewOCIClient(
-				oci.WithBasicAuth(opts.Username, opts.Password),
-				oci.WithMultiAuth(),
-				oci.WithTLSConfig(opts.InsecureSkipTLSVerify, "", opts.CaFile),
+			ociClient, err := ocic.NewOCIClient(
+				ocic.WithBasicAuth(opts.Username, opts.Password),
+				ocic.WithMultiAuth(ociauth.GetKeychain(opts.Registry)),
+				ocic.WithTLSConfig(opts.InsecureSkipTLSVerify, "", opts.CaFile),
 			)
 			if err != nil {
 				r.Log.V(0).Error(err, "failed to create OCI client")
 				conditions[i] = r.buildHelmChartCondition(p.Chart.Name, err)
 				continue
 			}
-			ociOpts := oci.ImageOptions{
-				Ref:     fmt.Sprintf("%s/%s:%s", strings.TrimPrefix(opts.Registry, oci.Scheme), opts.Repo, opts.Version),
+			ociOpts := ocic.ImageOptions{
+				Ref:     fmt.Sprintf("%s/%s:%s", strings.TrimPrefix(opts.Registry, ocic.Scheme), opts.Repo, opts.Version),
 				OutDir:  opts.Path,
 				OutFile: opts.Chart,
 			}
