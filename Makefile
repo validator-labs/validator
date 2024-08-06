@@ -36,5 +36,8 @@ haul: hauler ## Generate Hauls for latest release
 HAULER_VERSION ?= 1.0.4
 .PHONY: hauler
 hauler: ## Install hauler
-	curl -sfL https://get.hauler.dev | HAULER_VERSION=$(HAULER_VERSION) bash
+	@command -v hauler >/dev/null 2>&1 || { \
+		echo "Hauler version $(HAULER_VERSION) not found, downloading..."; \
+		curl -sfL https://get.hauler.dev | HAULER_VERSION=$(HAULER_VERSION) bash; \
+	}
 HAULER = /usr/local/bin/hauler
