@@ -1,5 +1,24 @@
 # Changelog
 
+## [0.1.2](https://github.com/validator-labs/validator/compare/v0.1.1...v0.1.2) (2024-08-08)
+
+
+### Bug Fixes
+
+* ensure validatorctl arch matches haul arch ([#374](https://github.com/validator-labs/validator/issues/374)) ([ca38f3e](https://github.com/validator-labs/validator/commit/ca38f3edcf7a56f01a52b399ffc386150adedc71))
+
+
+### Other
+
+* **deps:** bump github.com/docker/docker from 24.0.9+incompatible to 25.0.6+incompatible ([#368](https://github.com/validator-labs/validator/issues/368)) ([7e21122](https://github.com/validator-labs/validator/commit/7e21122bb63438749d95e564902b94eaf6531b47))
+
+
+### Dependency Updates
+
+* **deps:** update module github.com/onsi/ginkgo/v2 to v2.20.0 ([#373](https://github.com/validator-labs/validator/issues/373)) ([37fa8f3](https://github.com/validator-labs/validator/commit/37fa8f31a984b5e7243311febfe063874a4927c0))
+* **deps:** update module github.com/validator-labs/validator-plugin-oci to v0.0.13 ([#369](https://github.com/validator-labs/validator/issues/369)) ([a06d799](https://github.com/validator-labs/validator/commit/a06d7997d6efba08a50d4cc997f4de4e7aaaaf73))
+* **deps:** update module github.com/validator-labs/validator-plugin-oci to v0.1.0 ([#375](https://github.com/validator-labs/validator/issues/375)) ([ddfd175](https://github.com/validator-labs/validator/commit/ddfd175247532129b1d9c393fc47ad58ae30f03e))
+
 ## [0.1.1](https://github.com/validator-labs/validator/compare/v0.1.0...v0.1.1) (2024-08-05)
 
 
