@@ -4,7 +4,7 @@ metadata:
   name: validator-images
 spec:
   images:
-    - name: quay.io/validator-labs/validator:v0.1.2 # x-release-please-version
+    - name: quay.io/validator-labs/validator:v0.1.3 # x-release-please-version
     - name: quay.io/validator-labs/validator-plugin-aws:v0.1.3
     - name: quay.io/validator-labs/validator-plugin-azure:v0.0.15
     - name: quay.io/validator-labs/validator-plugin-kubescape:v0.0.4
@@ -27,7 +27,7 @@ spec:
   charts:
     - name: validator
       repoURL: https://validator-labs.github.io/validator
-      version: 0.1.2 # x-release-please-version
+      version: 0.1.3 # x-release-please-version
     - name: validator-plugin-aws
       repoURL: https://validator-labs.github.io/validator-plugin-aws
       version: 0.1.3
