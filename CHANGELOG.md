@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.3](https://github.com/validator-labs/validator/compare/v0.1.2...v0.1.3) (2024-08-08)
+
+
+### Dependency Updates
+
+* **deps:** update golang.org/x/exp digest to 0cdaa3a ([#376](https://github.com/validator-labs/validator/issues/376)) ([65e2c2f](https://github.com/validator-labs/validator/commit/65e2c2fde9ae01a6cc6867184174e56366e26122))
+
 ## [0.1.2](https://github.com/validator-labs/validator/compare/v0.1.1...v0.1.2) (2024-08-08)
 
 
