@@ -5,9 +5,9 @@
 [![codecov](https://codecov.io/gh/validator-labs/validator/graph/badge.svg?token=GVZ4LZ5SOY)](https://codecov.io/gh/validator-labs/validator)
 [![Go Reference](https://pkg.go.dev/badge/github.com/validator-labs/validator.svg)](https://pkg.go.dev/github.com/validator-labs/validator)
 
-validator (AKA Validation Controller) monitors ValidationResults created by one or more validator plugins and uploads them to a sink of your choosing, e.g., Slack or Spectro Cloud Palette.
+validator (AKA Validation Controller) monitors ValidationResults created by one or more validator plugins and uploads them to a sink of your choosing, e.g., Slack or Alertmanager.
 
-<img width="1364" alt="image" src="https://github.com/validator-labs/validator/assets/1795270/e68dfdf5-25bf-4336-ad87-f783c4825c7e">
+<img width="1364" alt="image" src=./img/install_use_flow_diagram.png>
 
 ## Description
 The validator repository is fairly minimal - all the heavy lifting is done by the validator plugins. Installation of validator and one or more plugins is accomplished via Helm.
@@ -264,20 +264,3 @@ make manifests
 **NOTE:** Run `make --help` for more information on all potential `make` targets
 
 More information can be found via the [Kubebuilder Documentation](https://book.kubebuilder.io/introduction.html)
-
-## License
-
-Copyright 2023.
-
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-
