@@ -7,7 +7,7 @@
 
 validator (AKA Validation Controller) monitors ValidationResults created by one or more validator plugins and uploads them to a sink of your choosing, e.g., Slack or Alertmanager.
 
-![validator architecture](./img/install_use_flow_diagram.png)
+![validator architecture](./docs/img/install_use_flow_diagram.png)
 
 ## Description
 The validator repository is fairly minimal - all the heavy lifting is done by the validator plugins. Installation of validator and one or more plugins is accomplished via Helm.
