@@ -29,7 +29,7 @@ type Patcher interface {
 // ValidationRule is an interface for validation rules.
 type ValidationRule interface {
 	client.Object
-	Kind() string
+	GetKind() string
 	PluginCode() string
 	ResultCount() int
 }
@@ -39,7 +39,7 @@ func Build(r ValidationRule) *v1alpha1.ValidationResult {
 	return &v1alpha1.ValidationResult{
 		TypeMeta: metav1.TypeMeta{
 			APIVersion: v1alpha1.APIVersion,
-			Kind:       r.Kind(),
+			Kind:       r.GetKind(),
 		},
 		ObjectMeta: metav1.ObjectMeta{
 			Name:      Name(r),
