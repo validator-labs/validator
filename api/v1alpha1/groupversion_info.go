@@ -20,17 +20,37 @@ limitations under the License.
 package v1alpha1
 
 import (
+	"reflect"
+
 	"k8s.io/apimachinery/pkg/runtime/schema"
 	"sigs.k8s.io/controller-runtime/pkg/scheme"
 )
 
 var (
-	// GroupVersion is group version used to register these objects
-	GroupVersion = schema.GroupVersion{Group: "validation.spectrocloud.labs", Version: "v1alpha1"}
+	// APIVersion is the API version used to reference v1alpha1 objects.
+	APIVersion = GroupVersion.String()
 
-	// SchemeBuilder is used to add go types to the GroupVersionKind scheme
+	// Group is the API group used to reference validator objects.
+	Group = "validation.spectrocloud.labs"
+
+	// GroupVersion is group version used to register these objects.
+	GroupVersion = schema.GroupVersion{Group: Group, Version: "v1alpha1"}
+
+	// SchemeBuilder is used to add go types to the GroupVersionKind scheme.
 	SchemeBuilder = &scheme.Builder{GroupVersion: GroupVersion}
 
 	// AddToScheme adds the types in this group-version to the given scheme.
 	AddToScheme = SchemeBuilder.AddToScheme
+
+	// ValidatorConfigKind is the kind of the ValidatorConfig object.
+	ValidatorConfigKind = reflect.TypeOf(ValidatorConfig{}).Name()
+
+	// ValidatorConfigGroupResource is the name of the ValidatorConfig resource.
+	ValidatorConfigGroupResource = schema.GroupResource{Group: Group, Resource: "validatorconfigs"}
+
+	// ValidationResultKind is the kind of the ValidationResult object.
+	ValidationResultKind = reflect.TypeOf(ValidationResult{}).Name()
+
+	// ValidationResultGroupResource is the name of the ValidationResult resource.
+	ValidationResultGroupResource = schema.GroupResource{Group: Group, Resource: "validationresults"}
 )
