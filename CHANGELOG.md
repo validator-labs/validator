@@ -1,5 +1,28 @@
 # Changelog
 
+## [0.1.3](https://github.com/validator-labs/validator/compare/v0.1.2...v0.1.3) (2024-08-10)
+
+
+### Features
+
+* add GroupResource consts; set TypeMeta in Build ([#379](https://github.com/validator-labs/validator/issues/379)) ([c05a36e](https://github.com/validator-labs/validator/commit/c05a36eebd3c6ce0398e9c3bd9946a22516d7966))
+
+
+### Other
+
+* bump oci plugin version ([#381](https://github.com/validator-labs/validator/issues/381)) ([8e09f0b](https://github.com/validator-labs/validator/commit/8e09f0b8c4c7851f9a9f7e3b648c375f324d3856))
+
+
+### Docs
+
+* update architecture diagram ([#378](https://github.com/validator-labs/validator/issues/378)) ([8fd8c5d](https://github.com/validator-labs/validator/commit/8fd8c5d5e7c5264ac8ddcf572992b628a0a72a22))
+
+
+### Dependency Updates
+
+* **deps:** update golang.org/x/exp digest to 0cdaa3a ([#376](https://github.com/validator-labs/validator/issues/376)) ([65e2c2f](https://github.com/validator-labs/validator/commit/65e2c2fde9ae01a6cc6867184174e56366e26122))
+* **deps:** update module github.com/validator-labs/validator-plugin-oci to v0.2.0 ([#380](https://github.com/validator-labs/validator/issues/380)) ([4642c6c](https://github.com/validator-labs/validator/commit/4642c6c7a7d7954b50450612b2d322c0e6696fee))
+
 ## [0.1.2](https://github.com/validator-labs/validator/compare/v0.1.1...v0.1.2) (2024-08-08)
 
 
