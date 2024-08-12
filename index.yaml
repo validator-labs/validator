@@ -3,6 +3,17 @@ entries:
   validator:
   - apiVersion: v2
     appVersion: 0.0.27
+    created: "2024-08-12T21:18:38.248699201Z"
+    description: Monitor results created by validator plugins and upload them to a
+      configurable sink
+    digest: 625c2681040d4891c60adfab6ebbf7bcd9924fd07ed049cdfd2c431efd99fec5
+    name: validator
+    type: application
+    urls:
+    - https://validator-labs.github.io/validator/validator-0.1.4.tgz
+    version: 0.1.4
+  - apiVersion: v2
+    appVersion: 0.0.27
     created: "2024-08-10T22:07:42.799933401Z"
     description: Monitor results created by validator plugins and upload them to a
       configurable sink
@@ -616,4 +627,4 @@ entries:
     urls:
     - https://spectrocloud-labs.github.io/validator/validator-0.0.1.tgz
     version: 0.0.1
-generated: "2024-08-10T22:07:42.797665109Z"
+generated: "2024-08-12T21:18:38.246461658Z"
