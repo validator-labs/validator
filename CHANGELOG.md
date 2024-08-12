@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.1.4](https://github.com/validator-labs/validator/compare/v0.1.3...v0.1.4) (2024-08-12)
+
+
+### Other
+
+* bump plugin versions ([#385](https://github.com/validator-labs/validator/issues/385)) ([2e2c14b](https://github.com/validator-labs/validator/commit/2e2c14ba76ce0722603d82f7d46c007ea19ab4bd))
+
+
+### Dependency Updates
+
+* **deps:** update module sigs.k8s.io/controller-runtime to v0.18.5 ([#382](https://github.com/validator-labs/validator/issues/382)) ([680962e](https://github.com/validator-labs/validator/commit/680962e124127f0d9f0d4c61f1b35c11bbc768e0))
+
 ## [0.1.3](https://github.com/validator-labs/validator/compare/v0.1.2...v0.1.3) (2024-08-10)
 
 
