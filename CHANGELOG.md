@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.1.5](https://github.com/validator-labs/validator/compare/v0.1.4...v0.1.5) (2024-08-14)
+
+
+### Bug Fixes
+
+* ensure all oci auth secrets in values.yaml are created ([#390](https://github.com/validator-labs/validator/issues/390)) ([8c0e4fb](https://github.com/validator-labs/validator/commit/8c0e4fbc6a0a8537fa2a82bfe45d4ec835de428a))
+
+
+### Dependency Updates
+
+* **deps:** update module sigs.k8s.io/cluster-api to v1.8.1 ([#383](https://github.com/validator-labs/validator/issues/383)) ([f909931](https://github.com/validator-labs/validator/commit/f909931ca69a8c4f966f32b75f6af01e75d769b9))
+
 ## [0.1.4](https://github.com/validator-labs/validator/compare/v0.1.3...v0.1.4) (2024-08-13)
 
 
