@@ -216,7 +216,7 @@ plugins:
 - chart:
     name: validator-plugin-azure
     repository: validator-plugin-azure
-    version: v0.0.16
+    version: v0.0.17
   values: |-
     controllerManager:
       kubeRbacProxy:
@@ -251,7 +251,7 @@ plugins:
               - ALL
         image:
           repository: quay.io/validator-labs/validator-plugin-azure
-          tag: v0.0.16
+          tag: v0.0.17
         resources:
           limits:
             cpu: 500m
@@ -282,10 +282,13 @@ plugins:
       # Override the service account used by Azure validator (optional, could be used for WorkloadIdentityCredentials on AKS)
       # WARNING: the chosen service account must include all RBAC privileges found in templates/manager-rbac.yaml
       serviceAccountName: ""
+    # Optionally specify the Azure environment to use. Defaults to "AzureCloud" for public Azure cloud.
+    # Other acceptable values are "AzureUSGovernment" and "AzureChinaCloud".
+    azureEnvironment: "AzureCloud"
 - chart:
     name: validator-plugin-oci
     repository: validator-plugin-oci
-    version: v0.2.0
+    version: v0.2.1
   values: |-
     controllerManager:
       kubeRbacProxy:
@@ -320,7 +323,7 @@ plugins:
               - ALL
         image:
           repository: quay.io/validator-labs/validator-plugin-oci
-          tag: v0.2.0
+          tag: v0.2.1
         resources:
           limits:
             cpu: 500m
