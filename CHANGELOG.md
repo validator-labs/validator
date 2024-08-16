@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.1.6](https://github.com/validator-labs/validator/compare/v0.1.5...v0.1.6) (2024-08-16)
+
+
+### Other
+
+* bump plugin versions ([#395](https://github.com/validator-labs/validator/issues/395)) ([ae540cb](https://github.com/validator-labs/validator/commit/ae540cb9ba9a19e1792a1573de5b5b77d38470a5))
+
+
+### Dependency Updates
+
+* **deps:** update module github.com/slack-go/slack to v0.14.0 ([#393](https://github.com/validator-labs/validator/issues/393)) ([b3ecb8b](https://github.com/validator-labs/validator/commit/b3ecb8b4a40449005c733bc9080804cedc9926f3))
+
 ## [0.1.5](https://github.com/validator-labs/validator/compare/v0.1.4...v0.1.5) (2024-08-14)
 
 
