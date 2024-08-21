@@ -26,7 +26,7 @@ type Patcher interface {
 	Patch(ctx context.Context, obj client.Object, opts ...patch.Option) error
 }
 
-// ValidationRule is an interface for validation rules.
+// ValidationRule is an interface for defining validation rules that are used to build a ValidationResult.
 type ValidationRule interface {
 	client.Object
 	GetKind() string

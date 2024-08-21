@@ -57,4 +57,4 @@ metadata:
 spec:
   files:
     - name: validatorctl
-      path: https://github.com/validator-labs/validatorctl/releases/download/v0.1.1/validator-linux-ARCH
+      path: https://github.com/validator-labs/validatorctl/releases/download/v0.1.2/validator-linux-ARCH
