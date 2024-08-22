@@ -26,16 +26,16 @@ type Patcher interface {
 	Patch(ctx context.Context, obj client.Object, opts ...patch.Option) error
 }
 
-// ValidationRule is an interface for validation rules.
-type ValidationRule interface {
+// Validator is an interface for building ValidationResults.
+type Validator interface {
 	client.Object
 	GetKind() string
 	PluginCode() string
 	ResultCount() int
 }
 
-// Build creates a new ValidationResult for a specific ValidationRule.
-func Build(r ValidationRule) *v1alpha1.ValidationResult {
+// Build creates a new ValidationResult for a specific Validator.
+func Build(r Validator) *v1alpha1.ValidationResult {
 	return &v1alpha1.ValidationResult{
 		TypeMeta: metav1.TypeMeta{
 			APIVersion: v1alpha1.APIVersion,
@@ -61,8 +61,8 @@ func Build(r ValidationRule) *v1alpha1.ValidationResult {
 	}
 }
 
-// Name returns the name of a ValidationResult for a specific ValidationRule.
-func Name(r ValidationRule) string {
+// Name returns the name of a ValidationResult for a specific Validator.
+func Name(r Validator) string {
 	name := fmt.Sprintf("validator-plugin-%s-%s", r.PluginCode(), r.GetName())
 	return util.Sanitize(name)
 }
