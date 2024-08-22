@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.7](https://github.com/validator-labs/validator/compare/v0.1.6...v0.1.7) (2024-08-22)
+
+
+### Refactoring
+
+* new validation rule interface ([#399](https://github.com/validator-labs/validator/issues/399)) ([6b16845](https://github.com/validator-labs/validator/commit/6b16845ab5e0d159fcb99c65c0baeac87a2eb3ba))
+
 ## [0.1.6](https://github.com/validator-labs/validator/compare/v0.1.5...v0.1.6) (2024-08-16)
 
 
