@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.1.8](https://github.com/validator-labs/validator/compare/v0.1.7...v0.1.8) (2024-08-23)
+
+
+### Features
+
+* introduce PluginSpec interface ([#403](https://github.com/validator-labs/validator/issues/403)) ([3adc6a0](https://github.com/validator-labs/validator/commit/3adc6a050cfeb1f8e25103f2363a7a893722d993))
+
+
+### Dependency Updates
+
+* **deps:** update module github.com/onsi/ginkgo/v2 to v2.20.1 ([#398](https://github.com/validator-labs/validator/issues/398)) ([baa9201](https://github.com/validator-labs/validator/commit/baa92012ea4eedc41b8e7fd6f9def11500ea0945))
+
 ## [0.1.7](https://github.com/validator-labs/validator/compare/v0.1.6...v0.1.7) (2024-08-22)
 
 
