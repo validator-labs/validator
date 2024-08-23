@@ -288,7 +288,7 @@ plugins:
 - chart:
     name: validator-plugin-oci
     repository: validator-plugin-oci
-    version: v0.3.0
+    version: v0.3.1
   values: |-
     controllerManager:
       kubeRbacProxy:
@@ -323,7 +323,7 @@ plugins:
               - ALL
         image:
           repository: quay.io/validator-labs/validator-plugin-oci
-          tag: v0.3.0
+          tag: v0.3.1
         resources:
           limits:
             cpu: 500m
@@ -410,7 +410,7 @@ plugins:
 - chart:
     name: validator-plugin-aws
     repository: validator-plugin-aws
-    version: v0.1.5
+    version: v0.1.6
   values: |-
     controllerManager:
       kubeRbacProxy:
@@ -445,7 +445,7 @@ plugins:
               - ALL
         image:
           repository: quay.io/validator-labs/validator-plugin-aws
-          tag: v0.1.5
+          tag: v0.1.6
         resources:
           limits:
             cpu: 500m
@@ -471,7 +471,7 @@ plugins:
 - chart:
     name: validator-plugin-network
     repository: validator-plugin-network
-    version: v0.0.24
+    version: v0.0.25
   values: |-
     controllerManager:
       kubeRbacProxy:
@@ -508,7 +508,7 @@ plugins:
               - ALL
         image:
           repository: quay.io/validator-labs/validator-plugin-network
-          tag: v0.0.24
+          tag: v0.0.25
         resources:
           limits:
             cpu: 500m
@@ -530,7 +530,7 @@ plugins:
 - chart:
     name: validator-plugin-maas
     repository: validator-plugin-maas
-    version: v0.0.8
+    version: v0.0.10
   values: |-
     controllerManager:
       kubeRbacProxy:
@@ -565,7 +565,7 @@ plugins:
               - ALL
         image:
           repository: quay.io/validator-labs/validator-plugin-maas
-          tag: v0.0.8
+          tag: v0.0.10
         resources:
           limits:
             cpu: 500m
@@ -587,7 +587,7 @@ plugins:
 - chart:
     name: validator-plugin-vsphere
     repository: validator-plugin-vsphere
-    version: v0.0.32
+    version: v0.0.33
   values: |-
     controllerManager:
       kubeRbacProxy:
@@ -623,7 +623,7 @@ plugins:
               - ALL
         image:
           repository: quay.io/validator-labs/validator-plugin-vsphere
-          tag: v0.0.32
+          tag: v0.0.33
         resources:
           limits:
             cpu: 500m
