@@ -148,7 +148,7 @@ pluginSecrets:
   #
   maas: {}  # Don't forget to delete these curly braces if you're specifying credentials here!
     # secretName: maas-creds  # ensure this matches the MAAS plugin values below
-    # maasApiToken: ""
+    # apiToken: ""
     # tokenKey: MAAS_API_KEY
 
   network:
@@ -216,7 +216,7 @@ plugins:
 - chart:
     name: validator-plugin-azure
     repository: validator-plugin-azure
-    version: v0.0.18
+    version: v0.0.20
   values: |-
     controllerManager:
       kubeRbacProxy:
@@ -251,7 +251,7 @@ plugins:
               - ALL
         image:
           repository: quay.io/validator-labs/validator-plugin-azure
-          tag: v0.0.18
+          tag: v0.0.20
         resources:
           limits:
             cpu: 500m
@@ -288,7 +288,7 @@ plugins:
 - chart:
     name: validator-plugin-oci
     repository: validator-plugin-oci
-    version: v0.3.1
+    version: v0.3.2
   values: |-
     controllerManager:
       kubeRbacProxy:
@@ -323,7 +323,7 @@ plugins:
               - ALL
         image:
           repository: quay.io/validator-labs/validator-plugin-oci
-          tag: v0.3.1
+          tag: v0.3.2
         resources:
           limits:
             cpu: 500m
@@ -410,7 +410,7 @@ plugins:
 - chart:
     name: validator-plugin-aws
     repository: validator-plugin-aws
-    version: v0.1.6
+    version: v0.1.7
   values: |-
     controllerManager:
       kubeRbacProxy:
@@ -445,7 +445,7 @@ plugins:
               - ALL
         image:
           repository: quay.io/validator-labs/validator-plugin-aws
-          tag: v0.1.6
+          tag: v0.1.7
         resources:
           limits:
             cpu: 500m
@@ -471,7 +471,7 @@ plugins:
 - chart:
     name: validator-plugin-network
     repository: validator-plugin-network
-    version: v0.0.25
+    version: v0.0.26
   values: |-
     controllerManager:
       kubeRbacProxy:
@@ -508,7 +508,7 @@ plugins:
               - ALL
         image:
           repository: quay.io/validator-labs/validator-plugin-network
-          tag: v0.0.25
+          tag: v0.0.26
         resources:
           limits:
             cpu: 500m
@@ -530,7 +530,7 @@ plugins:
 - chart:
     name: validator-plugin-maas
     repository: validator-plugin-maas
-    version: v0.0.10
+    version: v0.0.12
   values: |-
     controllerManager:
       kubeRbacProxy:
@@ -565,7 +565,7 @@ plugins:
               - ALL
         image:
           repository: quay.io/validator-labs/validator-plugin-maas
-          tag: v0.0.10
+          tag: v0.0.12
         resources:
           limits:
             cpu: 500m
@@ -587,7 +587,7 @@ plugins:
 - chart:
     name: validator-plugin-vsphere
     repository: validator-plugin-vsphere
-    version: v0.0.33
+    version: v0.0.34
   values: |-
     controllerManager:
       kubeRbacProxy:
@@ -623,7 +623,7 @@ plugins:
               - ALL
         image:
           repository: quay.io/validator-labs/validator-plugin-vsphere
-          tag: v0.0.33
+          tag: v0.0.34
         resources:
           limits:
             cpu: 500m
