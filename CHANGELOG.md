@@ -1,5 +1,22 @@
 # Changelog
 
+## [0.1.9](https://github.com/validator-labs/validator/compare/v0.1.8...v0.1.9) (2024-08-27)
+
+
+### Bug Fixes
+
+* update chart with new maas api token name ([#406](https://github.com/validator-labs/validator/issues/406)) ([4641279](https://github.com/validator-labs/validator/commit/4641279a86fe125797492afa1173ca3795f5021b))
+
+
+### Other
+
+* make reviewable ([5d13607](https://github.com/validator-labs/validator/commit/5d13607f103f5a1f13e721acd485a1dc7c917872))
+
+
+### Dependency Updates
+
+* **deps:** update golang.org/x/exp digest to 9b4947d ([#401](https://github.com/validator-labs/validator/issues/401)) ([3f87eb2](https://github.com/validator-labs/validator/commit/3f87eb2bae7334958f3c482114dec8f68d584935))
+
 ## [0.1.8](https://github.com/validator-labs/validator/compare/v0.1.7...v0.1.8) (2024-08-23)
 
 
