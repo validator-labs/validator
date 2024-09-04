@@ -288,7 +288,7 @@ plugins:
 - chart:
     name: validator-plugin-oci
     repository: validator-plugin-oci
-    version: v0.3.2
+    version: v0.3.3
   values: |-
     controllerManager:
       kubeRbacProxy:
@@ -323,7 +323,7 @@ plugins:
               - ALL
         image:
           repository: quay.io/validator-labs/validator-plugin-oci
-          tag: v0.3.2
+          tag: v0.3.3
         resources:
           limits:
             cpu: 500m
@@ -471,7 +471,7 @@ plugins:
 - chart:
     name: validator-plugin-network
     repository: validator-plugin-network
-    version: v0.0.26
+    version: v0.1.0
   values: |-
     controllerManager:
       kubeRbacProxy:
@@ -508,7 +508,7 @@ plugins:
               - ALL
         image:
           repository: quay.io/validator-labs/validator-plugin-network
-          tag: v0.0.26
+          tag: v0.1.0
         resources:
           limits:
             cpu: 500m
