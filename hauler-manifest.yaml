@@ -9,8 +9,8 @@ spec:
     - name: quay.io/validator-labs/validator-plugin-azure:v0.0.20
     - name: quay.io/validator-labs/validator-plugin-kubescape:v0.0.4
     - name: quay.io/validator-labs/validator-plugin-maas:v0.0.12
-    - name: quay.io/validator-labs/validator-plugin-network:v0.0.26
-    - name: quay.io/validator-labs/validator-plugin-oci:v0.3.2
+    - name: quay.io/validator-labs/validator-plugin-network:v0.1.0
+    - name: quay.io/validator-labs/validator-plugin-oci:v0.3.3
     - name: quay.io/validator-labs/validator-plugin-vsphere:v0.0.34
     - name: quay.io/validator-labs/validator-certs-init:1.0.0
     - name: gcr.io/spectro-images-public/release/spectro-cleanup:1.2.0
@@ -42,10 +42,10 @@ spec:
       version: 0.0.12
     - name: validator-plugin-network
       repoURL: https://validator-labs.github.io/validator-plugin-network
-      version: 0.0.26
+      version: 0.1.0
     - name: validator-plugin-oci
       repoURL: https://validator-labs.github.io/validator-plugin-oci
-      version: 0.3.2
+      version: 0.3.3
     - name: validator-plugin-vsphere
       repoURL: https://validator-labs.github.io/validator-plugin-vsphere
       version: 0.0.34
@@ -57,4 +57,4 @@ metadata:
 spec:
   files:
     - name: validatorctl
-      path: https://github.com/validator-labs/validatorctl/releases/download/v0.1.2/validator-linux-ARCH
+      path: https://github.com/validator-labs/validatorctl/releases/download/v0.1.4/validator-linux-ARCH
