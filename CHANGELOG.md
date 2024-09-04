@@ -1,5 +1,18 @@
 # Changelog
 
+## [0.1.10](https://github.com/validator-labs/validator/compare/v0.1.9...v0.1.10) (2024-09-04)
+
+
+### Other
+
+* bump oci and network plugin versions ([#411](https://github.com/validator-labs/validator/issues/411)) ([8fc8616](https://github.com/validator-labs/validator/commit/8fc86167ef61fa55798b32729d0299422c154929))
+
+
+### Dependency Updates
+
+* **deps:** update module github.com/onsi/ginkgo/v2 to v2.20.2 ([#407](https://github.com/validator-labs/validator/issues/407)) ([a9f8f6b](https://github.com/validator-labs/validator/commit/a9f8f6b89329c33809e2ce54612b3ccdd2a8b700))
+* **deps:** update module github.com/onsi/gomega to v1.34.2 ([#408](https://github.com/validator-labs/validator/issues/408)) ([3043175](https://github.com/validator-labs/validator/commit/3043175a9f765ee01a3789dff3aad3542557df39))
+
 ## [0.1.9](https://github.com/validator-labs/validator/compare/v0.1.8...v0.1.9) (2024-08-27)
 
 
