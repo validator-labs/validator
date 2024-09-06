@@ -19,8 +19,6 @@ import (
 	"github.com/validator-labs/validator/pkg/util"
 )
 
-const validationErrorMsg = "Validation failed with an unexpected error"
-
 // Patcher is an interface for patching objects.
 type Patcher interface {
 	Patch(ctx context.Context, obj client.Object, opts ...patch.Option) error
@@ -156,12 +154,7 @@ func Finalize(vr *v1alpha1.ValidationResult, vrr types.ValidationResponse, l log
 func updateStatus(vr *v1alpha1.ValidationResult, vrr *types.ValidationRuleResult, vrrErr error, l logr.Logger) {
 
 	// Finalize result State and Condition in the event of an unexpected error
-	if vrrErr != nil {
-		vrr.State = util.Ptr(v1alpha1.ValidationFailed)
-		vrr.Condition.Status = corev1.ConditionFalse
-		vrr.Condition.Message = validationErrorMsg
-		vrr.Condition.Failures = append(vrr.Condition.Failures, vrrErr.Error())
-	}
+	vrr.Finalize(vrrErr)
 
 	// Update and/or insert the ValidationResult's Conditions with the latest Condition
 	idx := getConditionIndexByValidationRule(vr.Status.ValidationConditions, vrr.Condition.ValidationRule)
