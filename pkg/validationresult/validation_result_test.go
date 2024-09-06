@@ -41,7 +41,7 @@ func vr(cs []corev1.ConditionStatus, state v1alpha1.ValidationState, err error) 
 			ValidationRule: constants.ValidationRulePrefix,
 		}
 		if err != nil {
-			condition.Message = validationErrorMsg
+			condition.Message = types.ErrValidationFailed
 			condition.Failures = append(condition.Failures, err.Error())
 		}
 		vr.Status.ValidationConditions = append(vr.Status.ValidationConditions, condition)
