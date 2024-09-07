@@ -1,5 +1,18 @@
 # Changelog
 
+## [0.1.11](https://github.com/validator-labs/validator/compare/v0.1.10...v0.1.11) (2024-09-06)
+
+
+### Features
+
+* finalization helper for ValidationRuleResults ([#415](https://github.com/validator-labs/validator/issues/415)) ([ff7f786](https://github.com/validator-labs/validator/commit/ff7f786be18b2a52c8eeef6cef6e402071bd6a0d))
+
+
+### Dependency Updates
+
+* **deps:** update golang.org/x/exp digest to e7e105d ([#412](https://github.com/validator-labs/validator/issues/412)) ([4ecf59f](https://github.com/validator-labs/validator/commit/4ecf59f7d49c9d84101f9ddc67805d8389b4948b))
+* **deps:** update module sigs.k8s.io/cluster-api to v1.8.2 ([#414](https://github.com/validator-labs/validator/issues/414)) ([288194c](https://github.com/validator-labs/validator/commit/288194ca80ac3e82e4f269830710a2947600d673))
+
 ## [0.1.10](https://github.com/validator-labs/validator/compare/v0.1.9...v0.1.10) (2024-09-04)
 
 
