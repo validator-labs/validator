@@ -16,9 +16,9 @@ import (
 // validation type param should be unique for each combination of plugin and rule (e.g.
 // "aws-iam-role-policy").
 //
-// One of the validation rule param or rule name params must be provided. If validation rule is
-// provided, it is used as the validation rule description of the condition. If it isn't, a
-// description is generated based on the rule name and used instead.
+// One of the validation rule or rule name params must be provided. If validation rule is provided,
+// it is used as the validation rule description of the condition. If it isn't, a description is
+// generated based on the rule name and used instead.
 func BuildDefault(latestConditionMsg, validationType, validationRule, ruleName string) *types.ValidationRuleResult {
 	state := v1alpha1.ValidationSucceeded
 	latestCondition := v1alpha1.DefaultValidationCondition()
