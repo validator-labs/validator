@@ -10,19 +10,27 @@ import (
 	"github.com/validator-labs/validator/pkg/util"
 )
 
-// BuildDefault builds a default ValidationResult for a given validation type. The rule name is
-// sanitized and then used as part of the one-word validation rule description in the latest
-// condition. The latest condition message should be one that conveys that validation succeeded. The
-// validation type should be unique for each combination of plugin and rule (e.g.
+// BuildDefault builds a default ValidationResult for a given validation type.
+//
+// The latest condition message param should be one that conveys that validation succeeded. The
+// validation type param should be unique for each combination of plugin and rule (e.g.
 // "aws-iam-role-policy").
-func BuildDefault(ruleName, latestConditionMsg, validationType string) *types.ValidationRuleResult {
+//
+// One of the validation rule param or rule name params must be provided. If validation rule is
+// provided, it is used as the validation rule description of the condition. If it isn't, a
+// description is generated based on the rule name and used instead.
+func BuildDefault(latestConditionMsg, validationType, validationRule, ruleName string) *types.ValidationRuleResult {
 	state := v1alpha1.ValidationSucceeded
 	latestCondition := v1alpha1.DefaultValidationCondition()
 	latestCondition.Message = latestConditionMsg
-	latestCondition.ValidationRule = fmt.Sprintf(
-		"%s-%s",
-		constants.ValidationRulePrefix, util.Sanitize(ruleName),
-	)
+	if validationRule != "" {
+		latestCondition.ValidationRule = validationRule
+	} else {
+		latestCondition.ValidationRule = fmt.Sprintf(
+			"%s-%s",
+			constants.ValidationRulePrefix, util.Sanitize(ruleName),
+		)
+	}
 	latestCondition.ValidationType = validationType
 	return &types.ValidationRuleResult{
 		Condition: &latestCondition,
