@@ -587,7 +587,7 @@ plugins:
 - chart:
     name: validator-plugin-vsphere
     repository: validator-plugin-vsphere
-    version: v0.0.34
+    version: v0.1.2
   values: |-
     controllerManager:
       kubeRbacProxy:
@@ -623,7 +623,7 @@ plugins:
               - ALL
         image:
           repository: quay.io/validator-labs/validator-plugin-vsphere
-          tag: v0.0.34
+          tag: v0.1.2
         resources:
           limits:
             cpu: 500m
