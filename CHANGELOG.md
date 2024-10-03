@@ -1,5 +1,22 @@
 # Changelog
 
+## [0.1.12](https://github.com/validator-labs/validator/compare/v0.1.11...v0.1.12) (2024-10-03)
+
+
+### Other
+
+* bump plugin versions ([#423](https://github.com/validator-labs/validator/issues/423)) ([4516f8f](https://github.com/validator-labs/validator/commit/4516f8f52b01d5cb2d0f3116185ed85e6fda8870))
+
+
+### Dependency Updates
+
+* **deps:** update golang.org/x/exp digest to 701f63a ([#416](https://github.com/validator-labs/validator/issues/416)) ([638c5d2](https://github.com/validator-labs/validator/commit/638c5d232f08758d1097a863d2aff0ac98359ae2))
+
+
+### Refactoring
+
+* Add BuildDefault validation rule result util code for all plugins to use ([#419](https://github.com/validator-labs/validator/issues/419)) ([a01093e](https://github.com/validator-labs/validator/commit/a01093ef89fd8ab0607b024fc50c0dfc36f3c591))
+
 ## [0.1.11](https://github.com/validator-labs/validator/compare/v0.1.10...v0.1.11) (2024-09-06)
 
 
