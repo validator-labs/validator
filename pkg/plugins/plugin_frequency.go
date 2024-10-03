@@ -10,7 +10,7 @@ import (
 	ctrl "sigs.k8s.io/controller-runtime"
 )
 
-// Calculates reconciliation frequency from annotations of the plugin custom resource.
+// FrequencyFromAnnotations calculates reconciliation frequency from annotations of the plugin custom resource.
 // Defaults to 120 seconds if annotation is not found.
 func FrequencyFromAnnotations(l logr.Logger, annotations map[string]string) ctrl.Result {
 	var frequency time.Duration
