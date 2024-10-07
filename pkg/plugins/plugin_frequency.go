@@ -1,7 +1,6 @@
 package plugins
 
 import (
-	"fmt"
 	"strconv"
 	"time"
 
@@ -17,10 +16,10 @@ func FrequencyFromAnnotations(l logr.Logger, annotations map[string]string) ctrl
 	if secondsString, ok := annotations[constants.ReconciliationFrequencyAnnotation]; ok {
 		seconds, err := strconv.Atoi(secondsString)
 		if err != nil {
-			l.Info("Failed to convert frequency annotation: defaulting to 120 seconds")
+			l.Error(err, "Failed to convert frequency annotation", "rescheduleSeconds", 120)
 			frequency = time.Second * 120
 		} else {
-			l.Info(fmt.Sprintf("Frequency annotation found: setting to reschedule after %d seconds", seconds))
+			l.Info("Reconciliation frequency annotation found", "rescheduleSeconds", seconds)
 			frequency = time.Second * time.Duration(seconds)
 		}
 	} else {
