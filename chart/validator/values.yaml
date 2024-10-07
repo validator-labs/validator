@@ -214,44 +214,431 @@ helmConfig:
 # Validation plugin charts
 plugins:
 - chart:
-    name: validator-plugin-oci
-    repository: validator-plugin-oci
-    version: v0.3.3
-  values: |-
-    
-- chart:
     name: validator-plugin-azure
     repository: validator-plugin-azure
     version: v0.0.21
   values: |-
-    
+    controllerManager:
+      kubeRbacProxy:
+        args:
+          - --secure-listen-address=0.0.0.0:8443
+          - --upstream=http://127.0.0.1:8080/
+          - --logtostderr=true
+          - --v=0
+        containerSecurityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+              - ALL
+        image:
+          repository: gcr.io/kubebuilder/kube-rbac-proxy
+          tag: v0.16.0
+        resources:
+          limits:
+            cpu: 500m
+            memory: 128Mi
+          requests:
+            cpu: 5m
+            memory: 64Mi
+      manager:
+        args:
+          - --health-probe-bind-address=:8081
+          - --leader-elect
+        containerSecurityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+              - ALL
+        image:
+          repository: quay.io/validator-labs/validator-plugin-azure
+          tag: v0.0.21
+        resources:
+          limits:
+            cpu: 500m
+            memory: 128Mi
+          requests:
+            cpu: 10m
+            memory: 64Mi
+        # Optionally specify a volumeMount to mount a volume containing a private key
+        # to leverage Azure Service principal with certificate authentication.
+        volumeMounts: []
+      replicas: 1
+      serviceAccount:
+        annotations: {}
+      # Optionally specify a volume containing a private key to leverage Azure Service
+      # principal with certificate authentication.
+      volumes: []
+      # Optionally specify additional labels to use for the controller-manager Pods.
+      podLabels: {}
+    kubernetesClusterDomain: cluster.local
+    metricsService:
+      ports:
+        - name: https
+          port: 8443
+          protocol: TCP
+          targetPort: https
+      type: ClusterIP
+    auth:
+      # Override the service account used by Azure validator (optional, could be used for WorkloadIdentityCredentials on AKS)
+      # WARNING: the chosen service account must include all RBAC privileges found in templates/manager-rbac.yaml
+      serviceAccountName: ""
+    # Optionally specify the Azure environment to use. Defaults to "AzureCloud" for public Azure cloud.
+    # Other acceptable values are "AzureUSGovernment" and "AzureChinaCloud".
+    azureEnvironment: "AzureCloud"
+- chart:
+    name: validator-plugin-oci
+    repository: validator-plugin-oci
+    version: v0.3.3
+  values: |-
+    controllerManager:
+      kubeRbacProxy:
+        args:
+          - --secure-listen-address=0.0.0.0:8443
+          - --upstream=http://127.0.0.1:8080/
+          - --logtostderr=true
+          - --v=0
+        containerSecurityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+              - ALL
+        image:
+          repository: gcr.io/kubebuilder/kube-rbac-proxy
+          tag: v0.16.0
+        resources:
+          limits:
+            cpu: 500m
+            memory: 128Mi
+          requests:
+            cpu: 5m
+            memory: 64Mi
+      manager:
+        args:
+          - --health-probe-bind-address=:8081
+          - --leader-elect
+        containerSecurityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+              - ALL
+        image:
+          repository: quay.io/validator-labs/validator-plugin-oci
+          tag: v0.3.3
+        resources:
+          limits:
+            cpu: 500m
+            memory: 128Mi
+          requests:
+            cpu: 10m
+            memory: 64Mi
+      replicas: 1
+      serviceAccount:
+        annotations: {}
+    kubernetesClusterDomain: cluster.local
+    metricsService:
+      ports:
+        - name: https
+          port: 8443
+          protocol: TCP
+          targetPort: https
+      type: ClusterIP
 - chart:
     name: validator-plugin-kubescape
     repository: validator-plugin-kubescape
     version: v0.0.4
   values: |-
-    
+    controllerManager:
+      kubeRbacProxy:
+        args:
+          - --secure-listen-address=0.0.0.0:8443
+          - --upstream=http://127.0.0.1:8080/
+          - --logtostderr=true
+          - --v=0
+        containerSecurityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+              - ALL
+        image:
+          repository: gcr.io/kubebuilder/kube-rbac-proxy
+          tag: v0.16.0
+        resources:
+          limits:
+            cpu: 500m
+            memory: 128Mi
+          requests:
+            cpu: 5m
+            memory: 64Mi
+      manager:
+        args:
+          - --health-probe-bind-address=:8081
+          - --leader-elect
+        containerSecurityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+              - ALL
+        image:
+          repository: quay.io/validator-labs/validator-plugin-kubescape
+          tag: v0.0.4
+        resources:
+          limits:
+            cpu: 500m
+            memory: 128Mi
+          requests:
+            cpu: 10m
+            memory: 64Mi
+        # Optionally specify a volumeMount to mount a volume containing a private key
+        # to leverage Azure Service principal with certificate authentication.
+        volumeMounts: []
+      replicas: 1
+      serviceAccount:
+        annotations: {}
+      # Optionally specify a volume containing a private key to leverage Azure Service
+      # principal with certificate authentication.
+      volumes: []
+      # Optionally specify additional labels to use for the controller-manager Pods.
+      podLabels: {}
+    kubernetesClusterDomain: cluster.local
+    metricsService:
+      ports:
+        - name: https
+          port: 8443
+          protocol: TCP
+          targetPort: https
+      type: ClusterIP
 - chart:
     name: validator-plugin-aws
     repository: validator-plugin-aws
     version: v0.1.7
   values: |-
-    
+    controllerManager:
+      kubeRbacProxy:
+        args:
+          - --secure-listen-address=0.0.0.0:8443
+          - --upstream=http://127.0.0.1:8080/
+          - --logtostderr=true
+          - --v=0
+        containerSecurityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+              - ALL
+        image:
+          repository: gcr.io/kubebuilder/kube-rbac-proxy
+          tag: v0.16.0
+        resources:
+          limits:
+            cpu: 500m
+            memory: 128Mi
+          requests:
+            cpu: 5m
+            memory: 64Mi
+      manager:
+        args:
+          - --health-probe-bind-address=:8081
+          - --leader-elect
+        containerSecurityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+              - ALL
+        image:
+          repository: quay.io/validator-labs/validator-plugin-aws
+          tag: v0.1.7
+        resources:
+          limits:
+            cpu: 500m
+            memory: 128Mi
+          requests:
+            cpu: 10m
+            memory: 64Mi
+      replicas: 1
+      serviceAccount:
+        annotations: {}
+    kubernetesClusterDomain: cluster.local
+    metricsService:
+      ports:
+        - name: https
+          port: 8443
+          protocol: TCP
+          targetPort: https
+      type: ClusterIP
+    auth:
+      # Override the service account used by AWS validator (optional, could be used for IAM roles for Service Accounts)
+      # WARNING: the chosen service account must have the same RBAC privileges as seen in templates/manager-rbac.yaml
+      serviceAccountName: ""
 - chart:
     name: validator-plugin-network
     repository: validator-plugin-network
     version: v0.1.0
   values: |-
-    
+    controllerManager:
+      kubeRbacProxy:
+        args:
+          - --secure-listen-address=0.0.0.0:8443
+          - --upstream=http://127.0.0.1:8080/
+          - --logtostderr=true
+          - --v=0
+        containerSecurityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+              - ALL
+        image:
+          repository: gcr.io/kubebuilder/kube-rbac-proxy
+          tag: v0.16.0
+        resources:
+          limits:
+            cpu: 500m
+            memory: 128Mi
+          requests:
+            cpu: 5m
+            memory: 64Mi
+      manager:
+        args:
+          - --health-probe-bind-address=:8081
+          - --leader-elect
+        containerSecurityContext:
+          allowPrivilegeEscalation: true
+          capabilities:
+            add:
+              - NET_RAW
+            drop:
+              - ALL
+        image:
+          repository: quay.io/validator-labs/validator-plugin-network
+          tag: v0.1.0
+        resources:
+          limits:
+            cpu: 500m
+            memory: 128Mi
+          requests:
+            cpu: 10m
+            memory: 64Mi
+      replicas: 1
+      serviceAccount:
+        annotations: {}
+    kubernetesClusterDomain: cluster.local
+    metricsService:
+      ports:
+        - name: https
+          port: 8443
+          protocol: TCP
+          targetPort: https
+      type: ClusterIP
 - chart:
     name: validator-plugin-maas
     repository: validator-plugin-maas
     version: v0.0.12
   values: |-
-    
+    controllerManager:
+      kubeRbacProxy:
+        args:
+          - --secure-listen-address=0.0.0.0:8443
+          - --upstream=http://127.0.0.1:8080/
+          - --logtostderr=true
+          - --v=0
+        containerSecurityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+              - ALL
+        image:
+          repository: gcr.io/kubebuilder/kube-rbac-proxy
+          tag: v0.16.0
+        resources:
+          limits:
+            cpu: 500m
+            memory: 128Mi
+          requests:
+            cpu: 5m
+            memory: 64Mi
+      manager:
+        args:
+          - --health-probe-bind-address=:8081
+          - --leader-elect
+        containerSecurityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+              - ALL
+        image:
+          repository: quay.io/validator-labs/validator-plugin-maas
+          tag: v0.0.12
+        resources:
+          limits:
+            cpu: 500m
+            memory: 128Mi
+          requests:
+            cpu: 10m
+            memory: 64Mi
+      replicas: 1
+      serviceAccount:
+        annotations: {}
+    kubernetesClusterDomain: cluster.local
+    metricsService:
+      ports:
+        - name: https
+          port: 8443
+          protocol: TCP
+          targetPort: https
+      type: ClusterIP
 - chart:
     name: validator-plugin-vsphere
     repository: validator-plugin-vsphere
     version: v0.1.4
   values: |-
-    
+    controllerManager:
+      kubeRbacProxy:
+        args:
+          - --secure-listen-address=0.0.0.0:8443
+          - --upstream=http://127.0.0.1:8080/
+          - --logtostderr=true
+          - --v=0
+        containerSecurityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+              - ALL
+        image:
+          repository: gcr.io/kubebuilder/kube-rbac-proxy
+          tag: v0.16.0
+        resources:
+          limits:
+            cpu: 500m
+            memory: 128Mi
+          requests:
+            cpu: 5m
+            memory: 64Mi
+      manager:
+        args:
+          - --health-probe-bind-address=:8081
+          - --metrics-bind-address=127.0.0.1:8080
+          - --leader-elect
+        containerSecurityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+              - ALL
+        image:
+          repository: quay.io/validator-labs/validator-plugin-vsphere
+          tag: v0.1.4
+        resources:
+          limits:
+            cpu: 500m
+            memory: 128Mi
+          requests:
+            cpu: 10m
+            memory: 64Mi
+      replicas: 1
+      serviceAccount:
+        annotations: {}
+    kubernetesClusterDomain: cluster.local
+    metricsService:
+      ports:
+        - name: https
+          port: 8443
+          protocol: TCP
+          targetPort: https
+      type: ClusterIP
