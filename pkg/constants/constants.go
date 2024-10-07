@@ -8,6 +8,6 @@ const (
 	// ValidatorConfig is the name of the default validator config.
 	ValidatorConfig string = "validator-config"
 
-	// ReconciliationFrequencyAnnotation is annotation key for reconciliation frequency
+	// ReconciliationFrequencyAnnotation is annotation key for reconciliation frequency.
 	ReconciliationFrequencyAnnotation = "validation.validator.labs/reconciliation-frequency"
 )
