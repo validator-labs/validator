@@ -5,7 +5,7 @@ go 1.22.5
 require (
 	buf.build/gen/go/spectrocloud/spectro-cleanup/connectrpc/go v1.16.2-20240205164452-95dfd137cb54.1
 	buf.build/gen/go/spectrocloud/spectro-cleanup/protocolbuffers/go v1.34.2-20240205164452-95dfd137cb54.2
-	connectrpc.com/connect v1.16.2
+	connectrpc.com/connect v1.17.0
 	github.com/go-logr/logr v1.4.2
 	github.com/onsi/ginkgo/v2 v2.20.2
 	github.com/onsi/gomega v1.34.2
