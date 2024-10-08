@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.1.13](https://github.com/validator-labs/validator/compare/v0.1.12...v0.1.13) (2024-10-08)
+
+
+### Features
+
+* frequency annotation helper ([#422](https://github.com/validator-labs/validator/issues/422)) ([b2ca83f](https://github.com/validator-labs/validator/commit/b2ca83f7052037c5a6c08c9974abaea65c2c2a9b))
+
+
+### Dependency Updates
+
+* **deps:** update module sigs.k8s.io/cluster-api to v1.8.3 ([#418](https://github.com/validator-labs/validator/issues/418)) ([735df90](https://github.com/validator-labs/validator/commit/735df9000900b05f9946288ca2e46002e79e5344))
+
 ## [0.1.12](https://github.com/validator-labs/validator/compare/v0.1.11...v0.1.12) (2024-10-03)
 
 
