@@ -3,7 +3,7 @@ module github.com/validator-labs/validator
 go 1.22.5
 
 require (
-	buf.build/gen/go/spectrocloud/spectro-cleanup/connectrpc/go v1.16.2-20240205164452-95dfd137cb54.1
+	buf.build/gen/go/spectrocloud/spectro-cleanup/connectrpc/go v1.17.0-20240205164452-95dfd137cb54.1
 	buf.build/gen/go/spectrocloud/spectro-cleanup/protocolbuffers/go v1.35.1-20240205164452-95dfd137cb54.1
 	connectrpc.com/connect v1.17.0
 	github.com/go-logr/logr v1.4.2
