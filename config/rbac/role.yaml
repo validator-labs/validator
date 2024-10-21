@@ -8,31 +8,6 @@ rules:
   - validation.spectrocloud.labs
   resources:
   - validationresults
-  verbs:
-  - create
-  - delete
-  - get
-  - list
-  - patch
-  - update
-  - watch
-- apiGroups:
-  - validation.spectrocloud.labs
-  resources:
-  - validationresults/finalizers
-  verbs:
-  - update
-- apiGroups:
-  - validation.spectrocloud.labs
-  resources:
-  - validationresults/status
-  verbs:
-  - get
-  - patch
-  - update
-- apiGroups:
-  - validation.spectrocloud.labs
-  resources:
   - validatorconfigs
   verbs:
   - create
@@ -45,12 +20,14 @@ rules:
 - apiGroups:
   - validation.spectrocloud.labs
   resources:
+  - validationresults/finalizers
   - validatorconfigs/finalizers
   verbs:
   - update
 - apiGroups:
   - validation.spectrocloud.labs
   resources:
+  - validationresults/status
   - validatorconfigs/status
   verbs:
   - get
