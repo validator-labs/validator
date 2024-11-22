@@ -4,21 +4,21 @@ go 1.22.5
 
 require (
 	buf.build/gen/go/spectrocloud/spectro-cleanup/connectrpc/go v1.17.0-20240205164452-95dfd137cb54.1
-	buf.build/gen/go/spectrocloud/spectro-cleanup/protocolbuffers/go v1.35.1-20240205164452-95dfd137cb54.1
+	buf.build/gen/go/spectrocloud/spectro-cleanup/protocolbuffers/go v1.35.2-20240205164452-95dfd137cb54.1
 	connectrpc.com/connect v1.17.0
 	github.com/go-logr/logr v1.4.2
-	github.com/onsi/ginkgo/v2 v2.21.0
-	github.com/onsi/gomega v1.35.0
+	github.com/onsi/ginkgo/v2 v2.22.0
+	github.com/onsi/gomega v1.35.1
 	github.com/pkg/errors v0.9.1
 	github.com/slack-go/slack v0.15.0
 	github.com/validator-labs/validator-plugin-oci v0.3.3
 	golang.org/x/exp v0.0.0-20241009180824-f66d83c29e7c
-	k8s.io/api v0.31.2
-	k8s.io/apimachinery v0.31.2
-	k8s.io/client-go v0.31.2
+	k8s.io/api v0.31.3
+	k8s.io/apimachinery v0.31.3
+	k8s.io/client-go v0.31.3
 	k8s.io/klog/v2 v2.130.1
-	sigs.k8s.io/cluster-api v1.8.4
-	sigs.k8s.io/controller-runtime v0.19.1
+	sigs.k8s.io/cluster-api v1.8.5
+	sigs.k8s.io/controller-runtime v0.19.2
 	sigs.k8s.io/yaml v1.4.0
 )
 
@@ -193,7 +193,7 @@ require (
 	golang.org/x/tools v0.26.0 // indirect
 	gomodules.xyz/jsonpatch/v2 v2.4.0 // indirect
 	google.golang.org/genproto/googleapis/api v0.0.0-20240725223205-93522f1f2a9f // indirect
-	google.golang.org/protobuf v1.35.1 // indirect
+	google.golang.org/protobuf v1.35.2 // indirect
 	gopkg.in/inf.v0 v0.9.1 // indirect
 	gopkg.in/ini.v1 v1.67.0 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
