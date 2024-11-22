@@ -1,5 +1,42 @@
 # Changelog
 
+## [0.1.13](https://github.com/validator-labs/validator/compare/v0.1.12...v0.1.13) (2024-11-22)
+
+
+### Features
+
+* frequency annotation helper ([#422](https://github.com/validator-labs/validator/issues/422)) ([b2ca83f](https://github.com/validator-labs/validator/commit/b2ca83f7052037c5a6c08c9974abaea65c2c2a9b))
+
+
+### Other
+
+* **deps:** bump github.com/golang-jwt/jwt/v4 from 4.5.0 to 4.5.1 ([#438](https://github.com/validator-labs/validator/issues/438)) ([b69e66f](https://github.com/validator-labs/validator/commit/b69e66f5469ac6cfe2e2cb14eefba0ca27f015e8))
+* update renovate.json ([96c3ea7](https://github.com/validator-labs/validator/commit/96c3ea77b8e2d24395aee6a57b017871923ad58e))
+* Update renovate.json ([#436](https://github.com/validator-labs/validator/issues/436)) ([d720806](https://github.com/validator-labs/validator/commit/d720806372b6b2f6882d3d461004f5e92f5463cf))
+
+
+### Dependency Updates
+
+* **deps:** update actions/checkout digest to 11bd719 ([#430](https://github.com/validator-labs/validator/issues/430)) ([dcc37af](https://github.com/validator-labs/validator/commit/dcc37afc2e38081c6ed432be2d39d73eb01ada94))
+* **deps:** update actions/checkout digest to eef6144 ([#426](https://github.com/validator-labs/validator/issues/426)) ([ae9976f](https://github.com/validator-labs/validator/commit/ae9976fac047431dddf51d88c9ad3f72e9b40623))
+* **deps:** update all non-major dependencies ([#437](https://github.com/validator-labs/validator/issues/437)) ([8a2fb74](https://github.com/validator-labs/validator/commit/8a2fb74f4d15f3d6e7b6227865d01382ce4634b6))
+* **deps:** update golang.org/x/exp digest to 2d47ceb ([#439](https://github.com/validator-labs/validator/issues/439)) ([4f2ffdf](https://github.com/validator-labs/validator/commit/4f2ffdf1a15c2d8013647cc120da345e650d81ca))
+* **deps:** update golang.org/x/exp digest to f66d83c ([#425](https://github.com/validator-labs/validator/issues/425)) ([edf709b](https://github.com/validator-labs/validator/commit/edf709b18478b821097b0f4c20feb2edc99ee7a0))
+* **deps:** update kubernetes packages to v0.31.1 ([#388](https://github.com/validator-labs/validator/issues/388)) ([5459610](https://github.com/validator-labs/validator/commit/5459610bffee6262b35e069ece63dd5417a6b39a))
+* **deps:** update kubernetes packages to v0.31.2 ([#431](https://github.com/validator-labs/validator/issues/431)) ([16f3c2a](https://github.com/validator-labs/validator/commit/16f3c2a9da959f00e159fe427daf835911f795b6))
+* **deps:** update module buf.build/gen/go/spectrocloud/spectro-cleanup/connectrpc/go to v1.17.0-20240205164452-95dfd137cb54.1 ([#421](https://github.com/validator-labs/validator/issues/421)) ([274ba08](https://github.com/validator-labs/validator/commit/274ba08ce9e96b730c2f27e449454752eea82cf0))
+* **deps:** update module buf.build/gen/go/spectrocloud/spectro-cleanup/protocolbuffers/go to v1.35.1-20240205164452-95dfd137cb54.1 ([#428](https://github.com/validator-labs/validator/issues/428)) ([728bbf1](https://github.com/validator-labs/validator/commit/728bbf1f321e7aa8a932af9072ba91e7cf0a6f1e))
+* **deps:** update module connectrpc.com/connect to v1.17.0 ([#420](https://github.com/validator-labs/validator/issues/420)) ([1425343](https://github.com/validator-labs/validator/commit/14253432eb8778ac69da30fabd0cbfcd49dbd02f))
+* **deps:** update module github.com/onsi/ginkgo/v2 to v2.21.0 ([#433](https://github.com/validator-labs/validator/issues/433)) ([d2dbcf0](https://github.com/validator-labs/validator/commit/d2dbcf04c05261aac38693bd1905132a6f69d22a))
+* **deps:** update module github.com/onsi/gomega to v1.35.0 ([#434](https://github.com/validator-labs/validator/issues/434)) ([274b277](https://github.com/validator-labs/validator/commit/274b277037e0b395d93164daa34c770604ebf876))
+* **deps:** update module github.com/slack-go/slack to v0.15.0 ([#429](https://github.com/validator-labs/validator/issues/429)) ([2ce3b4b](https://github.com/validator-labs/validator/commit/2ce3b4bacbd8eb11eca5d8ce0d9807b36dcd0767))
+* **deps:** update module github.com/validator-labs/validator-plugin-oci to v0.3.3 ([#396](https://github.com/validator-labs/validator/issues/396)) ([011d5bd](https://github.com/validator-labs/validator/commit/011d5bd9ce2b5a5821858b0ac3e0081fff193a7c))
+* **deps:** update module sigs.k8s.io/cluster-api to v1.8.3 ([#418](https://github.com/validator-labs/validator/issues/418)) ([735df90](https://github.com/validator-labs/validator/commit/735df9000900b05f9946288ca2e46002e79e5344))
+* **deps:** update module sigs.k8s.io/cluster-api to v1.8.4 ([#427](https://github.com/validator-labs/validator/issues/427)) ([67fbcfc](https://github.com/validator-labs/validator/commit/67fbcfcb163fb76c781461faa3004c7e3d228077))
+* **deps:** update module sigs.k8s.io/controller-runtime to v0.19.0 ([#392](https://github.com/validator-labs/validator/issues/392)) ([1c87bd3](https://github.com/validator-labs/validator/commit/1c87bd3fd905661b0eb6dc7d61f88e93bcea2940))
+* **deps:** update module sigs.k8s.io/controller-runtime to v0.19.1 ([#432](https://github.com/validator-labs/validator/issues/432)) ([7b2f95a](https://github.com/validator-labs/validator/commit/7b2f95ac51e2d383a4028e405459cf9b0ab672de))
+* **deps:** update softprops/action-gh-release digest to e7a8f85 ([#435](https://github.com/validator-labs/validator/issues/435)) ([cb388ca](https://github.com/validator-labs/validator/commit/cb388cafea34d1ca33757d3928ddecaa3d1fdb7f))
+
 ## [0.1.12](https://github.com/validator-labs/validator/compare/v0.1.11...v0.1.12) (2024-10-03)
 
 
