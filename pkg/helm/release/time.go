@@ -53,6 +53,7 @@ func ParseInLocation(layout, value string, loc *time.Location) (Time, error) {
 }
 
 // Date returns the Time corresponding to the given year, month, day, hour, min, sec, and nsec.
+// nolint:revive
 func Date(year int, month time.Month, day, hour, min, sec, nsec int, loc *time.Location) Time {
 	return Time{Time: time.Date(year, month, day, hour, min, sec, nsec, loc)}
 }
