@@ -27,7 +27,9 @@ jobs:
           submodules: recursive
 
       - name: Generate Hauls for release
-        run: make haul
+        run: |
+          helm repo update
+          make haul
       
       - name: Attach Hauls to release
         uses: softprops/action-gh-release@e7a8f85e1c67a31e6ed99a94b41bd0b71bbee6b8 # v2
