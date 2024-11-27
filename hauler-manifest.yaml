@@ -5,8 +5,8 @@ metadata:
 spec:
   images:
     - name: quay.io/validator-labs/validator:v0.1.13 # x-release-please-version
-    - name: quay.io/validator-labs/validator-plugin-aws:v0.1.8
-    - name: quay.io/validator-labs/validator-plugin-azure:v0.0.22
+    - name: quay.io/validator-labs/validator-plugin-aws:v0.1.9
+    - name: quay.io/validator-labs/validator-plugin-azure:v0.0.23
     - name: quay.io/validator-labs/validator-plugin-kubescape:v0.0.4
     - name: quay.io/validator-labs/validator-plugin-maas:v0.0.12
     - name: quay.io/validator-labs/validator-plugin-network:v0.1.0
@@ -30,10 +30,10 @@ spec:
       version: 0.1.13 # x-release-please-version
     - name: validator-plugin-aws
       repoURL: https://validator-labs.github.io/validator-plugin-aws
-      version: 0.1.8
+      version: 0.1.9
     - name: validator-plugin-azure
       repoURL: https://validator-labs.github.io/validator-plugin-azure
-      version: 0.0.22
+      version: 0.0.23
     - name: validator-plugin-kubescape
       repoURL: https://validator-labs.github.io/validator-plugin-kubescape
       version: 0.0.4
@@ -57,4 +57,4 @@ metadata:
 spec:
   files:
     - name: validatorctl
-      path: https://github.com/validator-labs/validatorctl/releases/download/v0.2.4/validator-linux-ARCH
+      path: https://github.com/validator-labs/validatorctl/releases/download/v0.2.5/validator-linux-ARCH
