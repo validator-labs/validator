@@ -1,5 +1,18 @@
 # Changelog
 
+## [0.1.14](https://github.com/validator-labs/validator/compare/v0.1.13...v0.1.14) (2024-11-28)
+
+
+### Other
+
+* release 0.1.14 ([ea94cf9](https://github.com/validator-labs/validator/commit/ea94cf94377aa325c678dfa319d51dde3334df19))
+
+
+### Dependency Updates
+
+* **deps:** update build digest to d0ef938 ([#441](https://github.com/validator-labs/validator/issues/441)) ([044d782](https://github.com/validator-labs/validator/commit/044d782f9698bf84b719929cd3d8b47d399f73e4))
+* **deps:** update module github.com/onsi/gomega to v1.36.0 ([#442](https://github.com/validator-labs/validator/issues/442)) ([ceb7392](https://github.com/validator-labs/validator/commit/ceb7392cf7a7d8388070dc11fc91d5d7d92df3a6))
+
 ## [0.1.13](https://github.com/validator-labs/validator/compare/v0.1.12...v0.1.13) (2024-11-22)
 
 
