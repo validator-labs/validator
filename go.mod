@@ -8,7 +8,7 @@ require (
 	connectrpc.com/connect v1.17.0
 	github.com/go-logr/logr v1.4.2
 	github.com/onsi/ginkgo/v2 v2.22.0
-	github.com/onsi/gomega v1.36.0
+	github.com/onsi/gomega v1.36.1
 	github.com/pkg/errors v0.9.1
 	github.com/slack-go/slack v0.15.0
 	github.com/validator-labs/validator-plugin-oci v0.3.3
@@ -18,7 +18,7 @@ require (
 	k8s.io/client-go v0.31.3
 	k8s.io/klog/v2 v2.130.1
 	sigs.k8s.io/cluster-api v1.8.5
-	sigs.k8s.io/controller-runtime v0.19.2
+	sigs.k8s.io/controller-runtime v0.19.3
 	sigs.k8s.io/yaml v1.4.0
 )
 
