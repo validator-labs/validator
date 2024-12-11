@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.1.15](https://github.com/validator-labs/validator/compare/v0.1.14...v0.1.15) (2024-12-11)
+
+
+### Other
+
+* re-scaffold kubebuilder project ([#451](https://github.com/validator-labs/validator/issues/451)) ([025d729](https://github.com/validator-labs/validator/commit/025d72927ac69931812e8410f2d67573c131d44b))
+
+
+### Dependency Updates
+
+* **deps:** update build digest to 5e4aaa9 ([#450](https://github.com/validator-labs/validator/issues/450)) ([4a8bc76](https://github.com/validator-labs/validator/commit/4a8bc76bff4fc36425d29731fcb860e7dbfbc3b4))
+
 ## [0.1.14](https://github.com/validator-labs/validator/compare/v0.1.13...v0.1.14) (2024-11-28)
 
 
