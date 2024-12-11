@@ -50,9 +50,9 @@ type ValidationResultReconciler struct {
 	SinkClient *sinks.Client
 }
 
-//+kubebuilder:rbac:groups=validation.spectrocloud.labs,resources=validationresults,verbs=get;list;watch;create;update;patch;delete
-//+kubebuilder:rbac:groups=validation.spectrocloud.labs,resources=validationresults/status,verbs=get;update;patch
-//+kubebuilder:rbac:groups=validation.spectrocloud.labs,resources=validationresults/finalizers,verbs=update
+// +kubebuilder:rbac:groups=validation.spectrocloud.labs,resources=validationresults,verbs=get;list;watch;create;update;patch;delete
+// +kubebuilder:rbac:groups=validation.spectrocloud.labs,resources=validationresults/status,verbs=get;update;patch
+// +kubebuilder:rbac:groups=validation.spectrocloud.labs,resources=validationresults/finalizers,verbs=update
 
 // Reconcile reconciles a ValidationResult.
 func (r *ValidationResultReconciler) Reconcile(ctx context.Context, req ctrl.Request) (_ ctrl.Result, reterr error) {

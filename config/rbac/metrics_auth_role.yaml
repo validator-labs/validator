@@ -2,13 +2,13 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
   labels:
-    app.kubernetes.io/name: clusterrole
-    app.kubernetes.io/instance: proxy-role
-    app.kubernetes.io/component: kube-rbac-proxy
+    app.kubernetes.io/name: metrics-auth-role
+    app.kubernetes.io/instance: metrics-auth-role
+    app.kubernetes.io/component: rbac
     app.kubernetes.io/created-by: validator
     app.kubernetes.io/part-of: validator
     app.kubernetes.io/managed-by: kustomize
-  name: proxy-role
+  name: metrics-auth-role
 rules:
 - apiGroups:
   - authentication.k8s.io

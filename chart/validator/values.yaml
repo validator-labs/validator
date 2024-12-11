@@ -1,28 +1,8 @@
 controllerManager:
-  kubeRbacProxy:
-    args:
-    - --secure-listen-address=0.0.0.0:8443
-    - --upstream=http://127.0.0.1:8080/
-    - --logtostderr=true
-    - --v=0
-    containerSecurityContext:
-      allowPrivilegeEscalation: false
-      capabilities:
-        drop:
-        - ALL
-    image:
-      repository: gcr.io/kubebuilder/kube-rbac-proxy
-      tag: v0.16.0
-    resources:
-      limits:
-        cpu: 500m
-        memory: 128Mi
-      requests:
-        cpu: 5m
-        memory: 64Mi
   manager:
     args:
     - --health-probe-bind-address=:8081
+    - --metrics-bind-address=:8443
     - --leader-elect
     containerSecurityContext:
       allowPrivilegeEscalation: false
@@ -216,33 +196,13 @@ plugins:
 - chart:
     name: validator-plugin-azure
     repository: validator-plugin-azure
-    version: v0.0.24
+    version: v0.0.25
   values: |-
     controllerManager:
-      kubeRbacProxy:
-        args:
-          - --secure-listen-address=0.0.0.0:8443
-          - --upstream=http://127.0.0.1:8080/
-          - --logtostderr=true
-          - --v=0
-        containerSecurityContext:
-          allowPrivilegeEscalation: false
-          capabilities:
-            drop:
-              - ALL
-        image:
-          repository: gcr.io/kubebuilder/kube-rbac-proxy
-          tag: v0.16.0
-        resources:
-          limits:
-            cpu: 500m
-            memory: 128Mi
-          requests:
-            cpu: 5m
-            memory: 64Mi
       manager:
         args:
           - --health-probe-bind-address=:8081
+          - --metrics-bind-address=:8443
           - --leader-elect
         containerSecurityContext:
           allowPrivilegeEscalation: false
@@ -251,7 +211,7 @@ plugins:
               - ALL
         image:
           repository: quay.io/validator-labs/validator-plugin-azure
-          tag: v0.0.24
+          tag: v0.0.25
         resources:
           limits:
             cpu: 500m
@@ -288,33 +248,13 @@ plugins:
 - chart:
     name: validator-plugin-oci
     repository: validator-plugin-oci
-    version: v0.3.3
+    version: v0.3.4
   values: |-
     controllerManager:
-      kubeRbacProxy:
-        args:
-          - --secure-listen-address=0.0.0.0:8443
-          - --upstream=http://127.0.0.1:8080/
-          - --logtostderr=true
-          - --v=0
-        containerSecurityContext:
-          allowPrivilegeEscalation: false
-          capabilities:
-            drop:
-              - ALL
-        image:
-          repository: gcr.io/kubebuilder/kube-rbac-proxy
-          tag: v0.16.0
-        resources:
-          limits:
-            cpu: 500m
-            memory: 128Mi
-          requests:
-            cpu: 5m
-            memory: 64Mi
       manager:
         args:
           - --health-probe-bind-address=:8081
+          - --metrics-bind-address=:8443
           - --leader-elect
         containerSecurityContext:
           allowPrivilegeEscalation: false
@@ -323,7 +263,7 @@ plugins:
               - ALL
         image:
           repository: quay.io/validator-labs/validator-plugin-oci
-          tag: v0.3.3
+          tag: v0.3.4
         resources:
           limits:
             cpu: 500m
@@ -345,33 +285,13 @@ plugins:
 - chart:
     name: validator-plugin-kubescape
     repository: validator-plugin-kubescape
-    version: v0.0.4
+    version: v0.0.5
   values: |-
     controllerManager:
-      kubeRbacProxy:
-        args:
-          - --secure-listen-address=0.0.0.0:8443
-          - --upstream=http://127.0.0.1:8080/
-          - --logtostderr=true
-          - --v=0
-        containerSecurityContext:
-          allowPrivilegeEscalation: false
-          capabilities:
-            drop:
-              - ALL
-        image:
-          repository: gcr.io/kubebuilder/kube-rbac-proxy
-          tag: v0.16.0
-        resources:
-          limits:
-            cpu: 500m
-            memory: 128Mi
-          requests:
-            cpu: 5m
-            memory: 64Mi
       manager:
         args:
           - --health-probe-bind-address=:8081
+          - --metrics-bind-address=:8443
           - --leader-elect
         containerSecurityContext:
           allowPrivilegeEscalation: false
@@ -380,7 +300,7 @@ plugins:
               - ALL
         image:
           repository: quay.io/validator-labs/validator-plugin-kubescape
-          tag: v0.0.4
+          tag: v0.0.5
         resources:
           limits:
             cpu: 500m
@@ -410,33 +330,13 @@ plugins:
 - chart:
     name: validator-plugin-aws
     repository: validator-plugin-aws
-    version: v0.1.10
+    version: v0.1.11
   values: |-
     controllerManager:
-      kubeRbacProxy:
-        args:
-          - --secure-listen-address=0.0.0.0:8443
-          - --upstream=http://127.0.0.1:8080/
-          - --logtostderr=true
-          - --v=0
-        containerSecurityContext:
-          allowPrivilegeEscalation: false
-          capabilities:
-            drop:
-              - ALL
-        image:
-          repository: gcr.io/kubebuilder/kube-rbac-proxy
-          tag: v0.16.0
-        resources:
-          limits:
-            cpu: 500m
-            memory: 128Mi
-          requests:
-            cpu: 5m
-            memory: 64Mi
       manager:
         args:
           - --health-probe-bind-address=:8081
+          - --metrics-bind-address=:8443
           - --leader-elect
         containerSecurityContext:
           allowPrivilegeEscalation: false
@@ -445,7 +345,7 @@ plugins:
               - ALL
         image:
           repository: quay.io/validator-labs/validator-plugin-aws
-          tag: v0.1.10
+          tag: v0.1.11
         resources:
           limits:
             cpu: 500m
@@ -471,33 +371,13 @@ plugins:
 - chart:
     name: validator-plugin-network
     repository: validator-plugin-network
-    version: v0.1.0
+    version: v0.1.1
   values: |-
     controllerManager:
-      kubeRbacProxy:
-        args:
-          - --secure-listen-address=0.0.0.0:8443
-          - --upstream=http://127.0.0.1:8080/
-          - --logtostderr=true
-          - --v=0
-        containerSecurityContext:
-          allowPrivilegeEscalation: false
-          capabilities:
-            drop:
-              - ALL
-        image:
-          repository: gcr.io/kubebuilder/kube-rbac-proxy
-          tag: v0.16.0
-        resources:
-          limits:
-            cpu: 500m
-            memory: 128Mi
-          requests:
-            cpu: 5m
-            memory: 64Mi
       manager:
         args:
           - --health-probe-bind-address=:8081
+          - --metrics-bind-address=:8443
           - --leader-elect
         containerSecurityContext:
           allowPrivilegeEscalation: true
@@ -508,7 +388,7 @@ plugins:
               - ALL
         image:
           repository: quay.io/validator-labs/validator-plugin-network
-          tag: v0.1.0
+          tag: v0.1.1
         resources:
           limits:
             cpu: 500m
@@ -530,32 +410,12 @@ plugins:
 - chart:
     name: validator-plugin-maas
     repository: validator-plugin-maas
-    version: v0.0.12
+    version: v0.0.13
   values: |-
     controllerManager:
-      kubeRbacProxy:
-        args:
-          - --secure-listen-address=0.0.0.0:8443
-          - --upstream=http://127.0.0.1:8080/
-          - --logtostderr=true
-          - --v=0
-        containerSecurityContext:
-          allowPrivilegeEscalation: false
-          capabilities:
-            drop:
-              - ALL
-        image:
-          repository: gcr.io/kubebuilder/kube-rbac-proxy
-          tag: v0.16.0
-        resources:
-          limits:
-            cpu: 500m
-            memory: 128Mi
-          requests:
-            cpu: 5m
-            memory: 64Mi
       manager:
         args:
+          - --metrics-bind-address=:8443
           - --health-probe-bind-address=:8081
           - --leader-elect
         containerSecurityContext:
@@ -565,7 +425,7 @@ plugins:
               - ALL
         image:
           repository: quay.io/validator-labs/validator-plugin-maas
-          tag: v0.0.12
+          tag: v0.0.13
         resources:
           limits:
             cpu: 500m
@@ -582,39 +442,18 @@ plugins:
         - name: https
           port: 8443
           protocol: TCP
-          targetPort: https
+          targetPort: 8443
       type: ClusterIP
 - chart:
     name: validator-plugin-vsphere
     repository: validator-plugin-vsphere
-    version: v0.1.4
+    version: v0.1.5
   values: |-
     controllerManager:
-      kubeRbacProxy:
-        args:
-          - --secure-listen-address=0.0.0.0:8443
-          - --upstream=http://127.0.0.1:8080/
-          - --logtostderr=true
-          - --v=0
-        containerSecurityContext:
-          allowPrivilegeEscalation: false
-          capabilities:
-            drop:
-              - ALL
-        image:
-          repository: gcr.io/kubebuilder/kube-rbac-proxy
-          tag: v0.16.0
-        resources:
-          limits:
-            cpu: 500m
-            memory: 128Mi
-          requests:
-            cpu: 5m
-            memory: 64Mi
       manager:
         args:
           - --health-probe-bind-address=:8081
-          - --metrics-bind-address=127.0.0.1:8080
+          - --metrics-bind-address=:8443
           - --leader-elect
         containerSecurityContext:
           allowPrivilegeEscalation: false
@@ -623,7 +462,7 @@ plugins:
               - ALL
         image:
           repository: quay.io/validator-labs/validator-plugin-vsphere
-          tag: v0.1.4
+          tag: v0.1.5
         resources:
           limits:
             cpu: 500m

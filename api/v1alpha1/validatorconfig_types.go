@@ -121,8 +121,8 @@ type ConditionType string
 // HelmChartDeployedCondition defines whether the helm chart was installed/pulled/upgraded correctly.
 const HelmChartDeployedCondition ConditionType = "HelmChartDeployed"
 
-//+kubebuilder:object:root=true
-//+kubebuilder:subresource:status
+// +kubebuilder:object:root=true
+// +kubebuilder:subresource:status
 
 // ValidatorConfig is the Schema for the validatorconfigs API.
 type ValidatorConfig struct {
@@ -133,7 +133,7 @@ type ValidatorConfig struct {
 	Status ValidatorConfigStatus `json:"status,omitempty"`
 }
 
-//+kubebuilder:object:root=true
+// +kubebuilder:object:root=true
 
 // ValidatorConfigList contains a list of ValidatorConfig.
 type ValidatorConfigList struct {
