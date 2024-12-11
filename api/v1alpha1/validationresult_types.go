@@ -118,11 +118,11 @@ func DefaultValidationCondition() ValidationCondition {
 	}
 }
 
-//+kubebuilder:object:root=true
-//+kubebuilder:subresource:status
-//+kubebuilder:printcolumn:name="Age",type="date",JSONPath=".metadata.creationTimestamp",description="Age"
-//+kubebuilder:printcolumn:name="Plugin",type="string",JSONPath=".spec.plugin",description="Plugin"
-//+kubebuilder:printcolumn:name="State",type="string",JSONPath=".status.state",description="State"
+// +kubebuilder:object:root=true
+// +kubebuilder:subresource:status
+// +kubebuilder:printcolumn:name="Age",type="date",JSONPath=".metadata.creationTimestamp",description="Age"
+// +kubebuilder:printcolumn:name="Plugin",type="string",JSONPath=".spec.plugin",description="Plugin"
+// +kubebuilder:printcolumn:name="State",type="string",JSONPath=".status.state",description="State"
 
 // ValidationResult is the Schema for the validationresults API.
 type ValidationResult struct {
@@ -151,7 +151,7 @@ func (r *ValidationResult) Hash() string {
 	return base64.StdEncoding.EncodeToString(hash)
 }
 
-//+kubebuilder:object:root=true
+// +kubebuilder:object:root=true
 
 // ValidationResultList contains a list of ValidationResult.
 type ValidationResultList struct {

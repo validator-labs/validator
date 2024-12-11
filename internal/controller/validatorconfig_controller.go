@@ -68,9 +68,9 @@ type ValidatorConfigReconciler struct {
 	Scheme            *runtime.Scheme
 }
 
-//+kubebuilder:rbac:groups=validation.spectrocloud.labs,resources=validatorconfigs,verbs=get;list;watch;create;update;patch;delete
-//+kubebuilder:rbac:groups=validation.spectrocloud.labs,resources=validatorconfigs/status,verbs=get;update;patch
-//+kubebuilder:rbac:groups=validation.spectrocloud.labs,resources=validatorconfigs/finalizers,verbs=update
+// +kubebuilder:rbac:groups=validation.spectrocloud.labs,resources=validatorconfigs,verbs=get;list;watch;create;update;patch;delete
+// +kubebuilder:rbac:groups=validation.spectrocloud.labs,resources=validatorconfigs/status,verbs=get;update;patch
+// +kubebuilder:rbac:groups=validation.spectrocloud.labs,resources=validatorconfigs/finalizers,verbs=update
 
 // Reconcile reconciles a ValidatorConfig.
 func (r *ValidatorConfigReconciler) Reconcile(ctx context.Context, req ctrl.Request) (_ ctrl.Result, reterr error) {

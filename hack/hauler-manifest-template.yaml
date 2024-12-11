@@ -15,9 +15,6 @@ spec:
     - name: quay.io/validator-labs/validator-certs-init:1.0.0
     - name: gcr.io/spectro-images-public/release/spectro-cleanup:1.2.0
     - name: kindest/node:v1.30.2
-    # TODO: align on a single kube-rbac-proxy image
-    - name: gcr.io/kubebuilder/kube-rbac-proxy:v0.15.0
-    - name: gcr.io/kubebuilder/kube-rbac-proxy:v0.16.0
 ---
 apiVersion: content.hauler.cattle.io/v1alpha1
 kind: Charts

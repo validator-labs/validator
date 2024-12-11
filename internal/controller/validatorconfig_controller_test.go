@@ -23,7 +23,7 @@ import (
 	"github.com/validator-labs/validator/api/v1alpha1"
 	"github.com/validator-labs/validator/pkg/helm"
 	"github.com/validator-labs/validator/pkg/test"
-	//+kubebuilder:scaffold:imports
+	// +kubebuilder:scaffold:imports
 )
 
 const (

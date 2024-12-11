@@ -47,7 +47,7 @@ import (
 	"github.com/validator-labs/validator/pkg/kube"
 	"github.com/validator-labs/validator/pkg/sinks"
 	"github.com/validator-labs/validator/pkg/util"
-	//+kubebuilder:scaffold:imports
+	// +kubebuilder:scaffold:imports
 )
 
 // These tests use Ginkgo (BDD-style Go testing framework). Refer to
@@ -114,7 +114,7 @@ var _ = BeforeSuite(func() {
 	err = v1alpha1.AddToScheme(scheme.Scheme)
 	Expect(err).NotTo(HaveOccurred())
 
-	//+kubebuilder:scaffold:scheme
+	// +kubebuilder:scaffold:scheme
 
 	k8sClient, err = client.New(cfg, client.Options{Scheme: scheme.Scheme})
 	Expect(err).NotTo(HaveOccurred())
