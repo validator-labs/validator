@@ -29,7 +29,7 @@ metricsService:
   - name: https
     port: 8443
     protocol: TCP
-    targetPort: https
+    targetPort: 8443
   type: ClusterIP
 
 # Optional environment variable configuration
