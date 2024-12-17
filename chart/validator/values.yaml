@@ -29,7 +29,7 @@ metricsService:
   - name: https
     port: 8443
     protocol: TCP
-    targetPort: https
+    targetPort: 8443
   type: ClusterIP
 
 # Optional environment variable configuration
@@ -196,7 +196,7 @@ plugins:
 - chart:
     name: validator-plugin-azure
     repository: validator-plugin-azure
-    version: v0.0.25
+    version: v0.0.26
   values: |-
     controllerManager:
       manager:
@@ -211,7 +211,7 @@ plugins:
               - ALL
         image:
           repository: quay.io/validator-labs/validator-plugin-azure
-          tag: v0.0.25
+          tag: v0.0.26
         resources:
           limits:
             cpu: 500m
@@ -236,7 +236,7 @@ plugins:
         - name: https
           port: 8443
           protocol: TCP
-          targetPort: https
+          targetPort: 8443
       type: ClusterIP
     auth:
       # Override the service account used by Azure validator (optional, could be used for WorkloadIdentityCredentials on AKS)
@@ -248,7 +248,7 @@ plugins:
 - chart:
     name: validator-plugin-oci
     repository: validator-plugin-oci
-    version: v0.3.4
+    version: v0.3.5
   values: |-
     controllerManager:
       manager:
@@ -263,7 +263,7 @@ plugins:
               - ALL
         image:
           repository: quay.io/validator-labs/validator-plugin-oci
-          tag: v0.3.4
+          tag: v0.3.5
         resources:
           limits:
             cpu: 500m
@@ -280,12 +280,12 @@ plugins:
         - name: https
           port: 8443
           protocol: TCP
-          targetPort: https
+          targetPort: 8443
       type: ClusterIP
 - chart:
     name: validator-plugin-kubescape
     repository: validator-plugin-kubescape
-    version: v0.0.5
+    version: v0.0.6
   values: |-
     controllerManager:
       manager:
@@ -300,7 +300,7 @@ plugins:
               - ALL
         image:
           repository: quay.io/validator-labs/validator-plugin-kubescape
-          tag: v0.0.5
+          tag: v0.0.6
         resources:
           limits:
             cpu: 500m
@@ -325,12 +325,12 @@ plugins:
         - name: https
           port: 8443
           protocol: TCP
-          targetPort: https
+          targetPort: 8443
       type: ClusterIP
 - chart:
     name: validator-plugin-aws
     repository: validator-plugin-aws
-    version: v0.1.11
+    version: v0.1.12
   values: |-
     controllerManager:
       manager:
@@ -345,7 +345,7 @@ plugins:
               - ALL
         image:
           repository: quay.io/validator-labs/validator-plugin-aws
-          tag: v0.1.11
+          tag: v0.1.12
         resources:
           limits:
             cpu: 500m
@@ -362,7 +362,7 @@ plugins:
         - name: https
           port: 8443
           protocol: TCP
-          targetPort: https
+          targetPort: 8443
       type: ClusterIP
     auth:
       # Override the service account used by AWS validator (optional, could be used for IAM roles for Service Accounts)
@@ -371,7 +371,7 @@ plugins:
 - chart:
     name: validator-plugin-network
     repository: validator-plugin-network
-    version: v0.1.1
+    version: v0.1.2
   values: |-
     controllerManager:
       manager:
@@ -388,7 +388,7 @@ plugins:
               - ALL
         image:
           repository: quay.io/validator-labs/validator-plugin-network
-          tag: v0.1.1
+          tag: v0.1.2
         resources:
           limits:
             cpu: 500m
@@ -405,7 +405,7 @@ plugins:
         - name: https
           port: 8443
           protocol: TCP
-          targetPort: https
+          targetPort: 8443
       type: ClusterIP
 - chart:
     name: validator-plugin-maas
@@ -447,7 +447,7 @@ plugins:
 - chart:
     name: validator-plugin-vsphere
     repository: validator-plugin-vsphere
-    version: v0.1.5
+    version: v0.1.6
   values: |-
     controllerManager:
       manager:
@@ -462,7 +462,7 @@ plugins:
               - ALL
         image:
           repository: quay.io/validator-labs/validator-plugin-vsphere
-          tag: v0.1.5
+          tag: v0.1.6
         resources:
           limits:
             cpu: 500m
@@ -479,5 +479,5 @@ plugins:
         - name: https
           port: 8443
           protocol: TCP
-          targetPort: https
+          targetPort: 8443
       type: ClusterIP
