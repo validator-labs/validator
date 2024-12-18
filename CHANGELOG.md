@@ -1,5 +1,24 @@
 # Changelog
 
+## [0.1.16](https://github.com/validator-labs/validator/compare/v0.1.15...v0.1.16) (2024-12-17)
+
+
+### Bug Fixes
+
+* update plugin chart values with new metrics service targetPort ([#457](https://github.com/validator-labs/validator/issues/457)) ([c474d90](https://github.com/validator-labs/validator/commit/c474d90c46a8feb9b2e4e0b8f40c0f42a97958bc))
+
+
+### Other
+
+* **deps:** bump golang.org/x/crypto from 0.30.0 to 0.31.0 ([#455](https://github.com/validator-labs/validator/issues/455)) ([a8c3422](https://github.com/validator-labs/validator/commit/a8c3422288929292e9f94a482f8a6f59c208a919))
+
+
+### Dependency Updates
+
+* **deps:** update golang.org/x/exp digest to 1829a12 ([#448](https://github.com/validator-labs/validator/issues/448)) ([fb42aea](https://github.com/validator-labs/validator/commit/fb42aeaee051ef3b2b22986f7f203452419f03d4))
+* **deps:** update golang.org/x/exp digest to 4a55095 ([#454](https://github.com/validator-labs/validator/issues/454)) ([3e1fe92](https://github.com/validator-labs/validator/commit/3e1fe92ec84c986b237b82fc8662b6a468493315))
+* **deps:** update golang.org/x/exp digest to b2144cd ([#458](https://github.com/validator-labs/validator/issues/458)) ([0b04ec9](https://github.com/validator-labs/validator/commit/0b04ec9fc93e94b17e04b1de1a857f606042a940))
+
 ## [0.1.15](https://github.com/validator-labs/validator/compare/v0.1.14...v0.1.15) (2024-12-11)
 
 
