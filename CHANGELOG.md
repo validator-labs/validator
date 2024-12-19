@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.17](https://github.com/validator-labs/validator/compare/v0.1.16...v0.1.17) (2024-12-19)
+
+
+### Dependency Updates
+
+* **deps:** update build digest to aa32dd3 ([#456](https://github.com/validator-labs/validator/issues/456)) ([2e21b90](https://github.com/validator-labs/validator/commit/2e21b907d9a91eb8f170d3857861278c0714c85f))
+
 ## [0.1.16](https://github.com/validator-labs/validator/compare/v0.1.15...v0.1.16) (2024-12-17)
 
 
