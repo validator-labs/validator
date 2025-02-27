@@ -1,5 +1,30 @@
 # Changelog
 
+## [0.1.17](https://github.com/validator-labs/validator/compare/v0.1.16...v0.1.17) (2025-02-27)
+
+
+### Other
+
+* bump to go1.23.6 ([#470](https://github.com/validator-labs/validator/issues/470)) ([b68455b](https://github.com/validator-labs/validator/commit/b68455bff253958bc48fbfed84a960a73e6a8284))
+
+
+### Dependency Updates
+
+* **deps:** update azure/setup-helm digest to b9e5190 ([#472](https://github.com/validator-labs/validator/issues/472)) ([2b777e2](https://github.com/validator-labs/validator/commit/2b777e2184ae2e4282c9d1e21a56063da6423fe1))
+* **deps:** update build digest to 00de875 ([#460](https://github.com/validator-labs/validator/issues/460)) ([14f9f41](https://github.com/validator-labs/validator/commit/14f9f418d2c615634eb297588bfa6aff4eedda07))
+* **deps:** update build digest to 1af2678 ([#462](https://github.com/validator-labs/validator/issues/462)) ([13545f0](https://github.com/validator-labs/validator/commit/13545f0372d8643c9b2f963fb3ba39d6159de7e2))
+* **deps:** update build digest to 1b51737 ([#463](https://github.com/validator-labs/validator/issues/463)) ([e73fdcd](https://github.com/validator-labs/validator/commit/e73fdcdbf46fad120a9615a83e5112ea5f855e8b))
+* **deps:** update build digest to 2f5dbc3 ([#474](https://github.com/validator-labs/validator/issues/474)) ([9e50dc1](https://github.com/validator-labs/validator/commit/9e50dc1176a8d28a5d3267fedd9baa497c3b0de7))
+* **deps:** update build digest to 3236c04 ([#466](https://github.com/validator-labs/validator/issues/466)) ([54f33e6](https://github.com/validator-labs/validator/commit/54f33e60b2f776d963b79937dda3ed273eba99f4))
+* **deps:** update build digest to 454e459 ([#465](https://github.com/validator-labs/validator/issues/465)) ([0bb4cb1](https://github.com/validator-labs/validator/commit/0bb4cb14f1206537ef42f93482e645e7af8dc846))
+* **deps:** update build digest to 6a4c752 ([#468](https://github.com/validator-labs/validator/issues/468)) ([0c78fb2](https://github.com/validator-labs/validator/commit/0c78fb2e3744986d5f113767f33bbdd978bd9ace))
+* **deps:** update build digest to 95a81bf ([#473](https://github.com/validator-labs/validator/issues/473)) ([610f642](https://github.com/validator-labs/validator/commit/610f642c6193717765eda43088f180957e24eb02))
+* **deps:** update build digest to aa32dd3 ([#456](https://github.com/validator-labs/validator/issues/456)) ([2e21b90](https://github.com/validator-labs/validator/commit/2e21b907d9a91eb8f170d3857861278c0714c85f))
+* **deps:** update build digest to b554bf5 ([#464](https://github.com/validator-labs/validator/issues/464)) ([febc5a0](https://github.com/validator-labs/validator/commit/febc5a007eb712ce64aa1def499a0846bc515743))
+* **deps:** update build digest to d789840 ([#476](https://github.com/validator-labs/validator/issues/476)) ([efb00e8](https://github.com/validator-labs/validator/commit/efb00e8429bc36b29ad33f1d28474482acde00b0))
+* **deps:** update build digest to d7fbb38 ([#467](https://github.com/validator-labs/validator/issues/467)) ([979011f](https://github.com/validator-labs/validator/commit/979011f550512467a26d5b326b26904ed1d7cbae))
+* **deps:** update softprops/action-gh-release digest to c95fe14 ([#461](https://github.com/validator-labs/validator/issues/461)) ([1367896](https://github.com/validator-labs/validator/commit/13678968a80021950e46ca6872b7446e0b327db3))
+
 ## [0.1.16](https://github.com/validator-labs/validator/compare/v0.1.15...v0.1.16) (2024-12-17)
 
 
