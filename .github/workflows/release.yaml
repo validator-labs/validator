@@ -14,7 +14,7 @@ permissions:
 
 jobs:
   call-release:
-    uses: validator-labs/workflows/.github/workflows/release.yaml@main
+    uses: validator-labs/workflows/.github/workflows/release.yaml@533081ac49a832a478062407e23e559db6545f1d # main
     secrets: inherit
 
   haul:
